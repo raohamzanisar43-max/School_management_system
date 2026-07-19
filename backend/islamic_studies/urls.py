@@ -4,7 +4,7 @@ from .views import IslamicProfileViewSet, DailyProgressLogViewSet
 
 router = DefaultRouter()
 router.register(r'profiles', IslamicProfileViewSet, basename='islamic-profile')
-router.register(r'progress-logs', DailyProgressLogViewSet, basename='islamic-progress-log')
+router.register(r'logs', DailyProgressLogViewSet, basename='islamic-progress-log')
 
 urlpatterns = [
     path('', include(router.urls)),

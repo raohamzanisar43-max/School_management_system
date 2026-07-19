@@ -811,23 +811,25 @@ export default function StudentDashboard() {
                 {/* Recitation log queue */}
                 <div className="glass p-6 rounded-2xl lg:col-span-2 space-y-4">
                   <h3 className="text-base font-bold font-outfit text-white border-b border-slate-800/80 pb-3">Recitation History Logs</h3>
-                  <div className="space-y-3.5 max-h-[350px] overflow-y-auto pr-1">
-                    {islamicLogs.map(log => (
-                      <div key={log.id} className="p-4 bg-slate-900/60 border border-slate-800 rounded-xl flex items-start justify-between gap-4">
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2">
-                            <span className="text-[9px] font-bold px-2 py-0.5 bg-indigo-500/10 text-indigo-400 rounded-md uppercase tracking-wider">{log.type}</span>
-                            <span className="text-xs text-slate-500 font-medium">{log.date}</span>
+                    {islamicLogs && islamicLogs.length > 0 ? (
+                      islamicLogs.map(log => (
+                        <div key={log.id} className="p-4 bg-slate-900/60 border border-slate-800 rounded-xl flex items-start justify-between gap-4">
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-2">
+                              <span className="text-[9px] font-bold px-2 py-0.5 bg-indigo-500/10 text-indigo-400 rounded-md uppercase tracking-wider">{log.type}</span>
+                              <span className="text-xs text-slate-500 font-medium">{log.date}</span>
+                            </div>
+                            <h4 className="text-sm font-bold text-white mt-1.5">Surah {log.surah_name} (Ayat {log.from_ayat} to {log.to_ayat})</h4>
+                            <p className="text-xs text-slate-400 italic">Tarbiyah note: "{log.tarbiyah_notes}"</p>
                           </div>
-                          <h4 className="text-sm font-bold text-white mt-1.5">Surah {log.surah_name} (Ayat {log.from_ayat} to {log.to_ayat})</h4>
-                          <p className="text-xs text-slate-400 italic">Tarbiyah note: "{log.tarbiyah_notes}"</p>
+                          <span className="px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold rounded-full uppercase tracking-wider">
+                            {log.evaluation_grade}
+                          </span>
                         </div>
-                        <span className="px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold rounded-full uppercase tracking-wider">
-                          {log.evaluation_grade}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
+                      ))
+                    ) : (
+                      <p className="text-xs text-slate-500 italic py-4 text-center">No daily recitation logs found.</p>
+                    )}
                 </div>
               </div>
             </div>
