@@ -8,7 +8,7 @@ from .views import (
 )
 
 router = DefaultRouter()
-router.register(r'tests', ExamViewSet, basename='exam')
+router.register(r'exams', ExamViewSet, basename='exam')
 router.register(r'questions', QuestionViewSet, basename='question')
 router.register(r'attempts', ExamAttemptViewSet, basename='examattempt')
 router.register(r'violations', ProctoringViolationLogViewSet, basename='proctoringviolationlog')
