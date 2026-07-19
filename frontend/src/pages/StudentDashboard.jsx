@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { 
   BookOpen, Video, FileText, CheckCircle, Moon, Brain, Play, LogOut,
   Send, Upload, Clock, AlertTriangle, Shield, Check, Wallet, Printer, Camera,
-  MessageSquare, Sparkles, Settings, CreditCard
+  MessageSquare, Sparkles, Settings, CreditCard, Plus
 } from 'lucide-react';
 
 export default function StudentDashboard() {

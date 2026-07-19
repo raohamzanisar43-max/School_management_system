@@ -3,7 +3,7 @@ import { api } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { 
   BookOpen, Plus, FileText, CheckCircle, Moon, Brain, Check, LogOut,
-  Calendar, Award, MessageSquare, Video, ClipboardList, Sparkles, Settings
+  Calendar, Award, MessageSquare, Video, ClipboardList, Sparkles, Settings, Send
 } from 'lucide-react';
 
 export default function TeacherDashboard() {
