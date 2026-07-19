@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { 
   BookOpen, Video, FileText, CheckCircle, Moon, Brain, Play, LogOut,
   Send, Upload, Clock, AlertTriangle, Shield, Check, Wallet, Printer, Camera,
-  MessageSquare, Sparkles, Settings
+  MessageSquare, Sparkles, Settings, CreditCard
 } from 'lucide-react';
 
 export default function StudentDashboard() {
@@ -189,7 +189,7 @@ export default function StudentDashboard() {
   };
 
   const handleNextQuestion = () => {
-    if (currentQuestionIndex < activeExam.questions.length - 1) {
+    if (activeExam && activeExam.questions && currentQuestionIndex < activeExam.questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     }
   };
@@ -201,6 +201,7 @@ export default function StudentDashboard() {
   };
 
   const handleFinishExam = async () => {
+    if (!activeExam || !activeExam.questions || activeExam.questions.length === 0) return;
     // Score calculations
     let scoreCount = 0;
     activeExam.questions.forEach((q, idx) => {
@@ -557,24 +558,28 @@ export default function StudentDashboard() {
 
                   <div className="space-y-4">
                     <h3 className="text-base font-bold font-outfit text-white">Available Exams</h3>
-                    {exams.map(exam => (
-                      <div key={exam.id} className="p-4 bg-slate-900 border border-slate-800 rounded-xl flex items-center justify-between gap-4">
-                        <div>
-                          <h4 className="text-sm font-bold text-white">{exam.title}</h4>
-                          <div className="flex items-center gap-3 text-xs text-slate-500 mt-1">
-                            <span>Duration: {exam.duration_minutes} minutes</span>
-                            <span>•</span>
-                            <span className="text-emerald-400 font-medium">Proctor Active</span>
+                    {exams && exams.length > 0 ? (
+                      exams.map(exam => (
+                        <div key={exam.id} className="p-4 bg-slate-900 border border-slate-800 rounded-xl flex items-center justify-between gap-4">
+                          <div>
+                            <h4 className="text-sm font-bold text-white">{exam.title}</h4>
+                            <div className="flex items-center gap-3 text-xs text-slate-500 mt-1">
+                              <span>Duration: {exam.duration_minutes} minutes</span>
+                              <span>•</span>
+                              <span className="text-emerald-400 font-medium">Proctor Active</span>
+                            </div>
                           </div>
+                          <button
+                            onClick={() => handleStartExam(exam)}
+                            className="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-xl text-xs font-bold transition hover-glow cursor-pointer"
+                          >
+                            Start Exam
+                          </button>
                         </div>
-                        <button
-                          onClick={() => handleStartExam(exam)}
-                          className="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-xl text-xs font-bold transition hover-glow cursor-pointer"
-                        >
-                          Start Exam
-                        </button>
-                      </div>
-                    ))}
+                      ))
+                    ) : (
+                      <p className="text-xs text-slate-500 italic py-4 text-center">No scheduled exams available in the curriculum database.</p>
+                    )}
                   </div>
                 </div>
               ) : (
@@ -678,50 +683,57 @@ export default function StudentDashboard() {
                     ) : (
                       /* Exam Question Content */
                       <div className="glass p-6 rounded-2xl space-y-6 flex flex-col justify-between min-h-[450px]">
-                        <div className="space-y-4">
-                          <div className="flex justify-between items-center border-b border-slate-800/80 pb-4">
-                            <div>
-                              <h3 className="text-lg font-bold font-outfit text-white">{activeExam.title}</h3>
-                              <span className="text-xs text-slate-400">Question {currentQuestionIndex + 1} of {activeExam.questions.length}</span>
+                        {activeExam && activeExam.questions && activeExam.questions.length > 0 ? (
+                          <div className="space-y-4">
+                            <div className="flex justify-between items-center border-b border-slate-800/80 pb-4">
+                              <div>
+                                <h3 className="text-lg font-bold font-outfit text-white">{activeExam.title}</h3>
+                                <span className="text-xs text-slate-400">Question {currentQuestionIndex + 1} of {activeExam.questions.length}</span>
+                              </div>
+                              <div className="flex items-center gap-2 text-xs text-slate-400 bg-slate-900 px-3 py-1.5 border border-slate-800 rounded-xl">
+                                <Clock className="h-4 w-4 text-amber-400" />
+                                <span>Timer: 24:12</span>
+                              </div>
                             </div>
-                            <div className="flex items-center gap-2 text-xs text-slate-400 bg-slate-900 px-3 py-1.5 border border-slate-800 rounded-xl">
-                              <Clock className="h-4 w-4 text-amber-400" />
-                              <span>Timer: 24:12</span>
-                            </div>
-                          </div>
 
-                          {/* Question body */}
-                          <div className="p-4 bg-slate-900/40 border border-slate-850 rounded-xl">
-                            <p className="text-sm font-semibold text-white leading-relaxed">
-                              {activeExam.questions[currentQuestionIndex].text}
-                            </p>
-                          </div>
+                            {/* Question body */}
+                            <div className="p-4 bg-slate-900/40 border border-slate-850 rounded-xl">
+                              <p className="text-sm font-semibold text-white leading-relaxed">
+                                {activeExam.questions[currentQuestionIndex]?.text}
+                              </p>
+                            </div>
 
-                          {/* Answers */}
-                          {activeExam.questions[currentQuestionIndex].type === 'MCQ' ? (
-                            <div className="grid grid-cols-1 gap-3">
-                              {activeExam.questions[currentQuestionIndex].options.map(opt => (
-                                <button
-                                  key={opt}
-                                  onClick={() => setSelectedAnswers({ ...selectedAnswers, [currentQuestionIndex]: opt })}
-                                  className={`w-full text-left p-4 rounded-xl border text-xs font-medium transition cursor-pointer ${selectedAnswers[currentQuestionIndex] === opt ? 'bg-indigo-600/10 border-indigo-500 text-indigo-400' : 'bg-slate-900/60 border-slate-800 hover:border-slate-700 text-slate-300'}`}
-                                >
-                                  {opt}
-                                </button>
-                              ))}
-                            </div>
-                          ) : (
-                            <div>
-                              <textarea
-                                value={subjectiveAnswer}
-                                onChange={(e) => setSubjectiveAnswer(e.target.value)}
-                                rows={4}
-                                placeholder="Write your explanation answer here..."
-                                className="block w-full px-3 py-2.5 border border-slate-700 bg-slate-900 rounded-xl text-sm text-white focus:outline-none"
-                              />
-                            </div>
-                          )}
-                        </div>
+                            {/* Answers */}
+                            {activeExam.questions[currentQuestionIndex]?.type === 'MCQ' ? (
+                              <div className="grid grid-cols-1 gap-3">
+                                {(activeExam.questions[currentQuestionIndex]?.options || []).map(opt => (
+                                  <button
+                                    key={opt}
+                                    onClick={() => setSelectedAnswers({ ...selectedAnswers, [currentQuestionIndex]: opt })}
+                                    className={`w-full text-left p-4 rounded-xl border text-xs font-medium transition cursor-pointer ${selectedAnswers[currentQuestionIndex] === opt ? 'bg-indigo-600/10 border-indigo-500 text-indigo-400' : 'bg-slate-900/60 border-slate-800 hover:border-slate-700 text-slate-300'}`}
+                                  >
+                                    {opt}
+                                  </button>
+                                ))}
+                              </div>
+                            ) : (
+                              <div>
+                                <textarea
+                                  value={subjectiveAnswer}
+                                  onChange={(e) => setSubjectiveAnswer(e.target.value)}
+                                  rows={4}
+                                  placeholder="Write your explanation answer here..."
+                                  className="block w-full px-3 py-2.5 border border-slate-700 bg-slate-900 rounded-xl text-sm text-white focus:outline-none"
+                                />
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          <div className="text-center py-12 text-slate-500">
+                            <AlertTriangle className="h-10 w-10 mx-auto text-amber-500 mb-3" />
+                            <p className="text-sm font-semibold">No questions found in this exam.</p>
+                          </div>
+                        )}
 
                         {/* Navigation controls */}
                         <div className="flex justify-between items-center pt-6 border-t border-slate-800/80">
@@ -733,7 +745,7 @@ export default function StudentDashboard() {
                             Previous
                           </button>
                           
-                          {currentQuestionIndex === activeExam.questions.length - 1 ? (
+                          {activeExam && activeExam.questions && currentQuestionIndex === activeExam.questions.length - 1 ? (
                             <button
                               onClick={handleFinishExam}
                               className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition hover-glow cursor-pointer"
