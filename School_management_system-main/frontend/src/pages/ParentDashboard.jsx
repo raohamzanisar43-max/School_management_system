@@ -185,7 +185,7 @@ export default function ParentDashboard() {
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition cursor-pointer ${activeTab === 'ai' ? 'bg-pink-600 text-white shadow-lg shadow-pink-600/10' : 'text-slate-400 hover:bg-slate-900/60 hover:text-white'}`}
           >
             <Sparkles className="h-5 w-5" />
-            Gemini Family Advisor
+            Nova Family Advisor
           </button>
         </aside>
 
@@ -480,12 +480,12 @@ export default function ParentDashboard() {
             </div>
           )}
 
-          {/* Tab: GEMINI FAMILY ADVISOR */}
+          {/* Tab: NOVA FAMILY ADVISOR */}
           {activeTab === 'ai' && (
             <div className="space-y-8 animate-fade-in">
               <div className="flex justify-between items-center">
                 <div>
-                  <h2 className="text-3xl font-extrabold font-outfit text-white">AI Family Advisor</h2>
+                  <h2 className="text-3xl font-extrabold font-outfit text-white">Nova Family Advisor</h2>
                   <p className="text-slate-400 text-sm mt-1">Get parenting strategies, learning gaps diagnostics, and home activities advice from AI.</p>
                 </div>
                 <button
@@ -493,7 +493,7 @@ export default function ParentDashboard() {
                   className="flex items-center gap-2 px-3.5 py-1.5 bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-400 hover:text-white rounded-xl text-xs font-semibold transition cursor-pointer"
                 >
                   <Settings className="h-4 w-4 text-violet-400" />
-                  Gemini Settings
+                  AI Settings
                 </button>
               </div>
 
