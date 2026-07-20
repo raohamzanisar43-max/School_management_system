@@ -57,7 +57,7 @@ export default function StudentDashboard() {
   const [chatMessages, setChatMessages] = useState([]);
   const [chatInputText, setChatInputText] = useState('');
   const [aiMessages, setAiMessages] = useState([
-    { id: 1, sender: 'ai', text: "👋 Hello Zayd! I am your Bright Future AI Study Buddy. Ask me anything about Math, Python loops, or Quran Surahs, and let's learn together!" }
+    { id: 1, sender: 'ai', text: "👋 Hello Zayd! I am your Bright Future AI Tutor. Ask me anything about Math, Python loops, or Quran Surahs, and let's learn together!" }
   ]);
   const [aiInputText, setAiInputText] = useState('');
   const [aiLoading, setAiLoading] = useState(false);
@@ -371,7 +371,7 @@ export default function StudentDashboard() {
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition cursor-pointer ${activeTab === 'ai' ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/10' : 'text-slate-400 hover:bg-slate-900/60 hover:text-white'}`}
           >
             <Sparkles className="h-5 w-5" />
-            Gemini AI Buddy
+            AI Tutor
           </button>
         </aside>
 
