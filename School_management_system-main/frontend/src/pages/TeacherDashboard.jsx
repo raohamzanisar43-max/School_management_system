@@ -299,7 +299,7 @@ export default function TeacherDashboard() {
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition cursor-pointer ${activeTab === 'ai' ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/10' : 'text-slate-400 hover:bg-slate-900/60 hover:text-white'}`}
           >
             <Sparkles className="h-5 w-5" />
-            Gemini AI Planner
+            AI Planner
           </button>
         </aside>
 
