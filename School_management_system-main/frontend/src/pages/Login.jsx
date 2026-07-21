@@ -76,6 +76,46 @@ function hexToRgba(hex, alpha) {
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
+const AdminIcon = ({ color }) => (
+  <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="3" y="5" width="20" height="14" rx="1.5" stroke={color} strokeWidth="2" />
+    <line x1="9" y1="19" x2="9" y2="22" stroke={color} strokeWidth="2" strokeLinecap="round" />
+    <line x1="17" y1="19" x2="17" y2="22" stroke={color} strokeWidth="2" strokeLinecap="round" />
+    <line x1="8" y1="22" x2="18" y2="22" stroke={color} strokeWidth="2" strokeLinecap="round" />
+    <circle cx="13" cy="9.5" r="2" stroke={color} strokeWidth="1.5" />
+    <path d="M10 12.5C10 11.7 10.7 11 11.5 11H14.5C15.3 11 16 11.7 16 12.5V13C16 13.3 15.8 13.5 15.5 13.5H10.5C10.2 13.5 10 13.3 10 13V12.5Z" stroke={color} strokeWidth="1.5" fill="none" />
+  </svg>
+);
+
+const TeacherIcon = ({ color }) => (
+  <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+    {/* Monitor/Screen background */}
+    <rect x="8" y="3" width="15" height="12" rx="2" stroke={color} strokeWidth="2" fill="none" />
+    
+    {/* Person head */}
+    <circle cx="6" cy="6" r="2.5" fill={color} />
+    
+    {/* Person body */}
+    <rect x="4" y="9" width="4" height="5" rx="1.5" fill={color} />
+    
+    {/* Person pointing arm */}
+    <path d="M 8 10 Q 12 8 15 6" stroke={color} strokeWidth="2" fill="none" strokeLinecap="round" />
+    
+    {/* Person legs */}
+    <line x1="5" y1="14" x2="5" y2="20" stroke={color} strokeWidth="2" strokeLinecap="round" />
+    <line x1="7" y1="14" x2="7" y2="20" stroke={color} strokeWidth="2" strokeLinecap="round" />
+  </svg>
+);
+
+const ParentIcon = ({ color }) => (
+  <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="9" cy="6" r="2.5" fill={color} />
+    <circle cx="17" cy="7" r="2.5" fill={color} />
+    <path d="M6 10C6 9.44772 6.44772 9 7 9H11C11.5523 9 12 9.44772 12 10V15C12 15.5523 11.5523 16 11 16H7C6.44772 16 6 15.5523 6 15V10Z" fill={color} />
+    <path d="M14 11C14 10.4477 14.4477 10 15 10H19C19.5523 10 20 10.4477 20 11V16C20 16.5523 19.5523 17 19 17H15C14.4477 17 14 16.5523 14 16V11Z" fill={color} />
+  </svg>
+);
+
 function PortalCard({ portal, onSelect }) {
   const Icon = portal.icon;
   const [isHovered, setIsHovered] = useState(false);
@@ -95,7 +135,15 @@ function PortalCard({ portal, onSelect }) {
         className="w-14 h-14 rounded-full flex items-center justify-center mb-4"
         style={{ background: hexToRgba(portal.color, 0.15) }}
       >
-        <Icon size={26} color={portal.color} strokeWidth={1.8} />
+        {portal.key === "admin" ? (
+          <AdminIcon color={portal.color} />
+        ) : portal.key === "teacher" ? (
+          <TeacherIcon color={portal.color} />
+        ) : portal.key === "parent" ? (
+          <ParentIcon color={portal.color} />
+        ) : (
+          <Icon size={26} color={portal.color} strokeWidth={1.8} />
+        )}
       </div>
       <h3 className="font-semibold text-lg mb-2" style={{ color: portal.color }}>
         {portal.title}
