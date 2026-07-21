@@ -55,175 +55,163 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#0D1612] text-white overflow-x-hidden" style={{ fontFamily: 'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
-      <div className="fixed inset-0 z-0 opacity-20" style={{
-        backgroundImage: 'linear-gradient(#23382D 1px, transparent 1px), linear-gradient(90deg, #23382D 1px, transparent 1px)',
-        backgroundSize: '80px 80px',
-        backgroundPosition: 'center center'
+    <div className="min-h-screen bg-[#0a0e11] text-white flex items-center justify-center">
+      {/* Grid background */}
+      <div className="fixed inset-0 opacity-5" style={{
+        backgroundImage: 'linear-gradient(#ffffff 1px, transparent 1px), linear-gradient(90deg, #ffffff 1px, transparent 1px)',
+        backgroundSize: '40px 40px'
       }} />
 
-      <nav className="relative z-10 mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-8">
-        <div className="flex items-center gap-4">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#B6F34C] relative overflow-hidden">
-            <div className="h-6 w-6 rounded-full border-[3px] border-[#0D1612] relative">
-              <div className="absolute -top-2 left-1/2 h-2 w-[2px] -translate-x-1/2 bg-[#0D1612]" />
-              <div className="absolute left-1/2 top-1/2 h-2 w-[2px] -translate-x-1/2 -translate-y-1/2 rotate-90 bg-[#0D1612]" />
+      {/* Header */}
+      <div className="fixed top-0 left-0 right-0 z-40 bg-[#0a0e11]/80 backdrop-blur border-b border-white/5 py-6">
+        <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
+              <span className="text-lg font-bold text-[#0a0e11]">📦</span>
+            </div>
+            <div>
+              <div className="text-lg font-bold tracking-tight">BRIGHT FUTURE SCHOOL</div>
             </div>
           </div>
-          <div>
-            <span className="block text-xl font-semibold tracking-[0.2em] text-white">BRIGHT FUTURE</span>
-            <span className="text-[10px] uppercase tracking-[0.35em] text-slate-300">Academic Excellence</span>
+          <div className="flex items-center gap-4">
+            <span className="text-sm text-slate-400">New here?</span>
+            <button className="px-6 py-2 border border-white/20 rounded-lg hover:bg-white/5 transition text-sm font-medium">
+              Create account
+            </button>
+            <button className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:bg-white/5 transition">
+              🌙
+            </button>
           </div>
         </div>
-        <button className="rounded-full border border-white/20 px-6 py-2 text-xs font-semibold text-white transition-all hover:bg-white hover:text-black">
-          Create account
-        </button>
-      </nav>
+      </div>
 
-      <main className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col items-center justify-center gap-12 px-6 py-4 lg:flex-row">
-        <section className="flex flex-col justify-center lg:w-[55%]">
-          <div className="mb-12 space-y-4">
-            <span className="text-[12px] uppercase tracking-[0.3em] text-[#B6F34C]">{portalMeta[activePortal].tagline}</span>
-            <h1 className="text-5xl font-extrabold leading-[1.05] tracking-tight text-white md:text-7xl" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
-              Every day <br />
-              <span className="text-[#B6F34C]">{portalMeta[activePortal].headline}</span>
-            </h1>
-            <p className="max-w-md text-lg text-[#8B9E90]">Select your destination portal to manage your academic journey with Bright Future.</p>
+      <div className="relative z-10 w-full flex pt-24">
+        {/* Left Hero Section */}
+        <div className="hidden lg:flex lg:w-1/2 flex-col justify-between px-12 py-16">
+          <div className="space-y-8">
+            <div className="space-y-3">
+              <div className="text-xs font-bold uppercase tracking-widest text-emerald-400">
+                STUDENT SUCCESS, WORLDWIDE
+              </div>
+              <h1 className="text-6xl font-bold leading-tight">
+                Every future
+                <br />
+                <span className="text-emerald-400">starts connected.</span>
+              </h1>
+              <p className="text-lg text-slate-300 mt-6">
+                A unified portal to access everything you need. Choose your portal and sign in to continue your learning journey.
+              </p>
+            </div>
           </div>
 
-          <div className="space-y-8">
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+          {/* Features */}
+          <div className="grid grid-cols-2 gap-8">
+            <div className="space-y-2">
+              <Globe className="w-6 h-6 text-emerald-400" />
+              <div className="text-sm font-semibold">Global Community</div>
+              <p className="text-xs text-slate-400">Connect worldwide</p>
+            </div>
+            <div className="space-y-2">
+              <BookOpen className="w-6 h-6 text-emerald-400" />
+              <div className="text-sm font-semibold">Smart Learning</div>
+              <p className="text-xs text-slate-400">Learn. Grow. Succeed.</p>
+            </div>
+            <div className="space-y-2">
+              <Shield className="w-6 h-6 text-emerald-400" />
+              <div className="text-sm font-semibold">Secure & Trusted</div>
+              <p className="text-xs text-slate-400">Your data is safe</p>
+            </div>
+            <div className="space-y-2">
+              <TrendingUp className="w-6 h-6 text-emerald-400" />
+              <div className="text-sm font-semibold">Better Outcomes</div>
+              <p className="text-xs text-slate-400">Track your progress</p>
+            </div>
+          </div>
+
+          {/* Avatar group & Stats */}
+          <div className="flex items-center gap-3 pt-4">
+            <div className="flex -space-x-2">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-blue-500 border-2 border-[#0a0e11]" />
+              ))}
+            </div>
+            <span className="text-sm text-slate-300"><span className="font-bold text-white">21,500+</span> learners already connected</span>
+          </div>
+
+          {/* Footer links */}
+          <div className="flex gap-6 text-xs text-slate-400 pt-8 border-t border-white/10">
+            <span>© 2025 All rights reserved.</span>
+            <a href="#" className="hover:text-white transition">Privacy Policy</a>
+            <a href="#" className="hover:text-white transition">Terms of Service</a>
+            <a href="#" className="hover:text-white transition">Help Center</a>
+          </div>
+        </div>
+
+        {/* Right Portal Selection */}
+        <div className="w-full lg:w-1/2 px-6 sm:px-12 py-12 lg:py-16 lg:border-l border-white/10 flex items-center justify-center">
+          <div className="w-full max-w-md space-y-8">
+            {/* Header */}
+            <div className="space-y-3 text-center lg:text-left">
+              <div className="text-xs font-bold uppercase tracking-widest text-emerald-400">
+                WELCOME BACK
+              </div>
+              <h2 className="text-4xl font-bold">Choose your portal</h2>
+              <p className="text-slate-400">Select your role to sign in to your account</p>
+            </div>
+
+            {/* Portal Cards */}
+            <div className="grid grid-cols-2 gap-4">
               {[
-                { key: 'student', icon: '🎓', label: 'Student Portal', subtitle: 'Grades, tasks & schedules.' },
-                { key: 'parent', icon: '🏠', label: 'Parent Portal', subtitle: 'Progress & communication.' },
-                { key: 'teacher', icon: '💻', label: 'Teacher Portal', subtitle: 'Classroom & resources.' },
-                { key: 'admin', icon: '🛡️', label: 'Admin Portal', subtitle: 'Systems & reporting.' }
+                { key: 'STUDENT', icon: '🎓', title: 'Student Portal', description: 'Access your classes, assignments, results, timetable and more.' },
+                { key: 'ADMIN', icon: '👤', title: 'Admin Portal', description: 'Manage users, academics, reports and system settings.' },
+                { key: 'TEACHER', icon: '👨‍🏫', title: 'Teacher Portal', description: 'Manage classes, students, assignments and evaluations.' },
+                { key: 'PARENT', icon: '👨‍👩‍👧', title: 'Parent Portal', description: 'Track your child\'s progress, attendance, fees and more.' }
               ].map((portal) => (
                 <button
                   key={portal.key}
-                  onClick={() => setActivePortal(portal.key)}
-                  className={`flex flex-col gap-6 rounded-xl border p-6 text-left transition-all ${activePortal === portal.key ? 'border-[#B6F34C] bg-[#14211B] shadow-[0_0_20px_rgba(182,243,76,0.15)]' : 'border-[#23382D] bg-[#14211B] hover:-translate-y-1 hover:border-[#B6F34C]/40'}`}
+                  onClick={() => handlePortalLogin(portal.key)}
+                  className="group relative border border-white/10 rounded-2xl p-6 hover:border-white/20 transition space-y-4 text-left bg-gradient-to-br from-white/5 to-white/0"
                 >
-                  <span className="text-3xl">{portal.icon}</span>
-                  <div>
-                    <h3 className="mb-1 text-sm font-bold text-white">{portal.label}</h3>
-                    <p className="text-[11px] leading-snug text-[#8B9E90]">{portal.subtitle}</p>
+                  {/* Icon background */}
+                  <div className={`w-14 h-14 rounded-xl opacity-80 group-hover:opacity-100 transition flex items-center justify-center text-2xl ${ portal.key === 'STUDENT' ? 'bg-gradient-to-br from-emerald-400 to-emerald-500' : portal.key === 'ADMIN' ? 'bg-gradient-to-br from-blue-400 to-blue-500' : portal.key === 'TEACHER' ? 'bg-gradient-to-br from-purple-400 to-purple-500' : 'bg-gradient-to-br from-amber-400 to-amber-500'}`}>
+                    {portal.icon}
                   </div>
+
+                  {/* Content */}
+                  <div className="space-y-2">
+                    <h3 className="font-bold text-white">{portal.title}</h3>
+                    <p className="text-xs leading-relaxed text-slate-400">
+                      {portal.description}
+                    </p>
+                  </div>
+
+                  {/* Sign in button */}
+                  <button className="text-sm font-semibold text-emerald-400 hover:text-emerald-300 transition flex items-center gap-1 pt-2 border-t border-white/10 group-hover:border-emerald-400/20 w-full justify-center py-2">
+                    Sign in <span>→</span>
+                  </button>
                 </button>
               ))}
             </div>
 
+            {/* Divider */}
             <div className="flex items-center gap-4">
-              <p className="text-lg font-bold text-white">Choose access type to proceed</p>
-              <div className="h-[1px] flex-grow bg-white/10" />
-              <span className="text-2xl text-[#B6F34C]">⟶</span>
+              <div className="h-px flex-grow bg-white/10" />
+              <span className="text-xs text-slate-500">OR</span>
+              <div className="h-px flex-grow bg-white/10" />
             </div>
+
+            {/* Create account button */}
+            <button className="w-full border border-white/20 rounded-lg py-3 font-semibold hover:bg-white/5 transition flex items-center justify-center gap-2">
+              <span>👤</span> Create account
+            </button>
+
+            {/* Sign up link */}
+            <p className="text-center text-sm text-slate-400">
+              Don't have an account? <a href="#" className="text-emerald-400 hover:text-emerald-300 font-semibold transition">Sign up</a>
+            </p>
           </div>
-        </section>
-
-        <section className="flex w-full items-center justify-center lg:w-[45%]">
-          <div className="relative w-full max-w-[440px] overflow-hidden rounded-2xl border border-[#23382D] bg-[#14211B] p-8 shadow-2xl md:p-10">
-            <div className="absolute -mt-16 -mr-16 top-0 right-0 h-32 w-32 rounded-full bg-[#B6F34C]/5 blur-3xl" />
-
-            <header className="relative mb-10">
-              <span className="mb-3 block text-[10px] uppercase tracking-[0.3em] text-[#8B9E90]">Institutional Login</span>
-              <h2 className="mb-3 text-3xl font-semibold tracking-tight text-white">{portalMeta[activePortal].title}</h2>
-              <p className="text-sm leading-relaxed text-[#8B9E90]">{portalMeta[activePortal].subtitle}</p>
-            </header>
-
-            <form className="relative space-y-6" onSubmit={handleSubmit}>
-              {error && (
-                <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-200">
-                  {error}
-                </div>
-              )}
-
-              <div className="space-y-2">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-[#8B9E90]">School Email</label>
-                <input
-                  type="text"
-                  required
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  placeholder="name@brightfuture.edu"
-                  className="w-full rounded-lg border border-[#23382D] bg-[#080E0B] px-4 py-3.5 text-white placeholder:text-slate-500 transition-all focus:border-white/30 focus:outline-none"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-[#8B9E90]">Password</label>
-                  <a href="#" className="text-[11px] font-semibold text-[#B6F34C] hover:underline">Forgot Access?</a>
-                </div>
-                <input
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full rounded-lg border border-[#23382D] bg-[#080E0B] px-4 py-3.5 text-white placeholder:text-slate-500 transition-all focus:border-white/30 focus:outline-none"
-                />
-              </div>
-
-              <div className="flex items-center gap-3">
-                <input type="checkbox" id="remember" className="h-4 w-4 rounded border-[#23382D] bg-[#080E0B] accent-[#B6F34C]" />
-                <label htmlFor="remember" className="text-xs text-[#8B9E90]">Stay connected on this device</label>
-              </div>
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="flex w-full items-center justify-center gap-3 rounded-xl bg-[#B6F34C] py-4 text-sm font-bold uppercase tracking-widest text-[#0D1612] transition-all hover:opacity-95 disabled:opacity-60"
-              >
-                {loading ? 'Verifying Credentials...' : 'Enter Portal'}
-                <span>→</span>
-              </button>
-            </form>
-
-            <div className="my-8 flex items-center gap-4 text-[#23382D]">
-              <div className="h-px flex-grow bg-white/5" />
-              <span className="text-[9px] font-mono uppercase tracking-[0.3em] text-[#8B9E90]">External Auth</span>
-              <div className="h-px flex-grow bg-white/5" />
-            </div>
-
-            <div className="space-y-3">
-              <button
-                onClick={() => handleQuickLogin('ADMIN')}
-                className="flex w-full items-center justify-center gap-3 rounded-xl border border-white/5 py-3 transition-all hover:bg-white/5"
-              >
-                <span className="text-xs font-semibold text-white">Admin Quick Sign-In</span>
-              </button>
-              <button
-                onClick={() => handleQuickLogin('TEACHER')}
-                className="flex w-full items-center justify-center gap-3 rounded-xl border border-white/5 py-3 transition-all hover:bg-white/5"
-              >
-                <span className="text-xs font-semibold text-white">Teacher Quick Sign-In</span>
-              </button>
-              <button
-                onClick={() => handleQuickLogin('STUDENT')}
-                className="flex w-full items-center justify-center gap-3 rounded-xl border border-white/5 py-3 transition-all hover:bg-white/5"
-              >
-                <span className="text-xs font-semibold text-white">Student Quick Sign-In</span>
-              </button>
-              <button
-                onClick={() => handleQuickLogin('PARENT')}
-                className="flex w-full items-center justify-center gap-3 rounded-xl border border-white/5 py-3 transition-all hover:bg-white/5"
-              >
-                <span className="text-xs font-semibold text-white">Parent Quick Sign-In</span>
-              </button>
-            </div>
-          </div>
-        </section>
-      </main>
-
-      <footer className="relative z-10 mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-4 border-t border-white/5 px-6 py-8 text-[10px] font-mono uppercase tracking-wider text-[#8B9E90] md:flex-row">
-        <p>© 2026 BRIGHT FUTURE EDUCATIONAL PLATFORMS.</p>
-        <div className="flex gap-8">
-          <a href="#" className="transition-colors hover:text-white">Security</a>
-          <a href="#" className="transition-colors hover:text-white">Privacy</a>
-          <a href="#" className="transition-colors hover:text-white">Network Status</a>
         </div>
-      </footer>
+      </div>
     </div>
   );
 }
