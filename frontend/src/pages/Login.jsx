@@ -132,11 +132,11 @@ export default function Login() {
       {/* Dynamic Theme Styles Injection */}
       <style>{`
         :root {
-          --bg-page: #05070b;
-          --bg-card: #0b0f17;
-          --bg-card-inner: #07090e;
-          --border-color: #1a2333;
-          --border-subtle: rgba(255, 255, 255, 0.08);
+          --bg-page: #05070a;
+          --bg-card: #0b101d;
+          --bg-card-inner: #070a12;
+          --border-color: #182030;
+          --border-subtle: rgba(24, 32, 48, 0.6);
 
           --text-main: #f8fafc;
           --text-muted: #94a3b8;

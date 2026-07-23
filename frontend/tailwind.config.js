@@ -14,6 +14,14 @@ export default {
           600: '#4f46e5',
           700: '#4338ca',
           900: '#312e81',
+          lime: '#82e612',
+          limeHover: '#6cc40e',
+          darkBg: '#05070a',
+          darkBgEnd: '#070a12',
+          cardBg: '#0b101d',
+          cardBgEnd: '#0c101b',
+          borderDark: '#182030',
+          borderDarkHover: '#1a2336'
         },
         accent: {
           teal: '#14b8a6',
