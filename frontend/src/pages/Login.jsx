@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { api } from '../services/api';
 
 export default function Login() {
   const { login } = useAuth();
@@ -137,22 +138,47 @@ export default function Login() {
     setRegisterStep(prev => prev + 1);
   };
 
-  const handleRegisterSubmit = (e) => {
+  const handleRegisterSubmit = async (e) => {
     e.preventDefault();
     setRegError('');
     setLoading(true);
-    setTimeout(() => {
+
+    const nameParts = regFullName.trim().split(/\s+/);
+    const firstName = nameParts[0] || '';
+    const lastName = nameParts.slice(1).join(' ') || '';
+
+    const registerData = {
+      username: regEmail,
+      password: regPassword,
+      first_name: firstName,
+      last_name: lastName,
+      email: regEmail,
+      role: regRole,
+      phone_number: regPhone
+    };
+
+    try {
+      await api.register(registerData);
+      showNotification("Account created successfully!");
+      // Automatic login!
+      try {
+        await login(regEmail, regPassword);
+        showNotification("Welcome! Logged in automatically.");
+      } catch (loginErr) {
+        setMode('LOGIN');
+        setUsername(regEmail);
+        setPassword(regPassword);
+        setRegisterStep(1);
+      }
+    } catch (err) {
+      console.error('Registration failed:', err);
+      const serverMsg = err.response?.data 
+        ? Object.entries(err.response.data).map(([k, v]) => `${k}: ${v}`).join('; ') 
+        : 'Failed to create account. Email might already exist.';
+      setRegError(serverMsg);
+    } finally {
       setLoading(false);
-      showNotification("Account created successfully! Please sign in.");
-      setMode('LOGIN');
-      setRegisterStep(1);
-      // Clear forms
-      setRegFullName('');
-      setRegEmail('');
-      setRegPassword('');
-      setRegConfirmPassword('');
-      setRegAgree(false);
-    }, 1500);
+    }
   };
 
   // Color schemes dynamically styled based on role

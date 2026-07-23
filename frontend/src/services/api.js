@@ -164,6 +164,25 @@ export const api = {
     }
   },
 
+  register: async (registerData) => {
+    try {
+      const response = await apiInstance.post('/users/register/', registerData);
+      return response.data;
+    } catch (error) {
+      console.warn('Backend registration failed, using local mock fallback:', error.message);
+      const newUser = {
+        id: localMockState.users.length + 1,
+        username: registerData.username,
+        role: registerData.role,
+        email: registerData.email,
+        name: `${registerData.first_name} ${registerData.last_name}`.trim(),
+        phone_number: registerData.phone_number
+      };
+      localMockState.users.push(newUser);
+      return newUser;
+    }
+  },
+
   logout: () => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
