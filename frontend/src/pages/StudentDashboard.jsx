@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../services/api';
 import { useAuth } from '../context/AuthContext';
-import { 
+import {
   BookOpen, Video, FileText, CheckCircle, Moon, Brain, Play, LogOut,
   Send, Upload, Clock, AlertTriangle, Shield, Check, Wallet, Printer, Camera,
-  MessageSquare, Sparkles, Settings, CreditCard, Plus
+  MessageSquare, Sparkles, Settings, CreditCard, Plus, House
 } from 'lucide-react';
+import BrightFutureDashboard from '../components/BrightFutureDashboard';
 
 export default function StudentDashboard() {
   const { user, logout, switchRole } = useAuth();
@@ -325,6 +326,13 @@ export default function StudentDashboard() {
         <aside className="w-full md:w-64 border-r border-slate-800/80 p-6 flex flex-col gap-2">
           <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2 px-3">Classrooms</p>
           <button
+            onClick={() => setActiveTab('dashboard')}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition cursor-pointer ${activeTab === 'dashboard' ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/10' : 'text-slate-400 hover:bg-slate-900/60 hover:text-white'}`}
+          >
+            <House className="h-5 w-5" />
+            Dashboard
+          </button>
+          <button
             onClick={() => setActiveTab('lessons')}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition cursor-pointer ${activeTab === 'lessons' ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/10' : 'text-slate-400 hover:bg-slate-900/60 hover:text-white'}`}
           >
@@ -377,6 +385,9 @@ export default function StudentDashboard() {
 
         {/* Views */}
         <main className="flex-1 p-8 overflow-y-auto">
+          {/* View 0: BRIGHTFUTURE DASHBOARD (exact HTML mockup ported to React) */}
+          {activeTab === 'dashboard' && <BrightFutureDashboard />}
+
           {/* View 1: LMS Lectures */}
           {activeTab === 'lessons' && (
             <div className="space-y-8 animate-fade-in">
