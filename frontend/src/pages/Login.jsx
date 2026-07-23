@@ -3,12 +3,35 @@ import { useAuth } from '../context/AuthContext';
 
 export default function Login() {
   const { login } = useAuth();
+  
+  // Navigation mode: 'LOGIN' | 'REGISTER'
+  const [mode, setMode] = useState('LOGIN'); 
   const [selectedRole, setSelectedRole] = useState(null); // 'STUDENT' | 'TEACHER' | 'ADMIN' | 'PARENT' | null
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  
+
+  // Registration wizard states
+  const [registerStep, setRegisterStep] = useState(1); // 1 | 2 | 3 | 4
+  const [regFullName, setRegFullName] = useState('');
+  const [regEmail, setRegEmail] = useState('');
+  const [regPassword, setRegPassword] = useState('');
+  const [regConfirmPassword, setRegConfirmPassword] = useState('');
+  const [regRole, setRegRole] = useState('STUDENT'); // 'STUDENT' | 'TEACHER' | 'PARENT' | 'ADMIN'
+  const [regPhone, setRegPhone] = useState('');
+  const [regDOB, setRegDOB] = useState('');
+  const [regGender, setRegGender] = useState('MALE');
+  const [regAddress, setRegAddress] = useState('');
+  const [regCity, setRegCity] = useState('');
+  const [regCountry, setRegCountry] = useState('United States');
+  const [regAgree, setRegAgree] = useState(false);
+  const [regError, setRegError] = useState('');
+
+  // Password visibility triggers
+  const [showPass, setShowPass] = useState(false);
+  const [showConfirmPass, setShowConfirmPass] = useState(false);
+
   // Theme state: 'dark' | 'light' | 'night'
   const [theme, setTheme] = useState('dark');
   const [toastText, setToastText] = useState(null);
@@ -80,9 +103,62 @@ export default function Login() {
     }
   };
 
+  // Step validation routines for Registration
+  const handleRegNext = () => {
+    setRegError('');
+    if (registerStep === 1) {
+      if (!regFullName || !regEmail || !regPassword || !regConfirmPassword) {
+        setRegError('Please fill out all fields.');
+        return;
+      }
+      if (regPassword !== regConfirmPassword) {
+        setRegError('Passwords do not match.');
+        return;
+      }
+      if (regPassword.length < 8) {
+        setRegError('Password must be at least 8 characters long.');
+        return;
+      }
+      if (!regAgree) {
+        setRegError('You must agree to the Terms of Service & Privacy Policy.');
+        return;
+      }
+    } else if (registerStep === 2) {
+      if (!regPhone || !regDOB) {
+        setRegError('Please provide your phone number and date of birth.');
+        return;
+      }
+    } else if (registerStep === 3) {
+      if (!regAddress || !regCity || !regCountry) {
+        setRegError('Please fill out all contact information fields.');
+        return;
+      }
+    }
+    setRegisterStep(prev => prev + 1);
+  };
+
+  const handleRegisterSubmit = (e) => {
+    e.preventDefault();
+    setRegError('');
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      showNotification("Account created successfully! Please sign in.");
+      setMode('LOGIN');
+      setRegisterStep(1);
+      // Clear forms
+      setRegFullName('');
+      setRegEmail('');
+      setRegPassword('');
+      setRegConfirmPassword('');
+      setRegAgree(false);
+    }, 1500);
+  };
+
   // Color schemes dynamically styled based on role
   const getThemeSpecs = () => {
-    if (selectedRole === 'STUDENT') return {
+    const role = mode === 'LOGIN' ? selectedRole : regRole;
+    if (role === 'STUDENT') return {
       accentText: 'text-lime-400',
       accentBg: 'bg-lime-500',
       borderFocus: 'focus:border-lime-500/80 focus:ring-lime-500/20',
@@ -90,7 +166,7 @@ export default function Login() {
       badgeBg: 'bg-lime-500/10 border-lime-500/30 text-lime-400',
       iconCircle: 'border-lime-500 text-lime-400 bg-lime-500/5'
     };
-    if (selectedRole === 'ADMIN') return {
+    if (role === 'ADMIN') return {
       accentText: 'text-blue-400',
       accentBg: 'bg-blue-500',
       borderFocus: 'focus:border-blue-500/80 focus:ring-blue-500/20',
@@ -98,7 +174,7 @@ export default function Login() {
       badgeBg: 'bg-blue-500/10 border-blue-500/30 text-blue-400',
       iconCircle: 'border-blue-500 text-blue-400 bg-blue-500/5'
     };
-    if (selectedRole === 'TEACHER') return {
+    if (role === 'TEACHER') return {
       accentText: 'text-purple-400',
       accentBg: 'bg-purple-500',
       borderFocus: 'focus:border-purple-500/80 focus:ring-purple-500/20',
@@ -106,11 +182,11 @@ export default function Login() {
       badgeBg: 'bg-purple-500/10 border-purple-500/30 text-purple-400',
       iconCircle: 'border-purple-500 text-purple-400 bg-purple-500/5'
     };
-    if (selectedRole === 'PARENT') return {
+    if (role === 'PARENT') return {
       accentText: 'text-amber-400',
       accentBg: 'bg-amber-500',
       borderFocus: 'focus:border-amber-500/80 focus:ring-amber-500/20',
-      btnBg: 'bg-amber-500 hover:bg-amber-400 text-slate-950 focus:ring-amber-500',
+      btnBg: 'bg-amber-600 hover:bg-amber-500 text-slate-950 focus:ring-amber-500',
       badgeBg: 'bg-amber-500/10 border-amber-500/30 text-amber-400',
       iconCircle: 'border-amber-500 text-amber-400 bg-amber-500/5'
     };
@@ -220,7 +296,7 @@ export default function Login() {
       <header className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-4 sm:py-5 flex items-center justify-between z-20">
         
         {/* Brand Logo */}
-        <a href="/" className="flex items-center gap-3 group" onClick={(e) => { e.preventDefault(); setSelectedRole(null); }}>
+        <a href="/" className="flex items-center gap-3 group" onClick={(e) => { e.preventDefault(); setSelectedRole(null); setMode('LOGIN'); }}>
           <div className="w-10 h-10 rounded-xl bg-theme-card-inner border border-theme flex items-center justify-center p-2 shadow-sm group-hover:border-lime-500/50 transition">
             <svg className="w-6 h-6 text-theme-main sync-icon" viewBox="0 0 24 24" strokeWidth="1.8">
               <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
@@ -240,20 +316,36 @@ export default function Login() {
 
         {/* Header Actions */}
         <div className="flex items-center gap-3 sm:gap-4">
-          <span className="hidden sm:inline text-xs text-theme-muted font-medium">New here?</span>
-          
-          <button 
-            onClick={() => showNotification("Registrations are closed.")}
-            className="px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl border border-theme text-xs font-bold text-theme-main hover:text-lime-400 transition-all flex items-center gap-2 bg-theme-card-inner hover:bg-lime-500/10 cursor-pointer"
-          >
-            <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" stroke-width="2">
-              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-              <circle cx="8.5" cy="7" r="4"/>
-              <line x1="20" y1="8" x2="20" y2="14"/>
-              <line x1="17" y1="11" x2="23" y2="11"/>
-            </svg>
-            <span>Create account</span>
-          </button>
+          {mode === 'LOGIN' ? (
+            <>
+              <span className="hidden sm:inline text-xs text-theme-muted font-medium">New here?</span>
+              <button 
+                onClick={() => { setMode('REGISTER'); setRegisterStep(1); setRegError(''); }}
+                className="px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl border border-theme text-xs font-bold text-theme-main hover:text-lime-400 transition-all flex items-center gap-2 bg-theme-card-inner hover:bg-lime-500/10 cursor-pointer"
+              >
+                <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" stroke-width="2">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                  <circle cx="8.5" cy="7" r="4"/>
+                  <line x1="20" y1="8" x2="20" y2="14"/>
+                  <line x1="17" y1="11" x2="23" y2="11"/>
+                </svg>
+                <span>Create account</span>
+              </button>
+            </>
+          ) : (
+            <>
+              <span className="hidden sm:inline text-xs text-theme-muted font-medium">Already have an account?</span>
+              <button 
+                onClick={() => { setMode('LOGIN'); setSelectedRole(null); setError(''); }}
+                className="px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl border border-theme text-xs font-bold text-theme-main hover:text-lime-400 transition-all flex items-center gap-2 bg-theme-card-inner hover:bg-lime-500/10 cursor-pointer"
+              >
+                <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" stroke-width="2">
+                  <path d="M15 3h6v18h-6M10 17l5-5-5-5M13.8 12H3"/>
+                </svg>
+                <span>Sign in</span>
+              </button>
+            </>
+          )}
 
           {/* Theme Switcher */}
           <button 
@@ -288,199 +380,245 @@ export default function Login() {
           {/* Left Hero Column */}
           <div className="lg:col-span-5 space-y-6">
             
-            {/* Conditional Sub-text / Header */}
-            {selectedRole === null ? (
-              <div className="space-y-3">
-                <span style={{ color: 'var(--brand-lime)' }} className="text-xs font-extrabold tracking-widest uppercase block">
-                  STUDENT SUCCESS, WORLDWIDE
-                </span>
-                <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-theme-main leading-[1.08]">
-                  Every future <br />
-                  <span style={{ color: 'var(--brand-lime)' }}>starts connected.</span>
-                </h1>
-                <p className="text-sm text-theme-muted leading-relaxed font-normal pt-2 max-w-md">
-                  A unified portal to access everything you need. Choose your portal and sign in to continue your learning journey.
-                </p>
+            {mode === 'LOGIN' ? (
+              /* LOGIN LEFT COLUMN */
+              <div className="space-y-6">
+                {selectedRole === null ? (
+                  <div className="space-y-3">
+                    <span style={{ color: 'var(--brand-lime)' }} className="text-xs font-extrabold tracking-widest uppercase block">
+                      STUDENT SUCCESS, WORLDWIDE
+                    </span>
+                    <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-theme-main leading-[1.08]">
+                      Every future <br />
+                      <span style={{ color: 'var(--brand-lime)' }}>starts connected.</span>
+                    </h1>
+                    <p className="text-sm text-theme-muted leading-relaxed font-normal pt-2 max-w-md">
+                      A unified portal to access everything you need. Choose your portal and sign in to continue your learning journey.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    <span className={`text-xs font-extrabold tracking-widest uppercase block ${specs.accentText}`}>
+                      WELCOME BACK!
+                    </span>
+                    <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-theme-main leading-[1.08]">
+                      Sign in to continue <br />
+                      <span className={`${specs.accentText}`}>your learning journey</span>
+                    </h1>
+                    <p className="text-sm text-theme-muted leading-relaxed font-normal pt-2 max-w-md">
+                      Access your classes, assignments, grades and everything you need to succeed.
+                    </p>
+                  </div>
+                )}
+
+                {/* Feature grid/list */}
+                {selectedRole === null ? (
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t border-theme">
+                    <div className="space-y-1">
+                      <div className="w-8 h-8 rounded-lg bg-theme-card-inner border border-theme flex items-center justify-center text-theme-main mb-2">
+                        <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" stroke-width="2">
+                          <circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>
+                        </svg>
+                      </div>
+                      <h4 className="text-xs font-bold text-theme-main">Global Community</h4>
+                      <p className="text-[11px] text-theme-muted">Connect worldwide</p>
+                    </div>
+
+                    <div className="space-y-1">
+                      <div className="w-8 h-8 rounded-lg bg-theme-card-inner border border-theme flex items-center justify-center text-theme-main mb-2">
+                        <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" stroke-width="2">
+                          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                        </svg>
+                      </div>
+                      <h4 className="text-xs font-bold text-theme-main">Smart Learning</h4>
+                      <p className="text-[11px] text-theme-muted">Learn. Grow. Succeed.</p>
+                    </div>
+
+                    <div className="space-y-1">
+                      <div className="w-8 h-8 rounded-lg bg-theme-card-inner border border-theme flex items-center justify-center text-theme-main mb-2">
+                        <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" stroke-width="2">
+                          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                      </div>
+                      <h4 className="text-xs font-bold text-theme-main">Secure & Trusted</h4>
+                      <p className="text-[11px] text-theme-muted">Your data is safe</p>
+                    </div>
+
+                    <div className="space-y-1">
+                      <div className="w-8 h-8 rounded-lg bg-theme-card-inner border border-theme flex items-center justify-center text-theme-main mb-2">
+                        <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" stroke-width="2">
+                          <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
+                        </svg>
+                      </div>
+                      <h4 className="text-xs font-bold text-theme-main">Better Outcomes</h4>
+                      <p className="text-[11px] text-theme-muted">Track your progress</p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-4 pt-4 border-t border-theme">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-7 h-7 rounded-full border ${specs.iconCircle} flex items-center justify-center text-xs shrink-0`}>
+                        <svg className="w-3.5 h-3.5 sync-icon" viewBox="0 0 24 24" strokeWidth="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-bold text-theme-main">Smart Learning</h4>
+                        <p className="text-[11px] text-theme-muted mt-0.5">Personalized education for a better future.</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      <div className={`w-7 h-7 rounded-full border ${specs.iconCircle} flex items-center justify-center text-xs shrink-0`}>
+                        <svg className="w-3.5 h-3.5 sync-icon" viewBox="0 0 24 24" strokeWidth="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-bold text-theme-main">Secure & Trusted</h4>
+                        <p className="text-[11px] text-theme-muted mt-0.5">Your data is protected with top security.</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                      <div className={`w-7 h-7 rounded-full border ${specs.iconCircle} flex items-center justify-center text-xs shrink-0`}>
+                        <svg className="w-3.5 h-3.5 sync-icon" viewBox="0 0 24 24" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-bold text-theme-main">Global Community</h4>
+                        <p className="text-[11px] text-theme-muted mt-0.5">Connect, learn and grow together worldwide.</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Illustration / Badge */}
+                {selectedRole === null ? (
+                  <div className="pt-2 flex items-center gap-3">
+                    <div className="flex -space-x-2 overflow-hidden shrink-0">
+                      <img className="inline-block h-8 w-8 rounded-full ring-2 ring-slate-950 object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="Student 1" />
+                      <img className="inline-block h-8 w-8 rounded-full ring-2 ring-slate-950 object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80" alt="Student 2" />
+                      <img className="inline-block h-8 w-8 rounded-full ring-2 ring-slate-950 object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80" alt="Student 3" />
+                      <img className="inline-block h-8 w-8 rounded-full ring-2 ring-slate-950 object-cover" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80" alt="Student 4" />
+                    </div>
+                    <div className="text-xs text-theme-muted">
+                      <span style={{ color: 'var(--brand-lime)' }} className="font-extrabold text-sm">21,500+</span> learners already connected
+                    </div>
+                  </div>
+                ) : (
+                  <div className="w-full h-48 rounded-2xl bg-gradient-to-b from-slate-950 to-indigo-950/40 border border-theme relative overflow-hidden flex items-end justify-center pt-8">
+                    <div className="absolute top-4 left-6 w-1 h-1 bg-white rounded-full opacity-60"></div>
+                    <div className="absolute top-10 right-12 w-1.5 h-1.5 bg-white rounded-full opacity-45"></div>
+                    <div className="absolute top-4 right-10 w-6 h-6 bg-amber-200/20 rounded-full blur-[1px] flex items-center justify-center">
+                      <div className="w-4 h-4 bg-amber-100 rounded-full"></div>
+                    </div>
+                    <div className="absolute bottom-0 right-12 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl"></div>
+                    <div className="w-full flex items-end justify-center px-8 gap-3 relative z-10">
+                      <div className="w-14 h-16 bg-slate-950 border-t border-x border-slate-900 rounded-t-lg flex flex-col justify-around py-2.5 px-2">
+                        <div className="flex gap-1 justify-center"><div className="w-2 h-3 bg-amber-400 rounded-sm shadow-[0_0_8px_#fbbf24]"></div><div className="w-2 h-3 bg-amber-400 rounded-sm shadow-[0_0_8px_#fbbf24]"></div></div>
+                        <div className="flex gap-1 justify-center"><div className="w-2 h-3 bg-amber-400 rounded-sm shadow-[0_0_8px_#fbbf24]"></div><div className="w-2 h-3 bg-slate-900 rounded-sm"></div></div>
+                      </div>
+                      <div className="w-20 h-24 bg-slate-950 border-t border-x border-slate-900 rounded-t-xl flex flex-col justify-between py-3 px-2.5 relative">
+                        <div className="w-5 h-5 bg-slate-900 border border-slate-800 rounded-full absolute -top-2.5 left-7.5 flex items-center justify-center text-[7px] text-slate-500">⏰</div>
+                        <div className="flex gap-1.5 justify-center"><div className="w-2.5 h-3 bg-amber-400 rounded-sm shadow-[0_0_8px_#fbbf24]"></div><div className="w-2.5 h-3 bg-slate-900 rounded-sm"></div><div className="w-2.5 h-3 bg-amber-400 rounded-sm shadow-[0_0_8px_#fbbf24]"></div></div>
+                        <div className="flex gap-1.5 justify-center"><div className="w-2.5 h-3 bg-amber-400 rounded-sm shadow-[0_0_8px_#fbbf24]"></div><div className="w-2.5 h-3 bg-amber-400 rounded-sm shadow-[0_0_8px_#fbbf24]"></div><div className="w-2.5 h-3 bg-amber-400 rounded-sm shadow-[0_0_8px_#fbbf24]"></div></div>
+                        <div className="w-5 h-7 bg-slate-900 rounded-t-md mx-auto border-t border-x border-slate-800"></div>
+                      </div>
+                      <div className="w-14 h-18 bg-slate-950 border-t border-x border-slate-900 rounded-t-lg flex flex-col justify-around py-2.5 px-2">
+                        <div className="flex gap-1 justify-center"><div className="w-2 h-3 bg-slate-900 rounded-sm"></div><div className="w-2 h-3 bg-amber-400 rounded-sm shadow-[0_0_8px_#fbbf24]"></div></div>
+                        <div className="flex gap-1 justify-center"><div className="w-2 h-3 bg-amber-400 rounded-sm shadow-[0_0_8px_#fbbf24]"></div><div className="w-2 h-3 bg-amber-400 rounded-sm shadow-[0_0_8px_#fbbf24]"></div></div>
+                      </div>
+                    </div>
+                    <div className="absolute bottom-3 left-3 right-3 bg-slate-950/80 border border-slate-800/60 rounded-xl px-2.5 py-1.5 flex items-center gap-2 z-20 backdrop-blur-sm">
+                      <div className="flex -space-x-1.5 overflow-hidden shrink-0">
+                        <img className="inline-block h-6 w-6 rounded-full ring-2 ring-slate-950 object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=50&auto=format&fit=crop&q=80" alt="Student 1" />
+                        <img className="inline-block h-6 w-6 rounded-full ring-2 ring-slate-950 object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&auto=format&fit=crop&q=80" alt="Student 2" />
+                        <img className="inline-block h-6 w-6 rounded-full ring-2 ring-slate-950 object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=50&auto=format&fit=crop&q=80" alt="Student 3" />
+                      </div>
+                      <span className="text-[10px] text-slate-400 leading-none">
+                        <strong className="text-lime-400 font-extrabold">21,500+</strong> learners already connected and growing every day.
+                      </span>
+                    </div>
+                  </div>
+                )}
               </div>
             ) : (
-              <div className="space-y-3">
-                <span className={`text-xs font-extrabold tracking-widest uppercase block ${specs.accentText}`}>
-                  WELCOME BACK!
-                </span>
-                <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-theme-main leading-[1.08]">
-                  Sign in to continue <br />
-                  <span className={`${specs.accentText}`}>your learning journey</span>
-                </h1>
-                <p className="text-sm text-theme-muted leading-relaxed font-normal pt-2 max-w-md">
-                  Access your classes, assignments, grades and everything you need to succeed.
-                </p>
-              </div>
-            )}
-
-            {/* Feature Bullets List */}
-            {selectedRole === null ? (
-              /* Grid Layout (Default) */
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t border-theme">
-                <div className="space-y-1">
-                  <div className="w-8 h-8 rounded-lg bg-theme-card-inner border border-theme flex items-center justify-center text-theme-main mb-2">
-                    <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" stroke-width="2">
-                      <circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>
-                    </svg>
-                  </div>
-                  <h4 className="text-xs font-bold text-theme-main">Global Community</h4>
-                  <p className="text-[11px] text-theme-muted">Connect worldwide</p>
+              /* REGISTER LEFT COLUMN (Matches step 1 layout in the new screenshot) */
+              <div className="space-y-6">
+                <div>
+                  <button 
+                    onClick={() => { setMode('LOGIN'); setSelectedRole(null); }}
+                    className="inline-flex items-center gap-2 text-xs font-bold text-theme-muted hover:text-theme-main transition cursor-pointer"
+                  >
+                    <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" strokeWidth="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                    Back to home
+                  </button>
                 </div>
 
-                <div className="space-y-1">
-                  <div className="w-8 h-8 rounded-lg bg-theme-card-inner border border-theme flex items-center justify-center text-theme-main mb-2">
-                    <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" stroke-width="2">
-                      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-                    </svg>
-                  </div>
-                  <h4 className="text-xs font-bold text-theme-main">Smart Learning</h4>
-                  <p className="text-[11px] text-theme-muted">Learn. Grow. Succeed.</p>
+                <div className="space-y-3">
+                  <span className="text-xs font-extrabold tracking-widest text-slate-500 uppercase block">
+                    STUDENT SUCCESS, WORLDWIDE
+                  </span>
+                  <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-theme-main leading-[1.08]">
+                    Every future <br />
+                    <span style={{ color: 'var(--brand-lime)' }}>starts connected.</span>
+                  </h1>
+                  <p className="text-sm text-theme-muted leading-relaxed font-normal pt-2 max-w-md">
+                    Create your account to access everything you need. Choose your role and join our learning community.
+                  </p>
                 </div>
 
-                <div className="space-y-1">
-                  <div className="w-8 h-8 rounded-lg bg-theme-card-inner border border-theme flex items-center justify-center text-theme-main mb-2">
-                    <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" stroke-width="2">
-                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                    </svg>
-                  </div>
-                  <h4 className="text-xs font-bold text-theme-main">Secure & Trusted</h4>
-                  <p className="text-[11px] text-theme-muted">Your data is safe</p>
-                </div>
-
-                <div className="space-y-1">
-                  <div className="w-8 h-8 rounded-lg bg-theme-card-inner border border-theme flex items-center justify-center text-theme-main mb-2">
-                    <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" stroke-width="2">
-                      <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
-                    </svg>
-                  </div>
-                  <h4 className="text-xs font-bold text-theme-main">Better Outcomes</h4>
-                  <p className="text-[11px] text-theme-muted">Track your progress</p>
-                </div>
-              </div>
-            ) : (
-              /* Vertical List (Credentials Mode) */
-              <div className="space-y-4 pt-4 border-t border-theme">
-                <div className="flex items-center gap-3">
-                  <div className={`w-7 h-7 rounded-full border ${specs.iconCircle} flex items-center justify-center text-xs shrink-0`}>
-                    <svg className="w-3.5 h-3.5 sync-icon" viewBox="0 0 24 24" strokeWidth="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-bold text-theme-main">Smart Learning</h4>
-                    <p className="text-[11px] text-theme-muted mt-0.5">Personalized education for a better future.</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <div className={`w-7 h-7 rounded-full border ${specs.iconCircle} flex items-center justify-center text-xs shrink-0`}>
-                    <svg className="w-3.5 h-3.5 sync-icon" viewBox="0 0 24 24" strokeWidth="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-bold text-theme-main">Secure & Trusted</h4>
-                    <p className="text-[11px] text-theme-muted mt-0.5">Your data is protected with top security.</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <div className={`w-7 h-7 rounded-full border ${specs.iconCircle} flex items-center justify-center text-xs shrink-0`}>
-                    <svg className="w-3.5 h-3.5 sync-icon" viewBox="0 0 24 24" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-bold text-theme-main">Global Community</h4>
-                    <p className="text-[11px] text-theme-muted mt-0.5">Connect, learn and grow together worldwide.</p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Learners circular badge or Illustration block */}
-            {selectedRole === null ? (
-              /* Learners Badge (Default) */
-              <div className="pt-2 flex items-center gap-3">
-                <div className="flex -space-x-2 overflow-hidden shrink-0">
-                  <img className="inline-block h-8 w-8 rounded-full ring-2 ring-slate-950 object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="Student 1" />
-                  <img className="inline-block h-8 w-8 rounded-full ring-2 ring-slate-950 object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80" alt="Student 2" />
-                  <img className="inline-block h-8 w-8 rounded-full ring-2 ring-slate-950 object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80" alt="Student 3" />
-                  <img className="inline-block h-8 w-8 rounded-full ring-2 ring-slate-950 object-cover" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80" alt="Student 4" />
-                </div>
-                <div className="text-xs text-theme-muted">
-                  <span style={{ color: 'var(--brand-lime)' }} className="font-extrabold text-sm">21,500+</span> learners already connected
-                </div>
-              </div>
-            ) : (
-              /* Custom CSS SVG-drawn School Night Illustration */
-              <div className="w-full h-48 rounded-2xl bg-gradient-to-b from-slate-950 to-indigo-950/40 border border-theme relative overflow-hidden flex items-end justify-center pt-8">
-                {/* Stars */}
-                <div className="absolute top-4 left-6 w-1 h-1 bg-white rounded-full opacity-60"></div>
-                <div className="absolute top-10 right-12 w-1.5 h-1.5 bg-white rounded-full opacity-45"></div>
-                <div className="absolute top-16 left-1/3 w-1 h-1 bg-white rounded-full opacity-80"></div>
-                <div className="absolute top-8 right-1/4 w-1 h-1 bg-white rounded-full opacity-50"></div>
-                
-                {/* Moon */}
-                <div className="absolute top-4 right-10 w-6 h-6 bg-amber-200/20 rounded-full blur-[1px] flex items-center justify-center">
-                  <div className="w-4 h-4 bg-amber-100 rounded-full"></div>
-                </div>
-
-                {/* Glow */}
-                <div className="absolute bottom-0 right-12 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl"></div>
-
-                {/* Buildings Silhouettes */}
-                <div className="w-full flex items-end justify-center px-8 gap-3 relative z-10">
-                  {/* Left Building */}
-                  <div className="w-14 h-16 bg-slate-950 border-t border-x border-slate-900 rounded-t-lg flex flex-col justify-around py-2.5 px-2">
-                    <div className="flex gap-1 justify-center">
-                      <div className="w-2 h-3 bg-amber-400 rounded-sm shadow-[0_0_8px_#fbbf24]"></div>
-                      <div className="w-2 h-3 bg-amber-400 rounded-sm shadow-[0_0_8px_#fbbf24]"></div>
+                {/* Vertical Features list (4 items) */}
+                <div className="space-y-4 pt-4 border-t border-theme">
+                  <div className="flex items-center gap-3">
+                    <div className="w-7 h-7 rounded-full border border-theme flex items-center justify-center text-xs shrink-0 text-theme-main bg-theme-card-inner">
+                      <svg className="w-3.5 h-3.5 sync-icon" viewBox="0 0 24 24" strokeWidth="2.5"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
                     </div>
-                    <div className="flex gap-1 justify-center">
-                      <div className="w-2 h-3 bg-amber-400 rounded-sm shadow-[0_0_8px_#fbbf24]"></div>
-                      <div className="w-2 h-3 bg-slate-900 rounded-sm"></div>
+                    <div>
+                      <h4 className="text-xs font-bold text-theme-main">Smart Learning</h4>
+                      <p className="text-[11px] text-theme-muted mt-0.5">Learn. Grow. Succeed.</p>
                     </div>
                   </div>
-                  
-                  {/* Middle Main Building */}
-                  <div className="w-20 h-24 bg-slate-950 border-t border-x border-slate-900 rounded-t-xl flex flex-col justify-between py-3 px-2.5 relative">
-                    <div className="w-5 h-5 bg-slate-900 border border-slate-800 rounded-full absolute -top-2.5 left-7.5 flex items-center justify-center text-[7px] text-slate-500">⏰</div>
-                    <div className="flex gap-1.5 justify-center">
-                      <div className="w-2.5 h-3 bg-amber-400 rounded-sm shadow-[0_0_8px_#fbbf24]"></div>
-                      <div className="w-2.5 h-3 bg-slate-900 rounded-sm"></div>
-                      <div className="w-2.5 h-3 bg-amber-400 rounded-sm shadow-[0_0_8px_#fbbf24]"></div>
+
+                  <div className="flex items-center gap-3">
+                    <div className="w-7 h-7 rounded-full border border-theme flex items-center justify-center text-xs shrink-0 text-theme-main bg-theme-card-inner">
+                      <svg className="w-3.5 h-3.5 sync-icon" viewBox="0 0 24 24" strokeWidth="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                     </div>
-                    <div className="flex gap-1.5 justify-center">
-                      <div className="w-2.5 h-3 bg-amber-400 rounded-sm shadow-[0_0_8px_#fbbf24]"></div>
-                      <div className="w-2.5 h-3 bg-amber-400 rounded-sm shadow-[0_0_8px_#fbbf24]"></div>
-                      <div className="w-2.5 h-3 bg-amber-400 rounded-sm shadow-[0_0_8px_#fbbf24]"></div>
+                    <div>
+                      <h4 className="text-xs font-bold text-theme-main">Secure & Trusted</h4>
+                      <p className="text-[11px] text-theme-muted mt-0.5">Your data is safe with us.</p>
                     </div>
-                    <div className="w-5 h-7 bg-slate-900 rounded-t-md mx-auto border-t border-x border-slate-800"></div>
                   </div>
 
-                  {/* Right Building */}
-                  <div className="w-14 h-18 bg-slate-950 border-t border-x border-slate-900 rounded-t-lg flex flex-col justify-around py-2.5 px-2">
-                    <div className="flex gap-1 justify-center">
-                      <div className="w-2 h-3 bg-slate-900 rounded-sm"></div>
-                      <div className="w-2 h-3 bg-amber-400 rounded-sm shadow-[0_0_8px_#fbbf24]"></div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-7 h-7 rounded-full border border-theme flex items-center justify-center text-xs shrink-0 text-theme-main bg-theme-card-inner">
+                      <svg className="w-3.5 h-3.5 sync-icon" viewBox="0 0 24 24" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
                     </div>
-                    <div className="flex gap-1 justify-center">
-                      <div className="w-2 h-3 bg-amber-400 rounded-sm shadow-[0_0_8px_#fbbf24]"></div>
-                      <div className="w-2 h-3 bg-amber-400 rounded-sm shadow-[0_0_8px_#fbbf24]"></div>
+                    <div>
+                      <h4 className="text-xs font-bold text-theme-main">Global Community</h4>
+                      <p className="text-[11px] text-theme-muted mt-0.5">Connect and learn worldwide.</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <div className="w-7 h-7 rounded-full border border-theme flex items-center justify-center text-xs shrink-0 text-theme-main bg-theme-card-inner">
+                      <svg className="w-3.5 h-3.5 sync-icon" viewBox="0 0 24 24" strokeWidth="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-theme-main">Better Outcomes</h4>
+                      <p className="text-[11px] text-theme-muted mt-0.5">Track your progress and achieve more.</p>
                     </div>
                   </div>
                 </div>
 
-                {/* Avatar Overlay inside illustration */}
-                <div className="absolute bottom-3 left-3 right-3 bg-slate-950/80 border border-slate-800/60 rounded-xl px-2.5 py-1.5 flex items-center gap-2 z-20 backdrop-blur-sm">
+                {/* Overlapping Learners badge in a dark box at the bottom */}
+                <div className="p-3.5 rounded-xl border border-theme bg-theme-card-inner flex items-center gap-3 max-w-sm">
                   <div className="flex -space-x-1.5 overflow-hidden shrink-0">
                     <img className="inline-block h-6 w-6 rounded-full ring-2 ring-slate-950 object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=50&auto=format&fit=crop&q=80" alt="Student 1" />
                     <img className="inline-block h-6 w-6 rounded-full ring-2 ring-slate-950 object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&auto=format&fit=crop&q=80" alt="Student 2" />
                     <img className="inline-block h-6 w-6 rounded-full ring-2 ring-slate-950 object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=50&auto=format&fit=crop&q=80" alt="Student 3" />
                   </div>
-                  <span className="text-[10px] text-slate-400 leading-none">
-                    <strong className="text-lime-400 font-extrabold">21,500+</strong> learners already connected and growing every day.
+                  <span className="text-[10px] text-theme-muted leading-none">
+                    <strong style={{ color: 'var(--brand-lime)' }} className="font-extrabold text-xs">21,500+</strong> learners already connected
                   </span>
                 </div>
+
               </div>
             )}
           </div>
@@ -489,294 +627,441 @@ export default function Login() {
           <div className="lg:col-span-7">
             <div className="rounded-3xl p-6 sm:p-8 border border-theme shadow-2xl relative transition-all duration-300 min-h-[500px] flex flex-col justify-between" style={{ backgroundColor: 'var(--bg-card)' }}>
               
-              {selectedRole === null ? (
+              {mode === 'LOGIN' ? (
                 /* CHOOSE PORTAL CARD GRID */
-                <div className="space-y-6 flex-1 flex flex-col justify-between">
-                  <div>
-                    <span style={{ color: 'var(--brand-lime)' }} className="text-[11px] font-extrabold tracking-widest uppercase block mb-1">
-                      WELCOME BACK
-                    </span>
-                    <h2 className="text-2xl font-extrabold text-theme-main">Choose your portal</h2>
-                    <p className="text-xs text-theme-muted mt-0.5">Select your role to sign in to your account</p>
-                  </div>
-
-                  {/* 2x2 Portals Grid */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-auto">
-                    
-                    {/* Student Portal Card */}
-                    <div className="p-5 rounded-2xl border border-theme bg-theme-card-inner hover:border-lime-500/50 transition flex flex-col items-center text-center group">
-                      <div className="w-12 h-12 rounded-full bg-lime-500/10 border border-lime-500/30 flex items-center justify-center text-lime-400 mb-3 group-hover:scale-105 transition">
-                        <svg className="w-6 h-6 sync-icon" viewBox="0 0 24 24" stroke-width="1.8">
-                          <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-                          <path d="M6 12v5c0 2 3 3 6 3s6-1 6-3v-5"/>
-                        </svg>
-                      </div>
-                      <h3 className="text-sm font-bold text-lime-400 mb-1">Student Portal</h3>
-                      <p className="text-[11px] text-theme-muted mb-4 leading-relaxed">
-                        Access your classes, assignments, results, timetable and more.
-                      </p>
-                      <button 
-                        onClick={() => { setSelectedRole('STUDENT'); setUsername(''); setPassword(''); setError(''); }}
-                        className="mt-auto w-full py-2 px-4 rounded-xl border border-lime-500/40 hover:border-lime-400 text-xs font-semibold text-lime-400 hover:bg-lime-500/10 transition flex items-center justify-center gap-1.5 cursor-pointer bg-transparent"
-                      >
-                        Sign in
-                        <svg className="w-3.5 h-3.5 sync-icon" viewBox="0 0 24 24" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                      </button>
+                selectedRole === null ? (
+                  <div className="space-y-6 flex-1 flex flex-col justify-between animate-fade-in">
+                    <div>
+                      <span style={{ color: 'var(--brand-lime)' }} className="text-[11px] font-extrabold tracking-widest uppercase block mb-1">
+                        WELCOME BACK
+                      </span>
+                      <h2 className="text-2xl font-extrabold text-theme-main">Choose your portal</h2>
+                      <p className="text-xs text-theme-muted mt-0.5">Select your role to sign in to your account</p>
                     </div>
 
-                    {/* Admin Portal Card */}
-                    <div className="p-5 rounded-2xl border border-theme bg-theme-card-inner hover:border-blue-500/50 transition flex flex-col items-center text-center group">
-                      <div className="w-12 h-12 rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 mb-3 group-hover:scale-105 transition">
-                        <svg className="w-6 h-6 sync-icon" viewBox="0 0 24 24" stroke-width="1.8">
-                          <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-                          <line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
-                          <circle cx="12" cy="10" r="3"/>
-                        </svg>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-auto">
+                      {/* Student */}
+                      <div className="p-5 rounded-2xl border border-theme bg-theme-card-inner hover:border-lime-500/50 transition flex flex-col items-center text-center group">
+                        <div className="w-12 h-12 rounded-full bg-lime-500/10 border border-lime-500/30 flex items-center justify-center text-lime-400 mb-3 group-hover:scale-105 transition">
+                          <svg className="w-6 h-6 sync-icon" viewBox="0 0 24 24" stroke-width="1.8">
+                            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                            <path d="M6 12v5c0 2 3 3 6 3s6-1 6-3v-5"/>
+                          </svg>
+                        </div>
+                        <h3 className="text-sm font-bold text-lime-400 mb-1">Student Portal</h3>
+                        <p className="text-[11px] text-theme-muted mb-4 leading-relaxed">Access your classes, assignments, results, timetable and more.</p>
+                        <button onClick={() => { setSelectedRole('STUDENT'); setUsername(''); setPassword(''); setError(''); }} className="mt-auto w-full py-2 px-4 rounded-xl border border-lime-500/40 hover:border-lime-400 text-xs font-semibold text-lime-400 hover:bg-lime-500/10 transition flex items-center justify-center gap-1.5 cursor-pointer bg-transparent">Sign in<svg className="w-3.5 h-3.5 sync-icon" viewBox="0 0 24 24" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
                       </div>
-                      <h3 className="text-sm font-bold text-blue-400 mb-1">Admin Portal</h3>
-                      <p className="text-[11px] text-theme-muted mb-4 leading-relaxed">
-                        Manage users, academics, reports and system settings.
-                      </p>
-                      <button 
-                        onClick={() => { setSelectedRole('ADMIN'); setUsername(''); setPassword(''); setError(''); }}
-                        className="mt-auto w-full py-2 px-4 rounded-xl border border-blue-500/40 hover:border-blue-400 text-xs font-semibold text-blue-400 hover:bg-blue-500/10 transition flex items-center justify-center gap-1.5 cursor-pointer bg-transparent"
-                      >
-                        Sign in
-                        <svg className="w-3.5 h-3.5 sync-icon" viewBox="0 0 24 24" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                      </button>
+
+                      {/* Admin */}
+                      <div className="p-5 rounded-2xl border border-theme bg-theme-card-inner hover:border-blue-500/50 transition flex flex-col items-center text-center group">
+                        <div className="w-12 h-12 rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 mb-3 group-hover:scale-105 transition">
+                          <svg className="w-6 h-6 sync-icon" viewBox="0 0 24 24" stroke-width="1.8">
+                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/><circle cx="12" cy="10" r="3"/>
+                          </svg>
+                        </div>
+                        <h3 className="text-sm font-bold text-blue-400 mb-1">Admin Portal</h3>
+                        <p className="text-[11px] text-theme-muted mb-4 leading-relaxed">Manage users, academics, reports and system settings.</p>
+                        <button onClick={() => { setSelectedRole('ADMIN'); setUsername(''); setPassword(''); setError(''); }} className="mt-auto w-full py-2 px-4 rounded-xl border border-blue-500/40 hover:border-blue-400 text-xs font-semibold text-blue-400 hover:bg-blue-500/10 transition flex items-center justify-center gap-1.5 cursor-pointer bg-transparent">Sign in<svg className="w-3.5 h-3.5 sync-icon" viewBox="0 0 24 24" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+                      </div>
+
+                      {/* Teacher */}
+                      <div className="p-5 rounded-2xl border border-theme bg-theme-card-inner hover:border-purple-500/50 transition flex flex-col items-center text-center group">
+                        <div className="w-12 h-12 rounded-full bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 mb-3 group-hover:scale-105 transition">
+                          <svg className="w-6 h-6 sync-icon" viewBox="0 0 24 24" stroke-width="1.8">
+                            <rect x="2" y="3" width="20" height="12" rx="2"/><circle cx="12" cy="19" r="2"/><path d="M12 9v4"/>
+                          </svg>
+                        </div>
+                        <h3 className="text-sm font-bold text-purple-400 mb-1">Teacher Portal</h3>
+                        <p className="text-[11px] text-theme-muted mb-4 leading-relaxed">Manage classes, students, assignments and evaluations.</p>
+                        <button onClick={() => { setSelectedRole('TEACHER'); setUsername(''); setPassword(''); setError(''); }} className="mt-auto w-full py-2 px-4 rounded-xl border border-purple-500/40 hover:border-purple-400 text-xs font-semibold text-purple-400 hover:bg-purple-500/10 transition flex items-center justify-center gap-1.5 cursor-pointer bg-transparent">Sign in<svg className="w-3.5 h-3.5 sync-icon" viewBox="0 0 24 24" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+                      </div>
+
+                      {/* Parent */}
+                      <div className="p-5 rounded-2xl border border-theme bg-theme-card-inner hover:border-amber-500/50 transition flex flex-col items-center text-center group">
+                        <div className="w-12 h-12 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 mb-3 group-hover:scale-105 transition">
+                          <svg className="w-6 h-6 sync-icon" viewBox="0 0 24 24" stroke-width="1.8">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                          </svg>
+                        </div>
+                        <h3 className="text-sm font-bold text-amber-400 mb-1">Parent Portal</h3>
+                        <p className="text-[11px] text-theme-muted mb-4 leading-relaxed">Track your child's progress, attendance, fees and more.</p>
+                        <button onClick={() => { setSelectedRole('PARENT'); setUsername(''); setPassword(''); setError(''); }} className="mt-auto w-full py-2 px-4 rounded-xl border border-amber-500/40 hover:border-amber-400 text-xs font-semibold text-amber-400 hover:bg-amber-500/10 transition flex items-center justify-center gap-1.5 cursor-pointer bg-transparent">Sign in<svg className="w-3.5 h-3.5 sync-icon" viewBox="0 0 24 24" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+                      </div>
                     </div>
 
-                    {/* Teacher Portal Card */}
-                    <div className="p-5 rounded-2xl border border-theme bg-theme-card-inner hover:border-purple-500/50 transition flex flex-col items-center text-center group">
-                      <div className="w-12 h-12 rounded-full bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 mb-3 group-hover:scale-105 transition">
-                        <svg className="w-6 h-6 sync-icon" viewBox="0 0 24 24" stroke-width="1.8">
-                          <rect x="2" y="3" width="20" height="12" rx="2"/>
-                          <circle cx="12" cy="19" r="2"/>
-                          <path d="M12 9v4"/>
-                        </svg>
+                    <div className="space-y-4">
+                      <div className="relative my-4 text-center">
+                        <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-theme"></div></div>
+                        <span className="relative px-3 text-[10px] font-bold tracking-widest text-slate-500 uppercase" style={{ backgroundColor: 'var(--bg-card)' }}>OR</span>
                       </div>
-                      <h3 className="text-sm font-bold text-purple-400 mb-1">Teacher Portal</h3>
-                      <p className="text-[11px] text-theme-muted mb-4 leading-relaxed">
-                        Manage classes, students, assignments and evaluations.
-                      </p>
-                      <button 
-                        onClick={() => { setSelectedRole('TEACHER'); setUsername(''); setPassword(''); setError(''); }}
-                        className="mt-auto w-full py-2 px-4 rounded-xl border border-purple-500/40 hover:border-purple-400 text-xs font-semibold text-purple-400 hover:bg-purple-500/10 transition flex items-center justify-center gap-1.5 cursor-pointer bg-transparent"
-                      >
-                        Sign in
-                        <svg className="w-3.5 h-3.5 sync-icon" viewBox="0 0 24 24" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                      </button>
-                    </div>
-
-                    {/* Parent Portal Card */}
-                    <div className="p-5 rounded-2xl border border-theme bg-theme-card-inner hover:border-amber-500/50 transition flex flex-col items-center text-center group">
-                      <div className="w-12 h-12 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 mb-3 group-hover:scale-105 transition">
-                        <svg className="w-6 h-6 sync-icon" viewBox="0 0 24 24" stroke-width="1.8">
-                          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
-                          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                        </svg>
-                      </div>
-                      <h3 className="text-sm font-bold text-amber-400 mb-1">Parent Portal</h3>
-                      <p className="text-[11px] text-theme-muted mb-4 leading-relaxed">
-                        Track your child's progress, attendance, fees and more.
-                      </p>
-                      <button 
-                        onClick={() => { setSelectedRole('PARENT'); setUsername(''); setPassword(''); setError(''); }}
-                        className="mt-auto w-full py-2 px-4 rounded-xl border border-amber-500/40 hover:border-amber-400 text-xs font-semibold text-amber-400 hover:bg-amber-500/10 transition flex items-center justify-center gap-1.5 cursor-pointer bg-transparent"
-                      >
-                        Sign in
-                        <svg className="w-3.5 h-3.5 sync-icon" viewBox="0 0 24 24" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                      </button>
-                    </div>
-
-                  </div>
-
-                  {/* Divider & Create Account Button */}
-                  <div className="space-y-4">
-                    <div className="relative my-4 text-center">
-                      <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t border-theme"></div>
-                      </div>
-                      <span className="relative px-3 text-[10px] font-bold tracking-widest text-slate-500 uppercase" style={{ backgroundColor: 'var(--bg-card)' }}>OR</span>
-                    </div>
-
-                    <button 
-                      onClick={() => showNotification("Registrations are closed on this instance.")}
-                      className="w-full py-3 px-4 rounded-xl border border-theme bg-theme-card-inner text-xs font-bold text-theme-main transition flex items-center justify-center gap-2 cursor-pointer"
-                    >
-                      <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" stroke-width="2">
-                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/>
-                        <line x1="20" y1="8" x2="20" y2="14"/><line x1="17" y1="11" x2="23" y2="11"/>
-                      </svg>
-                      Create account
-                    </button>
-
-                    <div className="text-center text-xs text-theme-muted">
-                      Don't have an account? 
-                      <button onClick={() => showNotification("Please contact admin for registrations.")} style={{ color: 'var(--brand-lime)' }} className="font-bold hover:underline ml-1 cursor-pointer bg-transparent">Sign up</button>
+                      <button onClick={() => { setMode('REGISTER'); setRegisterStep(1); setRegError(''); }} className="w-full py-3 px-4 rounded-xl border border-theme bg-theme-card-inner text-xs font-bold text-theme-main transition flex items-center justify-center gap-2 cursor-pointer"><svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="17" y1="11" x2="23" y2="11"/></svg>Create account</button>
+                      <div className="text-center text-xs text-theme-muted">Don't have an account? <button onClick={() => { setMode('REGISTER'); setRegisterStep(1); setRegError(''); }} style={{ color: 'var(--brand-lime)' }} className="font-bold hover:underline ml-1 cursor-pointer bg-transparent">Sign up</button></div>
                     </div>
                   </div>
-                </div>
+                ) : (
+                  /* DETAILED SIGN IN CREDENTIALS VIEW */
+                  <div className="space-y-6 flex-1 flex flex-col justify-between animate-fade-in">
+                    <div>
+                      <button onClick={() => { setSelectedRole(null); setError(''); }} className="inline-flex items-center gap-2 text-xs font-bold text-theme-muted hover:text-theme-main transition cursor-pointer bg-transparent"><svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" strokeWidth="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>Back to portals</button>
+                    </div>
+                    <div className="text-center space-y-3">
+                      <div className={`mx-auto w-12 h-12 rounded-full border ${specs.iconCircle} flex items-center justify-center`}><svg className="w-6 h-6 sync-icon" viewBox="0 0 24 24" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+                      <div>
+                        <h2 className="text-2xl font-extrabold text-theme-main">Sign in</h2>
+                        <p className="text-xs text-theme-muted mt-1">Enter your credentials to access your account</p>
+                      </div>
+                    </div>
+                    <form className="space-y-5" onSubmit={handleSubmit}>
+                      {error && <div className="bg-red-500/10 border border-red-500/30 text-red-200 text-xs p-3.5 rounded-xl">{error}</div>}
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-[10px] font-bold text-theme-muted uppercase tracking-wider mb-2">Email Address</label>
+                          <div className="relative">
+                            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500"><svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" strokeWidth="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+                            <input type="text" required value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Enter your email address" className={`block w-full pl-10 pr-3 py-3 border border-theme rounded-xl bg-theme-card-inner text-theme-main placeholder-slate-600 focus:outline-none focus:ring-2 transition-all text-xs ${specs.borderFocus}`} />
+                          </div>
+                        </div>
+                        <div>
+                          <div className="flex justify-between items-center mb-2">
+                            <label className="block text-[10px] font-bold text-theme-muted uppercase tracking-wider">Password</label>
+                            <button type="button" onClick={() => showNotification("Contact administrator to retrieve password.")} className={`text-[10px] font-bold hover:underline ${specs.badgeText} cursor-pointer bg-transparent`}>Forgot Password?</button>
+                          </div>
+                          <div className="relative">
+                            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500"><svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+                            <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter your password" className={`block w-full pl-10 pr-10 py-3 border border-theme rounded-xl bg-theme-card-inner text-theme-main placeholder-slate-600 focus:outline-none focus:ring-2 transition-all text-xs ${specs.borderFocus}`} />
+                            <div className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-500 cursor-pointer hover:text-slate-350"><svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" strokeWidth="2"><circle cx="12" cy="12" r="3"/><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/></svg></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2.5 py-1">
+                        <input type="checkbox" id="rememberMe" className="rounded border-theme bg-theme-card-inner focus:ring-lime-500 h-4 w-4" />
+                        <label htmlFor="rememberMe" className="text-xs text-theme-muted cursor-pointer">Remember me</label>
+                      </div>
+                      <div className="pt-2">
+                        <button type="submit" disabled={loading} className={`w-full py-3.5 px-4 rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer disabled:opacity-50 flex items-center justify-center gap-1.5 ${specs.btnBg}`}>Sign in<svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" strokeWidth="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+                      </div>
+                    </form>
+                    <div className="space-y-4 pt-4 border-t border-theme">
+                      <div className="relative text-center">
+                        <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-theme"></div></div>
+                        <span className="relative px-2.5 text-[9px] font-bold tracking-widest text-slate-600 uppercase" style={{ backgroundColor: 'var(--bg-card)' }}>Or sign in with</span>
+                      </div>
+                      <div className="space-y-2">
+                        <button type="button" onClick={() => handleQuickDemoLogin(selectedRole)} className="w-full py-2.5 border border-theme bg-theme-card-inner hover:bg-slate-100/5 text-xs text-theme-main rounded-xl transition flex items-center justify-center gap-2 cursor-pointer">
+                          <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 23 23"><rect x="0" y="0" width="11" height="11" fill="#f25022"/><rect x="12" y="0" width="11" height="11" fill="#7fba00"/><rect x="0" y="12" width="11" height="11" fill="#00a4ef"/><rect x="12" y="12" width="11" height="11" fill="#ffb900"/></svg>
+                          <span>Continue with Microsoft</span>
+                        </button>
+                        <button type="button" onClick={() => handleQuickDemoLogin(selectedRole)} className="w-full py-2.5 border border-theme bg-theme-card-inner hover:bg-slate-100/5 text-xs text-theme-main rounded-xl transition flex items-center justify-center gap-2 cursor-pointer">
+                          <svg className="w-3.5 h-3.5 shrink-0 fill-current text-theme-main" viewBox="0 0 24 24"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.54 9.103 1.51 12.06 1.005 1.45 2.187 3.076 3.755 3.017 1.51-.062 2.079-.974 3.906-.974 1.826 0 2.36.974 3.934.94 1.602-.027 2.646-1.477 3.627-2.9 1.135-1.655 1.604-3.255 1.63-3.342-.03-.013-3.136-1.202-3.167-4.773-.027-2.983 2.444-4.417 2.557-4.483-1.402-2.052-3.57-2.285-4.331-2.342-1.954-.157-3.35 1.03-4.1.988zM15.975 4.108c.828-1.002 1.385-2.4 1.23-3.793-1.197.047-2.647.795-3.504 1.802-.756.873-1.42 2.29-1.242 3.666 1.332.103 2.69-.672 3.516-1.675z"/></svg>
+                          <span>Continue with Apple</span>
+                        </button>
+                      </div>
+                      <div className="text-center text-xs text-theme-muted">Don't have an account? <button type="button" onClick={() => { setMode('REGISTER'); setRegisterStep(1); setRegError(''); }} style={{ color: 'var(--brand-lime)' }} className="font-bold hover:underline cursor-pointer bg-transparent">Create Account</button></div>
+                    </div>
+                  </div>
+                )
               ) : (
-                /* DETAILED SIGN IN FORM VIEW */
+                /* ========================================================
+                   VIEW 3: CREATE ACCOUNT STEP WIZARD (Matches screenshot)
+                   ======================================================== */
                 <div className="space-y-6 flex-1 flex flex-col justify-between animate-fade-in">
                   
-                  {/* Back button */}
-                  <div>
-                    <button 
-                      onClick={() => { setSelectedRole(null); setError(''); }}
-                      className="inline-flex items-center gap-2 text-xs font-bold text-theme-muted hover:text-theme-main transition cursor-pointer"
-                    >
-                      <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" strokeWidth="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-                      Back to portals
-                    </button>
-                  </div>
-
-                  {/* Centered User Header */}
+                  {/* Stepper Header Title */}
                   <div className="text-center space-y-3">
-                    <div className={`mx-auto w-12 h-12 rounded-full border ${specs.iconCircle} flex items-center justify-center`}>
+                    <div className="mx-auto w-12 h-12 rounded-full border border-theme text-theme-main bg-theme-card-inner flex items-center justify-center">
                       <svg className="w-6 h-6 sync-icon" viewBox="0 0 24 24" strokeWidth="2">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="17" y1="11" x2="23" y2="11"/>
                       </svg>
                     </div>
                     <div>
-                      <h2 className="text-2xl font-extrabold text-theme-main">Sign in</h2>
-                      <p className="text-xs text-theme-muted mt-1">Enter your credentials to access your account</p>
+                      <h2 className="text-2xl font-extrabold text-theme-main">Create your account</h2>
+                      <p className="text-xs text-theme-muted mt-1">Join Bright Future School and start your journey</p>
                     </div>
                   </div>
 
-                  <form className="space-y-5" onSubmit={handleSubmit}>
-                    {error && (
+                  {/* Wizard Step Progress Tracker */}
+                  <div className="flex items-center justify-center max-w-md mx-auto w-full px-4 py-2">
+                    <div className="flex items-center w-full justify-between relative">
+                      
+                      {/* Dotted connecting line */}
+                      <div className="absolute top-4 left-4 right-4 h-px border-t-2 border-dashed border-theme z-0"></div>
+                      
+                      {/* Step 1 */}
+                      <div className="flex flex-col items-center z-10">
+                        <div className={`w-8 h-8 rounded-full border flex items-center justify-center text-xs font-bold transition-all duration-300 ${registerStep >= 1 ? 'border-lime-500 bg-lime-500/10 text-lime-400' : 'border-theme bg-theme-card-inner text-theme-muted'}`}>1</div>
+                        <span className={`text-[9px] font-bold mt-1.5 transition-all duration-300 ${registerStep === 1 ? 'text-lime-400' : 'text-theme-muted'}`}>Account Info</span>
+                      </div>
+                      
+                      {/* Step 2 */}
+                      <div className="flex flex-col items-center z-10">
+                        <div className={`w-8 h-8 rounded-full border flex items-center justify-center text-xs font-bold transition-all duration-300 ${registerStep >= 2 ? 'border-lime-500 bg-lime-500/10 text-lime-400' : 'border-theme bg-theme-card-inner text-theme-muted'}`}>2</div>
+                        <span className={`text-[9px] font-bold mt-1.5 transition-all duration-300 ${registerStep === 2 ? 'text-lime-400' : 'text-theme-muted'}`}>Personal Info</span>
+                      </div>
+
+                      {/* Step 3 */}
+                      <div className="flex flex-col items-center z-10">
+                        <div className={`w-8 h-8 rounded-full border flex items-center justify-center text-xs font-bold transition-all duration-300 ${registerStep >= 3 ? 'border-lime-500 bg-lime-500/10 text-lime-400' : 'border-theme bg-theme-card-inner text-theme-muted'}`}>3</div>
+                        <span className={`text-[9px] font-bold mt-1.5 transition-all duration-300 ${registerStep === 3 ? 'text-lime-400' : 'text-theme-muted'}`}>Contact Info</span>
+                      </div>
+
+                      {/* Step 4 */}
+                      <div className="flex flex-col items-center z-10">
+                        <div className={`w-8 h-8 rounded-full border flex items-center justify-center text-xs font-bold transition-all duration-300 ${registerStep >= 4 ? 'border-lime-500 bg-lime-500/10 text-lime-400' : 'border-theme bg-theme-card-inner text-theme-muted'}`}>4</div>
+                        <span className={`text-[9px] font-bold mt-1.5 transition-all duration-300 ${registerStep === 4 ? 'text-lime-400' : 'text-theme-muted'}`}>Review</span>
+                      </div>
+
+                    </div>
+                  </div>
+
+                  {/* Form fields conditional to current wizard step */}
+                  <form onSubmit={e => e.preventDefault()} className="space-y-5 my-auto">
+                    {regError && (
                       <div className="bg-red-500/10 border border-red-500/30 text-red-200 text-xs p-3.5 rounded-xl">
-                        {error}
+                        {regError}
                       </div>
                     )}
 
-                    <div className="space-y-4">
-                      {/* Email Address / Username field */}
-                      <div>
-                        <label className="block text-[10px] font-bold text-theme-muted uppercase tracking-wider mb-2">
-                          Email Address
-                        </label>
-                        <div className="relative">
-                          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
-                            <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" strokeWidth="2">
-                              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
-                            </svg>
+                    {registerStep === 1 && (
+                      /* STEP 1: ACCOUNT INFORMATION */
+                      <div className="space-y-5">
+                        <h3 className="text-xs font-bold text-theme-main uppercase tracking-widest border-b border-theme pb-2">Account Information</h3>
+                        
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-[10px] font-bold text-theme-muted uppercase tracking-wider mb-2">Full Name</label>
+                            <div className="relative">
+                              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                                <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                              </div>
+                              <input type="text" required value={regFullName} onChange={e => setRegFullName(e.target.value)} placeholder="Enter your full name" className="block w-full pl-10 pr-3 py-3 border border-theme rounded-xl bg-theme-card-inner text-theme-main placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-lime-500/20 focus:border-lime-500/80 transition-all text-xs" />
+                            </div>
                           </div>
-                          <input
-                            type="text"
-                            required
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            placeholder="Enter your email address"
-                            className={`block w-full pl-10 pr-3 py-3 border border-theme rounded-xl bg-theme-card-inner text-theme-main placeholder-slate-600 focus:outline-none focus:ring-2 transition-all text-xs ${specs.borderFocus}`}
-                          />
-                        </div>
-                      </div>
 
-                      {/* Password field */}
-                      <div>
-                        <div className="flex justify-between items-center mb-2">
-                          <label className="block text-[10px] font-bold text-theme-muted uppercase tracking-wider">
-                            Password
+                          <div>
+                            <label className="block text-[10px] font-bold text-theme-muted uppercase tracking-wider mb-2">Email Address</label>
+                            <div className="relative">
+                              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                                <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" strokeWidth="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                              </div>
+                              <input type="email" required value={regEmail} onChange={e => setRegEmail(e.target.value)} placeholder="Enter your email address" className="block w-full pl-10 pr-3 py-3 border border-theme rounded-xl bg-theme-card-inner text-theme-main placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-lime-500/20 focus:border-lime-500/80 transition-all text-xs" />
+                            </div>
+                          </div>
+
+                          <div>
+                            <label className="block text-[10px] font-bold text-theme-muted uppercase tracking-wider mb-2">Create Password</label>
+                            <div className="relative">
+                              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                                <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                              </div>
+                              <input type={showPass ? "text" : "password"} required value={regPassword} onChange={e => setRegPassword(e.target.value)} placeholder="Create a strong password" className="block w-full pl-10 pr-10 py-3 border border-theme rounded-xl bg-theme-card-inner text-theme-main placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-lime-500/20 focus:border-lime-500/80 transition-all text-xs" />
+                              <button type="button" onClick={() => setShowPass(!showPass)} className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-500 cursor-pointer hover:text-slate-350">
+                                <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" strokeWidth="2"><circle cx="12" cy="12" r="3"/><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/></svg>
+                              </button>
+                            </div>
+                          </div>
+
+                          <div>
+                            <label className="block text-[10px] font-bold text-theme-muted uppercase tracking-wider mb-2">Confirm Password</label>
+                            <div className="relative">
+                              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                                <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                              </div>
+                              <input type={showConfirmPass ? "text" : "password"} required value={regConfirmPassword} onChange={e => setRegConfirmPassword(e.target.value)} placeholder="Confirm your password" className="block w-full pl-10 pr-10 py-3 border border-theme rounded-xl bg-theme-card-inner text-theme-main placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-lime-500/20 focus:border-lime-500/80 transition-all text-xs" />
+                              <button type="button" onClick={() => setShowConfirmPass(!showConfirmPass)} className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-500 cursor-pointer hover:text-slate-350">
+                                <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" strokeWidth="2"><circle cx="12" cy="12" r="3"/><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/></svg>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        <p className="text-[9px] text-theme-muted">Min. 8 characters with letters, numbers & symbols</p>
+
+                        {/* Select Your Role heading and horizontal selector cards */}
+                        <div>
+                          <h3 className="text-xs font-bold text-theme-main uppercase tracking-widest mb-3">Select Your Role</h3>
+                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                            
+                            {/* Student role card */}
+                            <div 
+                              onClick={() => setRegRole('STUDENT')}
+                              className={`p-3.5 rounded-xl border transition-all cursor-pointer text-center relative ${regRole === 'STUDENT' ? 'border-lime-500 bg-lime-500/5' : 'border-theme bg-theme-card-inner'}`}
+                            >
+                              <div className={`absolute top-2 right-2 w-3.5 h-3.5 rounded-full border flex items-center justify-center ${regRole === 'STUDENT' ? 'border-lime-500' : 'border-theme'}`}>
+                                {regRole === 'STUDENT' && <div className="w-1.5 h-1.5 bg-lime-500 rounded-full"></div>}
+                              </div>
+                              <div className={`w-8 h-8 rounded-lg mx-auto flex items-center justify-center mb-2 ${regRole === 'STUDENT' ? 'text-lime-400 bg-lime-500/10' : 'text-theme-muted bg-theme-card-inner'}`}><svg className="w-5 h-5 sync-icon" viewBox="0 0 24 24" strokeWidth="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 3 3 6 3s6-1 6-3v-5"/></svg></div>
+                              <h4 className={`text-xs font-bold ${regRole === 'STUDENT' ? 'text-lime-400' : 'text-theme-main'}`}>Student</h4>
+                              <p className="text-[8px] text-theme-muted mt-1 leading-tight">Access assignments, classes, and marks.</p>
+                            </div>
+
+                            {/* Teacher role card */}
+                            <div 
+                              onClick={() => setRegRole('TEACHER')}
+                              className={`p-3.5 rounded-xl border transition-all cursor-pointer text-center relative ${regRole === 'TEACHER' ? 'border-purple-500 bg-purple-500/5' : 'border-theme bg-theme-card-inner'}`}
+                            >
+                              <div className={`absolute top-2 right-2 w-3.5 h-3.5 rounded-full border flex items-center justify-center ${regRole === 'TEACHER' ? 'border-purple-500' : 'border-theme'}`}>
+                                {regRole === 'TEACHER' && <div className="w-1.5 h-1.5 bg-purple-500 rounded-full"></div>}
+                              </div>
+                              <div className={`w-8 h-8 rounded-lg mx-auto flex items-center justify-center mb-2 ${regRole === 'TEACHER' ? 'text-purple-400 bg-purple-500/10' : 'text-theme-muted bg-theme-card-inner'}`}><svg className="w-5 h-5 sync-icon" viewBox="0 0 24 24" strokeWidth="2"><rect x="2" y="3" width="20" height="12" rx="2"/><circle cx="12" cy="19" r="2"/><path d="M12 9v4"/></svg></div>
+                              <h4 className={`text-xs font-bold ${regRole === 'TEACHER' ? 'text-purple-400' : 'text-theme-main'}`}>Teacher</h4>
+                              <p className="text-[8px] text-theme-muted mt-1 leading-tight">Manage students and schedule classes.</p>
+                            </div>
+
+                            {/* Parent role card */}
+                            <div 
+                              onClick={() => setRegRole('PARENT')}
+                              className={`p-3.5 rounded-xl border transition-all cursor-pointer text-center relative ${regRole === 'PARENT' ? 'border-amber-500 bg-amber-500/5' : 'border-theme bg-theme-card-inner'}`}
+                            >
+                              <div className={`absolute top-2 right-2 w-3.5 h-3.5 rounded-full border flex items-center justify-center ${regRole === 'PARENT' ? 'border-amber-500' : 'border-theme'}`}>
+                                {regRole === 'PARENT' && <div className="w-1.5 h-1.5 bg-amber-500 rounded-full"></div>}
+                              </div>
+                              <div className={`w-8 h-8 rounded-lg mx-auto flex items-center justify-center mb-2 ${regRole === 'PARENT' ? 'text-amber-400 bg-amber-500/10' : 'text-theme-muted bg-theme-card-inner'}`}><svg className="w-5 h-5 sync-icon" viewBox="0 0 24 24" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+                              <h4 className={`text-xs font-bold ${regRole === 'PARENT' ? 'text-amber-400' : 'text-theme-main'}`}>Parent</h4>
+                              <p className="text-[8px] text-theme-muted mt-1 leading-tight">Track child details and fee invoices.</p>
+                            </div>
+
+                            {/* Admin role card */}
+                            <div 
+                              onClick={() => setRegRole('ADMIN')}
+                              className={`p-3.5 rounded-xl border transition-all cursor-pointer text-center relative ${regRole === 'ADMIN' ? 'border-blue-500 bg-blue-500/5' : 'border-theme bg-theme-card-inner'}`}
+                            >
+                              <div className={`absolute top-2 right-2 w-3.5 h-3.5 rounded-full border flex items-center justify-center ${regRole === 'ADMIN' ? 'border-blue-500' : 'border-theme'}`}>
+                                {regRole === 'ADMIN' && <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>}
+                              </div>
+                              <div className={`w-8 h-8 rounded-lg mx-auto flex items-center justify-center mb-2 ${regRole === 'ADMIN' ? 'text-blue-400 bg-blue-500/10' : 'text-theme-muted bg-theme-card-inner'}`}><svg className="w-5 h-5 sync-icon" viewBox="0 0 24 24" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/></svg></div>
+                              <h4 className={`text-xs font-bold ${regRole === 'ADMIN' ? 'text-blue-400' : 'text-theme-main'}`}>Admin</h4>
+                              <p className="text-[8px] text-theme-muted mt-1 leading-tight">Configure school settings and databases.</p>
+                            </div>
+
+                          </div>
+                        </div>
+
+                        {/* Agreement Checkbox */}
+                        <div className="flex items-center gap-2.5 py-1">
+                          <input type="checkbox" id="regAgreeCheck" checked={regAgree} onChange={e => setRegAgree(e.target.checked)} className="rounded border-theme bg-theme-card-inner focus:ring-lime-500 h-4 w-4 cursor-pointer" />
+                          <label htmlFor="regAgreeCheck" className="text-xs text-theme-muted cursor-pointer">
+                            I agree to the <span className="text-lime-400 hover:underline">Terms of Service</span> and <span className="text-lime-400 hover:underline">Privacy Policy</span>
                           </label>
-                          <button 
-                            type="button"
-                            onClick={() => showNotification("Contact administrator to retrieve password.")}
-                            className={`text-[10px] font-bold hover:underline ${specs.badgeText} cursor-pointer bg-transparent`}
-                          >
-                            Forgot Password?
-                          </button>
                         </div>
-                        <div className="relative">
-                          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
-                            <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" strokeWidth="2">
-                              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                            </svg>
+                      </div>
+                    )}
+
+                    {registerStep === 2 && (
+                      /* STEP 2: PERSONAL INFO */
+                      <div className="space-y-5">
+                        <h3 className="text-xs font-bold text-theme-main uppercase tracking-widest border-b border-theme pb-2">Personal Information</h3>
+                        
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div>
+                            <label className="block text-[10px] font-bold text-theme-muted uppercase tracking-wider mb-2">Phone Number</label>
+                            <div className="relative">
+                              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                                <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" strokeWidth="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                              </div>
+                              <input type="text" required value={regPhone} onChange={e => setRegPhone(e.target.value)} placeholder="Enter phone number" className="block w-full pl-10 pr-3 py-3 border border-theme rounded-xl bg-theme-card-inner text-theme-main placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-lime-500/20 focus:border-lime-500/80 transition-all text-xs" />
+                            </div>
                           </div>
-                          <input
-                            type="password"
-                            required
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            placeholder="Enter your password"
-                            className={`block w-full pl-10 pr-10 py-3 border border-theme rounded-xl bg-theme-card-inner text-theme-main placeholder-slate-600 focus:outline-none focus:ring-2 transition-all text-xs ${specs.borderFocus}`}
-                          />
-                          <div className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-500 cursor-pointer hover:text-slate-350">
-                            <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" strokeWidth="2"><circle cx="12" cy="12" r="3"/><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/></svg>
+
+                          <div>
+                            <label className="block text-[10px] font-bold text-theme-muted uppercase tracking-wider mb-2">Date of Birth</label>
+                            <div className="relative">
+                              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                                <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                              </div>
+                              <input type="date" required value={regDOB} onChange={e => setRegDOB(e.target.value)} className="block w-full pl-10 pr-3 py-3 border border-theme rounded-xl bg-theme-card-inner text-theme-main focus:outline-none focus:ring-2 focus:ring-lime-500/20 focus:border-lime-500/80 transition-all text-xs" />
+                            </div>
+                          </div>
+
+                          <div>
+                            <label className="block text-[10px] font-bold text-theme-muted uppercase tracking-wider mb-2">Gender</label>
+                            <select value={regGender} onChange={e => setRegGender(e.target.value)} className="block w-full px-3.5 py-3 border border-theme rounded-xl bg-theme-card-inner text-theme-main focus:outline-none focus:ring-2 focus:ring-lime-500/20 focus:border-lime-500/80 transition-all text-xs">
+                              <option value="MALE">Male</option>
+                              <option value="FEMALE">Female</option>
+                              <option value="OTHER">Other</option>
+                            </select>
                           </div>
                         </div>
                       </div>
-                    </div>
+                    )}
 
-                    {/* Remember me check */}
-                    <div className="flex items-center gap-2.5 py-1">
-                      <input 
-                        type="checkbox" 
-                        id="rememberMe"
-                        className="rounded border-theme bg-theme-card-inner focus:ring-lime-500 h-4 w-4"
-                      />
-                      <label htmlFor="rememberMe" className="text-xs text-theme-muted cursor-pointer">Remember me</label>
-                    </div>
+                    {registerStep === 3 && (
+                      /* STEP 3: CONTACT INFO */
+                      <div className="space-y-5">
+                        <h3 className="text-xs font-bold text-theme-main uppercase tracking-widest border-b border-theme pb-2">Contact Information</h3>
+                        
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div className="sm:col-span-2">
+                            <label className="block text-[10px] font-bold text-theme-muted uppercase tracking-wider mb-2">Address</label>
+                            <div className="relative">
+                              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                                <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                              </div>
+                              <input type="text" required value={regAddress} onChange={e => setRegAddress(e.target.value)} placeholder="Enter home address" className="block w-full pl-10 pr-3 py-3 border border-theme rounded-xl bg-theme-card-inner text-theme-main placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-lime-500/20 focus:border-lime-500/80 transition-all text-xs" />
+                            </div>
+                          </div>
 
-                    {/* Submit Button */}
-                    <div className="pt-2">
-                      <button
-                        type="submit"
-                        disabled={loading}
-                        className={`w-full py-3.5 px-4 rounded-xl text-xs font-bold transition-all shadow-md cursor-pointer disabled:opacity-50 flex items-center justify-center gap-1.5 ${specs.btnBg}`}
-                      >
-                        {loading ? 'Verifying...' : 'Sign in'}
-                        <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" strokeWidth="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                      </button>
+                          <div>
+                            <label className="block text-[10px] font-bold text-theme-muted uppercase tracking-wider mb-2">City</label>
+                            <input type="text" required value={regCity} onChange={e => setRegCity(e.target.value)} placeholder="Enter city" className="block w-full px-3.5 py-3 border border-theme rounded-xl bg-theme-card-inner text-theme-main placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-lime-500/20 focus:border-lime-500/80 transition-all text-xs" />
+                          </div>
+
+                          <div>
+                            <label className="block text-[10px] font-bold text-theme-muted uppercase tracking-wider mb-2">Country</label>
+                            <input type="text" required value={regCountry} onChange={e => setRegCountry(e.target.value)} placeholder="Enter country" className="block w-full px-3.5 py-3 border border-theme rounded-xl bg-theme-card-inner text-theme-main placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-lime-500/20 focus:border-lime-500/80 transition-all text-xs" />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {registerStep === 4 && (
+                      /* STEP 4: REVIEW SUMMARY */
+                      <div className="space-y-5">
+                        <h3 className="text-xs font-bold text-theme-main uppercase tracking-widest border-b border-theme pb-2">Review Account Details</h3>
+                        
+                        <div className="p-4 rounded-xl border border-theme bg-theme-card-inner space-y-3.5 text-xs text-theme-main">
+                          <div className="flex justify-between border-b border-theme pb-1.5"><span className="text-theme-muted">Full Name:</span><span className="font-bold">{regFullName}</span></div>
+                          <div className="flex justify-between border-b border-theme pb-1.5"><span className="text-theme-muted">Email Address:</span><span className="font-bold">{regEmail}</span></div>
+                          <div className="flex justify-between border-b border-theme pb-1.5"><span className="text-theme-muted">Selected Role:</span><span className="font-bold text-lime-400">{regRole}</span></div>
+                          <div className="flex justify-between border-b border-theme pb-1.5"><span className="text-theme-muted">Phone Number:</span><span className="font-bold">{regPhone}</span></div>
+                          <div className="flex justify-between border-b border-theme pb-1.5"><span className="text-theme-muted">Date of Birth:</span><span className="font-bold">{regDOB}</span></div>
+                          <div className="flex justify-between border-b border-theme pb-1.5"><span className="text-theme-muted">Gender:</span><span className="font-bold">{regGender}</span></div>
+                          <div className="flex justify-between"><span className="text-theme-muted">Location:</span><span className="font-bold">{regCity}, {regCountry}</span></div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Stepper Wizard buttons */}
+                    <div className="flex justify-between items-center pt-4">
+                      {registerStep > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => setRegisterStep(prev => prev - 1)}
+                          className="px-5 py-3 border border-theme text-theme-main bg-theme-card-inner rounded-xl text-xs font-bold transition cursor-pointer hover:bg-slate-100/5"
+                        >
+                          Back
+                        </button>
+                      )}
+                      
+                      {registerStep < 4 ? (
+                        <button
+                          type="button"
+                          onClick={handleRegNext}
+                          className="ml-auto px-6 py-3 bg-lime-500 hover:bg-lime-400 text-slate-950 rounded-xl text-xs font-bold transition flex items-center gap-1 cursor-pointer"
+                        >
+                          Next <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" strokeWidth="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={handleRegisterSubmit}
+                          disabled={loading}
+                          className="ml-auto px-6 py-3 bg-lime-500 hover:bg-lime-400 text-slate-950 rounded-xl text-xs font-bold transition flex items-center gap-1 cursor-pointer"
+                        >
+                          {loading ? 'Creating...' : 'Create Account'} <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        </button>
+                      )}
                     </div>
                   </form>
-
-                  {/* Social & Demo login buttons */}
-                  <div className="space-y-4 pt-4 border-t border-theme">
-                    
-                    <div className="relative text-center">
-                      <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t border-theme"></div>
-                      </div>
-                      <span className="relative px-2.5 text-[9px] font-bold tracking-widest text-slate-600 uppercase" style={{ backgroundColor: 'var(--bg-card)' }}>Or sign in with</span>
-                    </div>
-
-                    <div className="space-y-2">
-                      {/* Microsoft */}
-                      <button 
-                        type="button"
-                        onClick={() => handleQuickDemoLogin(selectedRole)}
-                        className="w-full py-2.5 border border-theme bg-theme-card-inner hover:bg-slate-100/5 text-xs text-theme-main rounded-xl transition flex items-center justify-center gap-2 cursor-pointer"
-                      >
-                        <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 23 23">
-                          <rect x="0" y="0" width="11" height="11" fill="#f25022"/>
-                          <rect x="12" y="0" width="11" height="11" fill="#7fba00"/>
-                          <rect x="0" y="12" width="11" height="11" fill="#00a4ef"/>
-                          <rect x="12" y="12" width="11" height="11" fill="#ffb900"/>
-                        </svg>
-                        <span>Continue with Microsoft</span>
-                      </button>
-
-                      {/* Apple */}
-                      <button 
-                        type="button"
-                        onClick={() => handleQuickDemoLogin(selectedRole)}
-                        className="w-full py-2.5 border border-theme bg-theme-card-inner hover:bg-slate-100/5 text-xs text-theme-main rounded-xl transition flex items-center justify-center gap-2 cursor-pointer"
-                      >
-                        <svg className="w-3.5 h-3.5 shrink-0 fill-current text-theme-main" viewBox="0 0 24 24">
-                          <path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.54 9.103 1.51 12.06 1.005 1.45 2.187 3.076 3.755 3.017 1.51-.062 2.079-.974 3.906-.974 1.826 0 2.36.974 3.934.94 1.602-.027 2.646-1.477 3.627-2.9 1.135-1.655 1.604-3.255 1.63-3.342-.03-.013-3.136-1.202-3.167-4.773-.027-2.983 2.444-4.417 2.557-4.483-1.402-2.052-3.57-2.285-4.331-2.342-1.954-.157-3.35 1.03-4.1.988zM15.975 4.108c.828-1.002 1.385-2.4 1.23-3.793-1.197.047-2.647.795-3.504 1.802-.756.873-1.42 2.29-1.242 3.666 1.332.103 2.69-.672 3.516-1.675z"/>
-                        </svg>
-                        <span>Continue with Apple</span>
-                      </button>
-                    </div>
-
-                    <div className="text-center text-xs text-theme-muted">
-                      Don't have an account? <button type="button" onClick={() => showNotification("Please contact school admin.")} style={{ color: 'var(--brand-lime)' }} className="font-bold hover:underline cursor-pointer bg-transparent">Create Account</button>
-                    </div>
-
-                  </div>
 
                 </div>
               )}
