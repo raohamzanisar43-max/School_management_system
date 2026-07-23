@@ -20,7 +20,13 @@ export default {
           amber: '#f59e0b',
           rose: '#f43f5e',
           violet: '#8b5cf6',
-        }
+        },
+        darkbg: {
+          main: '#0b101d',
+          card: '#131b2e',
+          sidebar: '#0d1322',
+          border: '#1e293b',
+        },
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
