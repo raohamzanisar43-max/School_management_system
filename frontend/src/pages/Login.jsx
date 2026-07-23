@@ -134,11 +134,11 @@ export default function Login() {
         :root {
           --bg-page: #05070a;
           --bg-card: #0b101d;
-          --bg-card-inner: #070a12;
+          --bg-card-inner: #05070b;
           --border-color: #182030;
           --border-subtle: rgba(24, 32, 48, 0.6);
 
-          --text-main: #f8fafc;
+          --text-main: #ffffff;
           --text-muted: #94a3b8;
           --text-subtle: #64748b;
 
@@ -148,9 +148,9 @@ export default function Login() {
         }
 
         [data-theme="light"] {
-          --bg-page: #f1f5f9;
+          --bg-page: #f8fafc;
           --bg-card: #ffffff;
-          --bg-card-inner: #f8fafc;
+          --bg-card-inner: #ffffff;
           --border-color: #e2e8f0;
           --border-subtle: rgba(15, 23, 42, 0.08);
 
@@ -167,7 +167,7 @@ export default function Login() {
         [data-theme="night"] {
           --bg-page: #000000;
           --bg-card: #080808;
-          --bg-card-inner: #111111;
+          --bg-card-inner: #050505;
           --border-color: #222222;
           --border-subtle: rgba(255, 255, 255, 0.1);
 
@@ -181,49 +181,25 @@ export default function Login() {
         }
 
         body {
-          background-color: var(--bg-page);
-          color: var(--text-main);
+          background-color: var(--bg-page) !important;
+          color: var(--text-main) !important;
           transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        [data-theme="light"] body {
-          background-color: var(--bg-page);
+        .text-theme-main {
           color: var(--text-main);
         }
 
-        [data-theme="light"] .text-white {
-          color: #0f172a !important;
+        .text-theme-muted {
+          color: var(--text-muted);
         }
 
-        [data-theme="light"] .text-slate-200,
-        [data-theme="light"] .text-slate-300 {
-          color: #334155 !important;
+        .border-theme {
+          border-color: var(--border-color);
         }
 
-        [data-theme="light"] .text-slate-400 {
-          color: #475569 !important;
-        }
-
-        [data-theme="light"] .text-slate-500 {
-          color: #64748b !important;
-        }
-
-        [data-theme="light"] .bg-slate-900,
-        [data-theme="light"] .bg-slate-950,
-        [data-theme="light"] .bg-slate-900\/80,
-        [data-theme="light"] .bg-slate-950\/80,
-        [data-theme="light"] .bg-slate-950\/60,
-        [data-theme="light"] .bg-slate-950\/50,
-        [data-theme="light"] .bg-slate-950\/40 {
-          background-color: #ffffff !important;
-        }
-
-        [data-theme="light"] .border-slate-800,
-        [data-theme="light"] .border-slate-800\/80,
-        [data-theme="light"] .border-slate-800\/90,
-        [data-theme="light"] .border-slate-700\/80,
-        [data-theme="light"] .border-slate-700\/60 {
-          border-color: #e2e8f0 !important;
+        .bg-theme-card-inner {
+          background-color: var(--bg-card-inner);
         }
 
         .bg-grid-pattern {
@@ -245,18 +221,18 @@ export default function Login() {
         
         {/* Brand Logo */}
         <a href="/" className="flex items-center gap-3 group" onClick={(e) => { e.preventDefault(); setSelectedRole(null); }}>
-          <div className="w-10 h-10 rounded-xl bg-slate-900 dark:bg-white/5 border border-slate-700/60 dark:border-white/15 flex items-center justify-center p-2 shadow-sm group-hover:border-lime-500/50 transition">
-            <svg className="w-6 h-6 text-white sync-icon" viewBox="0 0 24 24" strokeWidth="1.8">
+          <div className="w-10 h-10 rounded-xl bg-theme-card-inner border border-theme flex items-center justify-center p-2 shadow-sm group-hover:border-lime-500/50 transition">
+            <svg className="w-6 h-6 text-theme-main sync-icon" viewBox="0 0 24 24" strokeWidth="1.8">
               <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
               <path d="M6 12v5c0 2 3 3 6 3s6-1 6-3v-5"/>
             </svg>
           </div>
           <div>
-            <div className="font-extrabold text-sm sm:text-base tracking-tight text-white uppercase flex items-center gap-1.5 leading-none">
+            <div className="font-extrabold text-sm sm:text-base tracking-tight text-theme-main uppercase flex items-center gap-1.5 leading-none">
               <span>BRIGHT FUTURE</span>
               <span style={{ color: 'var(--brand-lime)' }}>SCHOOL</span>
             </div>
-            <div className="text-[9px] sm:text-[10px] font-bold tracking-widest text-slate-400 uppercase mt-1">
+            <div className="text-[9px] sm:text-[10px] font-bold tracking-widest text-theme-muted uppercase mt-1">
               THE GLOBAL LEARNING HUB
             </div>
           </div>
@@ -264,11 +240,11 @@ export default function Login() {
 
         {/* Header Actions */}
         <div className="flex items-center gap-3 sm:gap-4">
-          <span className="hidden sm:inline text-xs text-slate-400 font-medium">Don't have an account?</span>
+          <span className="hidden sm:inline text-xs text-theme-muted font-medium">New here?</span>
           
           <button 
             onClick={() => showNotification("Registrations are closed.")}
-            className="px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl border border-slate-700/80 hover:border-lime-400 text-xs font-bold text-white hover:text-lime-400 transition-all flex items-center gap-2 bg-slate-900/60 hover:bg-lime-500/10 cursor-pointer"
+            className="px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl border border-theme text-xs font-bold text-theme-main hover:text-lime-400 transition-all flex items-center gap-2 bg-theme-card-inner hover:bg-lime-500/10 cursor-pointer"
           >
             <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" stroke-width="2">
               <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
@@ -276,14 +252,14 @@ export default function Login() {
               <line x1="20" y1="8" x2="20" y2="14"/>
               <line x1="17" y1="11" x2="23" y2="11"/>
             </svg>
-            <span>Create Account</span>
+            <span>Create account</span>
           </button>
 
           {/* Theme Switcher */}
           <button 
             onClick={toggleNextTheme} 
             title="Toggle Theme (Dark / Light / OLED)" 
-            className="w-9 h-9 rounded-xl border border-slate-700/80 hover:border-slate-500 bg-slate-900/80 flex items-center justify-center text-slate-300 hover:text-white transition cursor-pointer"
+            className="w-9 h-9 rounded-xl border border-theme bg-theme-card-inner flex items-center justify-center text-theme-muted hover:text-theme-main transition cursor-pointer"
           >
             {theme === 'dark' && (
               <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" stroke-width="2">
@@ -318,11 +294,11 @@ export default function Login() {
                 <span style={{ color: 'var(--brand-lime)' }} className="text-xs font-extrabold tracking-widest uppercase block">
                   STUDENT SUCCESS, WORLDWIDE
                 </span>
-                <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white leading-[1.08]">
+                <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-theme-main leading-[1.08]">
                   Every future <br />
                   <span style={{ color: 'var(--brand-lime)' }}>starts connected.</span>
                 </h1>
-                <p className="text-sm text-slate-400 leading-relaxed font-normal pt-2 max-w-md">
+                <p className="text-sm text-theme-muted leading-relaxed font-normal pt-2 max-w-md">
                   A unified portal to access everything you need. Choose your portal and sign in to continue your learning journey.
                 </p>
               </div>
@@ -331,70 +307,70 @@ export default function Login() {
                 <span className={`text-xs font-extrabold tracking-widest uppercase block ${specs.accentText}`}>
                   WELCOME BACK!
                 </span>
-                <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white leading-[1.08]">
+                <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-theme-main leading-[1.08]">
                   Sign in to continue <br />
                   <span className={`${specs.accentText}`}>your learning journey</span>
                 </h1>
-                <p className="text-sm text-slate-400 leading-relaxed font-normal pt-2 max-w-md">
+                <p className="text-sm text-theme-muted leading-relaxed font-normal pt-2 max-w-md">
                   Access your classes, assignments, grades and everything you need to succeed.
                 </p>
               </div>
             )}
 
-            {/* Feature Bullets List (Changes from grid to vertical list in Sign In mode) */}
+            {/* Feature Bullets List */}
             {selectedRole === null ? (
               /* Grid Layout (Default) */
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t border-slate-800/80">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t border-theme">
                 <div className="space-y-1">
-                  <div className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-300 mb-2">
+                  <div className="w-8 h-8 rounded-lg bg-theme-card-inner border border-theme flex items-center justify-center text-theme-main mb-2">
                     <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" stroke-width="2">
                       <circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>
                     </svg>
                   </div>
-                  <h4 className="text-xs font-bold text-white">Global Community</h4>
-                  <p className="text-[11px] text-slate-400">Connect worldwide</p>
+                  <h4 className="text-xs font-bold text-theme-main">Global Community</h4>
+                  <p className="text-[11px] text-theme-muted">Connect worldwide</p>
                 </div>
 
                 <div className="space-y-1">
-                  <div className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-300 mb-2">
+                  <div className="w-8 h-8 rounded-lg bg-theme-card-inner border border-theme flex items-center justify-center text-theme-main mb-2">
                     <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" stroke-width="2">
                       <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
                     </svg>
                   </div>
-                  <h4 className="text-xs font-bold text-white">Smart Learning</h4>
-                  <p className="text-[11px] text-slate-400">Learn. Grow. Succeed.</p>
+                  <h4 className="text-xs font-bold text-theme-main">Smart Learning</h4>
+                  <p className="text-[11px] text-theme-muted">Learn. Grow. Succeed.</p>
                 </div>
 
                 <div className="space-y-1">
-                  <div className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-300 mb-2">
+                  <div className="w-8 h-8 rounded-lg bg-theme-card-inner border border-theme flex items-center justify-center text-theme-main mb-2">
                     <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" stroke-width="2">
                       <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                     </svg>
                   </div>
-                  <h4 className="text-xs font-bold text-white">Secure & Trusted</h4>
-                  <p className="text-[11px] text-slate-400">Your data is safe</p>
+                  <h4 className="text-xs font-bold text-theme-main">Secure & Trusted</h4>
+                  <p className="text-[11px] text-theme-muted">Your data is safe</p>
                 </div>
 
                 <div className="space-y-1">
-                  <div className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-300 mb-2">
+                  <div className="w-8 h-8 rounded-lg bg-theme-card-inner border border-theme flex items-center justify-center text-theme-main mb-2">
                     <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" stroke-width="2">
                       <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
                     </svg>
                   </div>
-                  <h4 className="text-xs font-bold text-white">Better Outcomes</h4>
-                  <p className="text-[11px] text-slate-400">Track your progress</p>
+                  <h4 className="text-xs font-bold text-theme-main">Better Outcomes</h4>
+                  <p className="text-[11px] text-theme-muted">Track your progress</p>
                 </div>
               </div>
             ) : (
-              /* Vertical List (Credentials Mode - Matches Screenshot exactly) */
-              <div className="space-y-4 pt-4 border-t border-slate-800/80">
+              /* Vertical List (Credentials Mode) */
+              <div className="space-y-4 pt-4 border-t border-theme">
                 <div className="flex items-center gap-3">
                   <div className={`w-7 h-7 rounded-full border ${specs.iconCircle} flex items-center justify-center text-xs shrink-0`}>
                     <svg className="w-3.5 h-3.5 sync-icon" viewBox="0 0 24 24" strokeWidth="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-white">Smart Learning</h4>
-                    <p className="text-[11px] text-slate-400 mt-0.5">Personalized education for a better future.</p>
+                    <h4 className="text-xs font-bold text-theme-main">Smart Learning</h4>
+                    <p className="text-[11px] text-theme-muted mt-0.5">Personalized education for a better future.</p>
                   </div>
                 </div>
 
@@ -403,8 +379,8 @@ export default function Login() {
                     <svg className="w-3.5 h-3.5 sync-icon" viewBox="0 0 24 24" strokeWidth="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-white">Secure & Trusted</h4>
-                    <p className="text-[11px] text-slate-400 mt-0.5">Your data is protected with top security.</p>
+                    <h4 className="text-xs font-bold text-theme-main">Secure & Trusted</h4>
+                    <p className="text-[11px] text-theme-muted mt-0.5">Your data is protected with top security.</p>
                   </div>
                 </div>
 
@@ -413,8 +389,8 @@ export default function Login() {
                     <svg className="w-3.5 h-3.5 sync-icon" viewBox="0 0 24 24" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-white">Global Community</h4>
-                    <p className="text-[11px] text-slate-400 mt-0.5">Connect, learn and grow together worldwide.</p>
+                    <h4 className="text-xs font-bold text-theme-main">Global Community</h4>
+                    <p className="text-[11px] text-theme-muted mt-0.5">Connect, learn and grow together worldwide.</p>
                   </div>
                 </div>
               </div>
@@ -430,13 +406,13 @@ export default function Login() {
                   <img className="inline-block h-8 w-8 rounded-full ring-2 ring-slate-950 object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80" alt="Student 3" />
                   <img className="inline-block h-8 w-8 rounded-full ring-2 ring-slate-950 object-cover" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80" alt="Student 4" />
                 </div>
-                <div className="text-xs text-slate-400">
+                <div className="text-xs text-theme-muted">
                   <span style={{ color: 'var(--brand-lime)' }} className="font-extrabold text-sm">21,500+</span> learners already connected
                 </div>
               </div>
             ) : (
-              /* Custom CSS SVG-drawn School Night Illustration (Matches Screenshot) */
-              <div className="w-full h-48 rounded-2xl bg-gradient-to-b from-slate-950 to-indigo-950/40 border border-slate-900 relative overflow-hidden flex items-end justify-center pt-8">
+              /* Custom CSS SVG-drawn School Night Illustration */
+              <div className="w-full h-48 rounded-2xl bg-gradient-to-b from-slate-950 to-indigo-950/40 border border-theme relative overflow-hidden flex items-end justify-center pt-8">
                 {/* Stars */}
                 <div className="absolute top-4 left-6 w-1 h-1 bg-white rounded-full opacity-60"></div>
                 <div className="absolute top-10 right-12 w-1.5 h-1.5 bg-white rounded-full opacity-45"></div>
@@ -511,7 +487,7 @@ export default function Login() {
 
           {/* Right Portal Grid / Form Container */}
           <div className="lg:col-span-7">
-            <div className="rounded-3xl p-6 sm:p-8 border border-slate-800/90 backdrop-blur-xl shadow-2xl relative transition-all duration-300 min-h-[500px] flex flex-col justify-between" style={{ backgroundColor: 'var(--bg-card)' }}>
+            <div className="rounded-3xl p-6 sm:p-8 border border-theme shadow-2xl relative transition-all duration-300 min-h-[500px] flex flex-col justify-between" style={{ backgroundColor: 'var(--bg-card)' }}>
               
               {selectedRole === null ? (
                 /* CHOOSE PORTAL CARD GRID */
@@ -520,15 +496,15 @@ export default function Login() {
                     <span style={{ color: 'var(--brand-lime)' }} className="text-[11px] font-extrabold tracking-widest uppercase block mb-1">
                       WELCOME BACK
                     </span>
-                    <h2 className="text-2xl font-extrabold text-white">Choose your portal</h2>
-                    <p className="text-xs text-slate-400 mt-0.5">Select your role to sign in to your account</p>
+                    <h2 className="text-2xl font-extrabold text-theme-main">Choose your portal</h2>
+                    <p className="text-xs text-theme-muted mt-0.5">Select your role to sign in to your account</p>
                   </div>
 
                   {/* 2x2 Portals Grid */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-auto">
                     
                     {/* Student Portal Card */}
-                    <div className="p-5 rounded-2xl border border-slate-800 bg-slate-950/50 hover:border-lime-500/50 transition flex flex-col items-center text-center group">
+                    <div className="p-5 rounded-2xl border border-theme bg-theme-card-inner hover:border-lime-500/50 transition flex flex-col items-center text-center group">
                       <div className="w-12 h-12 rounded-full bg-lime-500/10 border border-lime-500/30 flex items-center justify-center text-lime-400 mb-3 group-hover:scale-105 transition">
                         <svg className="w-6 h-6 sync-icon" viewBox="0 0 24 24" stroke-width="1.8">
                           <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
@@ -536,12 +512,12 @@ export default function Login() {
                         </svg>
                       </div>
                       <h3 className="text-sm font-bold text-lime-400 mb-1">Student Portal</h3>
-                      <p className="text-[11px] text-slate-400 mb-4 leading-relaxed">
+                      <p className="text-[11px] text-theme-muted mb-4 leading-relaxed">
                         Access your classes, assignments, results, timetable and more.
                       </p>
                       <button 
                         onClick={() => { setSelectedRole('STUDENT'); setUsername(''); setPassword(''); setError(''); }}
-                        className="mt-auto w-full py-2 px-4 rounded-xl border border-lime-500/40 hover:border-lime-400 text-xs font-semibold text-lime-400 hover:bg-lime-500/10 transition flex items-center justify-center gap-1.5 cursor-pointer"
+                        className="mt-auto w-full py-2 px-4 rounded-xl border border-lime-500/40 hover:border-lime-400 text-xs font-semibold text-lime-400 hover:bg-lime-500/10 transition flex items-center justify-center gap-1.5 cursor-pointer bg-transparent"
                       >
                         Sign in
                         <svg className="w-3.5 h-3.5 sync-icon" viewBox="0 0 24 24" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
@@ -549,7 +525,7 @@ export default function Login() {
                     </div>
 
                     {/* Admin Portal Card */}
-                    <div className="p-5 rounded-2xl border border-slate-800 bg-slate-950/50 hover:border-blue-500/50 transition flex flex-col items-center text-center group">
+                    <div className="p-5 rounded-2xl border border-theme bg-theme-card-inner hover:border-blue-500/50 transition flex flex-col items-center text-center group">
                       <div className="w-12 h-12 rounded-full bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 mb-3 group-hover:scale-105 transition">
                         <svg className="w-6 h-6 sync-icon" viewBox="0 0 24 24" stroke-width="1.8">
                           <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
@@ -558,12 +534,12 @@ export default function Login() {
                         </svg>
                       </div>
                       <h3 className="text-sm font-bold text-blue-400 mb-1">Admin Portal</h3>
-                      <p className="text-[11px] text-slate-400 mb-4 leading-relaxed">
+                      <p className="text-[11px] text-theme-muted mb-4 leading-relaxed">
                         Manage users, academics, reports and system settings.
                       </p>
                       <button 
                         onClick={() => { setSelectedRole('ADMIN'); setUsername(''); setPassword(''); setError(''); }}
-                        className="mt-auto w-full py-2 px-4 rounded-xl border border-blue-500/40 hover:border-blue-400 text-xs font-semibold text-blue-400 hover:bg-blue-500/10 transition flex items-center justify-center gap-1.5 cursor-pointer"
+                        className="mt-auto w-full py-2 px-4 rounded-xl border border-blue-500/40 hover:border-blue-400 text-xs font-semibold text-blue-400 hover:bg-blue-500/10 transition flex items-center justify-center gap-1.5 cursor-pointer bg-transparent"
                       >
                         Sign in
                         <svg className="w-3.5 h-3.5 sync-icon" viewBox="0 0 24 24" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
@@ -571,7 +547,7 @@ export default function Login() {
                     </div>
 
                     {/* Teacher Portal Card */}
-                    <div className="p-5 rounded-2xl border border-slate-800 bg-slate-950/50 hover:border-purple-500/50 transition flex flex-col items-center text-center group">
+                    <div className="p-5 rounded-2xl border border-theme bg-theme-card-inner hover:border-purple-500/50 transition flex flex-col items-center text-center group">
                       <div className="w-12 h-12 rounded-full bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 mb-3 group-hover:scale-105 transition">
                         <svg className="w-6 h-6 sync-icon" viewBox="0 0 24 24" stroke-width="1.8">
                           <rect x="2" y="3" width="20" height="12" rx="2"/>
@@ -580,12 +556,12 @@ export default function Login() {
                         </svg>
                       </div>
                       <h3 className="text-sm font-bold text-purple-400 mb-1">Teacher Portal</h3>
-                      <p className="text-[11px] text-slate-400 mb-4 leading-relaxed">
+                      <p className="text-[11px] text-theme-muted mb-4 leading-relaxed">
                         Manage classes, students, assignments and evaluations.
                       </p>
                       <button 
                         onClick={() => { setSelectedRole('TEACHER'); setUsername(''); setPassword(''); setError(''); }}
-                        className="mt-auto w-full py-2 px-4 rounded-xl border border-purple-500/40 hover:border-purple-400 text-xs font-semibold text-purple-400 hover:bg-purple-500/10 transition flex items-center justify-center gap-1.5 cursor-pointer"
+                        className="mt-auto w-full py-2 px-4 rounded-xl border border-purple-500/40 hover:border-purple-400 text-xs font-semibold text-purple-400 hover:bg-purple-500/10 transition flex items-center justify-center gap-1.5 cursor-pointer bg-transparent"
                       >
                         Sign in
                         <svg className="w-3.5 h-3.5 sync-icon" viewBox="0 0 24 24" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
@@ -593,7 +569,7 @@ export default function Login() {
                     </div>
 
                     {/* Parent Portal Card */}
-                    <div className="p-5 rounded-2xl border border-slate-800 bg-slate-950/50 hover:border-amber-500/50 transition flex flex-col items-center text-center group">
+                    <div className="p-5 rounded-2xl border border-theme bg-theme-card-inner hover:border-amber-500/50 transition flex flex-col items-center text-center group">
                       <div className="w-12 h-12 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 mb-3 group-hover:scale-105 transition">
                         <svg className="w-6 h-6 sync-icon" viewBox="0 0 24 24" stroke-width="1.8">
                           <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
@@ -601,12 +577,12 @@ export default function Login() {
                         </svg>
                       </div>
                       <h3 className="text-sm font-bold text-amber-400 mb-1">Parent Portal</h3>
-                      <p className="text-[11px] text-slate-400 mb-4 leading-relaxed">
+                      <p className="text-[11px] text-theme-muted mb-4 leading-relaxed">
                         Track your child's progress, attendance, fees and more.
                       </p>
                       <button 
                         onClick={() => { setSelectedRole('PARENT'); setUsername(''); setPassword(''); setError(''); }}
-                        className="mt-auto w-full py-2 px-4 rounded-xl border border-amber-500/40 hover:border-amber-400 text-xs font-semibold text-amber-400 hover:bg-amber-500/10 transition flex items-center justify-center gap-1.5 cursor-pointer"
+                        className="mt-auto w-full py-2 px-4 rounded-xl border border-amber-500/40 hover:border-amber-400 text-xs font-semibold text-amber-400 hover:bg-amber-500/10 transition flex items-center justify-center gap-1.5 cursor-pointer bg-transparent"
                       >
                         Sign in
                         <svg className="w-3.5 h-3.5 sync-icon" viewBox="0 0 24 24" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
@@ -619,14 +595,14 @@ export default function Login() {
                   <div className="space-y-4">
                     <div className="relative my-4 text-center">
                       <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t border-slate-800"></div>
+                        <div className="w-full border-t border-theme"></div>
                       </div>
                       <span className="relative px-3 text-[10px] font-bold tracking-widest text-slate-500 uppercase" style={{ backgroundColor: 'var(--bg-card)' }}>OR</span>
                     </div>
 
                     <button 
                       onClick={() => showNotification("Registrations are closed on this instance.")}
-                      className="w-full py-3 px-4 rounded-xl border border-slate-700/80 hover:border-slate-500 bg-slate-950/60 hover:bg-slate-900 text-xs font-bold text-white transition flex items-center justify-center gap-2 cursor-pointer"
+                      className="w-full py-3 px-4 rounded-xl border border-theme bg-theme-card-inner text-xs font-bold text-theme-main transition flex items-center justify-center gap-2 cursor-pointer"
                     >
                       <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" stroke-width="2">
                         <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/>
@@ -635,21 +611,21 @@ export default function Login() {
                       Create account
                     </button>
 
-                    <div className="text-center text-xs text-slate-400">
+                    <div className="text-center text-xs text-theme-muted">
                       Don't have an account? 
-                      <button onClick={() => showNotification("Please contact admin for registrations.")} style={{ color: 'var(--brand-lime)' }} className="font-bold hover:underline ml-1 cursor-pointer">Sign up</button>
+                      <button onClick={() => showNotification("Please contact admin for registrations.")} style={{ color: 'var(--brand-lime)' }} className="font-bold hover:underline ml-1 cursor-pointer bg-transparent">Sign up</button>
                     </div>
                   </div>
                 </div>
               ) : (
-                /* DETAILED SIGN IN FORM VIEW (Matches layout in the new screenshot) */
+                /* DETAILED SIGN IN FORM VIEW */
                 <div className="space-y-6 flex-1 flex flex-col justify-between animate-fade-in">
                   
                   {/* Back button */}
                   <div>
                     <button 
                       onClick={() => { setSelectedRole(null); setError(''); }}
-                      className="inline-flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-white transition cursor-pointer"
+                      className="inline-flex items-center gap-2 text-xs font-bold text-theme-muted hover:text-theme-main transition cursor-pointer"
                     >
                       <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" strokeWidth="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
                       Back to portals
@@ -664,8 +640,8 @@ export default function Login() {
                       </svg>
                     </div>
                     <div>
-                      <h2 className="text-2xl font-extrabold text-white">Sign in</h2>
-                      <p className="text-xs text-slate-400 mt-1">Enter your credentials to access your account</p>
+                      <h2 className="text-2xl font-extrabold text-theme-main">Sign in</h2>
+                      <p className="text-xs text-theme-muted mt-1">Enter your credentials to access your account</p>
                     </div>
                   </div>
 
@@ -679,7 +655,7 @@ export default function Login() {
                     <div className="space-y-4">
                       {/* Email Address / Username field */}
                       <div>
-                        <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">
+                        <label className="block text-[10px] font-bold text-theme-muted uppercase tracking-wider mb-2">
                           Email Address
                         </label>
                         <div className="relative">
@@ -694,7 +670,7 @@ export default function Login() {
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                             placeholder="Enter your email address"
-                            className={`block w-full pl-10 pr-3 py-3 border border-slate-800 rounded-xl bg-slate-950/60 text-white placeholder-slate-600 focus:outline-none focus:ring-2 transition-all text-xs ${specs.borderFocus}`}
+                            className={`block w-full pl-10 pr-3 py-3 border border-theme rounded-xl bg-theme-card-inner text-theme-main placeholder-slate-600 focus:outline-none focus:ring-2 transition-all text-xs ${specs.borderFocus}`}
                           />
                         </div>
                       </div>
@@ -702,13 +678,13 @@ export default function Login() {
                       {/* Password field */}
                       <div>
                         <div className="flex justify-between items-center mb-2">
-                          <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                          <label className="block text-[10px] font-bold text-theme-muted uppercase tracking-wider">
                             Password
                           </label>
                           <button 
                             type="button"
                             onClick={() => showNotification("Contact administrator to retrieve password.")}
-                            className={`text-[10px] font-bold hover:underline ${specs.badgeText} cursor-pointer`}
+                            className={`text-[10px] font-bold hover:underline ${specs.badgeText} cursor-pointer bg-transparent`}
                           >
                             Forgot Password?
                           </button>
@@ -725,7 +701,7 @@ export default function Login() {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             placeholder="Enter your password"
-                            className={`block w-full pl-10 pr-10 py-3 border border-slate-800 rounded-xl bg-slate-950/60 text-white placeholder-slate-600 focus:outline-none focus:ring-2 transition-all text-xs ${specs.borderFocus}`}
+                            className={`block w-full pl-10 pr-10 py-3 border border-theme rounded-xl bg-theme-card-inner text-theme-main placeholder-slate-600 focus:outline-none focus:ring-2 transition-all text-xs ${specs.borderFocus}`}
                           />
                           <div className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-500 cursor-pointer hover:text-slate-350">
                             <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" strokeWidth="2"><circle cx="12" cy="12" r="3"/><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/></svg>
@@ -739,9 +715,9 @@ export default function Login() {
                       <input 
                         type="checkbox" 
                         id="rememberMe"
-                        className="rounded border-slate-800 bg-slate-950 focus:ring-lime-500 h-4 w-4"
+                        className="rounded border-theme bg-theme-card-inner focus:ring-lime-500 h-4 w-4"
                       />
-                      <label htmlFor="rememberMe" className="text-xs text-slate-400 cursor-pointer">Remember me</label>
+                      <label htmlFor="rememberMe" className="text-xs text-theme-muted cursor-pointer">Remember me</label>
                     </div>
 
                     {/* Submit Button */}
@@ -758,13 +734,13 @@ export default function Login() {
                   </form>
 
                   {/* Social & Demo login buttons */}
-                  <div className="space-y-4 pt-4 border-t border-slate-800/80">
+                  <div className="space-y-4 pt-4 border-t border-theme">
                     
                     <div className="relative text-center">
                       <div className="absolute inset-0 flex items-center">
-                        <div className="w-full border-t border-slate-800"></div>
+                        <div className="w-full border-t border-theme"></div>
                       </div>
-                      <span className="relative px-2.5 text-[9px] font-bold tracking-widest text-slate-650 uppercase" style={{ backgroundColor: 'var(--bg-card)' }}>Or sign in with</span>
+                      <span className="relative px-2.5 text-[9px] font-bold tracking-widest text-slate-600 uppercase" style={{ backgroundColor: 'var(--bg-card)' }}>Or sign in with</span>
                     </div>
 
                     <div className="space-y-2">
@@ -772,9 +748,8 @@ export default function Login() {
                       <button 
                         type="button"
                         onClick={() => handleQuickDemoLogin(selectedRole)}
-                        className="w-full py-2.5 border border-slate-800 hover:border-slate-700 bg-transparent text-xs text-white rounded-xl transition flex items-center justify-center gap-2 cursor-pointer"
+                        className="w-full py-2.5 border border-theme bg-theme-card-inner hover:bg-slate-100/5 text-xs text-theme-main rounded-xl transition flex items-center justify-center gap-2 cursor-pointer"
                       >
-                        {/* Microsoft colorful tile logo */}
                         <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 23 23">
                           <rect x="0" y="0" width="11" height="11" fill="#f25022"/>
                           <rect x="12" y="0" width="11" height="11" fill="#7fba00"/>
@@ -788,18 +763,17 @@ export default function Login() {
                       <button 
                         type="button"
                         onClick={() => handleQuickDemoLogin(selectedRole)}
-                        className="w-full py-2.5 border border-slate-800 hover:border-slate-700 bg-transparent text-xs text-white rounded-xl transition flex items-center justify-center gap-2 cursor-pointer"
+                        className="w-full py-2.5 border border-theme bg-theme-card-inner hover:bg-slate-100/5 text-xs text-theme-main rounded-xl transition flex items-center justify-center gap-2 cursor-pointer"
                       >
-                        {/* Apple white path logo */}
-                        <svg className="w-3.5 h-3.5 shrink-0 fill-current" viewBox="0 0 24 24">
+                        <svg className="w-3.5 h-3.5 shrink-0 fill-current text-theme-main" viewBox="0 0 24 24">
                           <path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.54 9.103 1.51 12.06 1.005 1.45 2.187 3.076 3.755 3.017 1.51-.062 2.079-.974 3.906-.974 1.826 0 2.36.974 3.934.94 1.602-.027 2.646-1.477 3.627-2.9 1.135-1.655 1.604-3.255 1.63-3.342-.03-.013-3.136-1.202-3.167-4.773-.027-2.983 2.444-4.417 2.557-4.483-1.402-2.052-3.57-2.285-4.331-2.342-1.954-.157-3.35 1.03-4.1.988zM15.975 4.108c.828-1.002 1.385-2.4 1.23-3.793-1.197.047-2.647.795-3.504 1.802-.756.873-1.42 2.29-1.242 3.666 1.332.103 2.69-.672 3.516-1.675z"/>
                         </svg>
                         <span>Continue with Apple</span>
                       </button>
                     </div>
 
-                    <div className="text-center text-xs text-slate-500">
-                      Don't have an account? <button type="button" onClick={() => showNotification("Please contact school admin.")} style={{ color: 'var(--brand-lime)' }} className="font-bold hover:underline cursor-pointer">Create Account</button>
+                    <div className="text-center text-xs text-theme-muted">
+                      Don't have an account? <button type="button" onClick={() => showNotification("Please contact school admin.")} style={{ color: 'var(--brand-lime)' }} className="font-bold hover:underline cursor-pointer bg-transparent">Create Account</button>
                     </div>
 
                   </div>
@@ -814,17 +788,17 @@ export default function Login() {
       </main>
 
       {/* FOOTER */}
-      <footer className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-5 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400 border-t border-slate-800/40 mt-6 z-10">
+      <footer className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-5 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-theme-muted border-t border-theme mt-6 z-10">
         <div>
           © 2025 Bright Future School. All rights reserved.
         </div>
 
         <div className="flex items-center gap-4 sm:gap-6">
-          <button onClick={() => showNotification('Privacy Policy Document')} className="hover:text-slate-200 transition cursor-pointer">Privacy Policy</button>
+          <button onClick={() => showNotification('Privacy Policy Document')} className="hover:text-theme-main transition cursor-pointer bg-transparent">Privacy Policy</button>
           <span className="text-slate-700">|</span>
-          <button onClick={() => showNotification('Terms of Service Document')} className="hover:text-slate-200 transition cursor-pointer">Terms of Service</button>
+          <button onClick={() => showNotification('Terms of Service Document')} className="hover:text-theme-main transition cursor-pointer bg-transparent">Terms of Service</button>
           <span className="text-slate-700">|</span>
-          <button onClick={() => showNotification('Help Center & Support Desk')} className="hover:text-slate-200 transition cursor-pointer">Help Center</button>
+          <button onClick={() => showNotification('Help Center & Support Desk')} className="hover:text-theme-main transition cursor-pointer bg-transparent">Help Center</button>
         </div>
       </footer>
 
@@ -833,7 +807,7 @@ export default function Login() {
         <div id="toastNotification" className="fixed bottom-6 right-6 z-50 transform translate-y-0 opacity-100 transition-all duration-300">
           <div className="px-4 py-3 rounded-2xl bg-slate-900/95 border border-lime-500/50 shadow-2xl backdrop-blur-md flex items-center gap-3 text-xs text-white">
             <div className="w-6 h-6 rounded-full bg-lime-500/20 text-lime-400 flex items-center justify-center shrink-0">
-              <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <svg className="w-4 h-4 sync-icon" viewBox="0 0 24 24" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
             <span>{toastText}</span>
           </div>
