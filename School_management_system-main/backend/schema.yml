@@ -1,0 +1,6921 @@
+openapi: 3.0.3
+info:
+  title: Bright Future Homeschooling API
+  version: 1.0.0
+  description: REST API backend for Phase 1 of Bright Future Homeschooling software.
+paths:
+  /api/accounts/fees/:
+    get:
+      operationId: accounts_fees_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - in: query
+        name: program
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - accounts
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FeeStructure'
+          description: ''
+    post:
+      operationId: accounts_fees_create
+      tags:
+      - accounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeeStructure'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FeeStructure'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FeeStructure'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeeStructure'
+          description: ''
+  /api/accounts/fees/{id}/:
+    get:
+      operationId: accounts_fees_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this fee structure.
+        required: true
+      tags:
+      - accounts
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeeStructure'
+          description: ''
+    put:
+      operationId: accounts_fees_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this fee structure.
+        required: true
+      tags:
+      - accounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeeStructure'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FeeStructure'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FeeStructure'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeeStructure'
+          description: ''
+    patch:
+      operationId: accounts_fees_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this fee structure.
+        required: true
+      tags:
+      - accounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedFeeStructure'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedFeeStructure'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedFeeStructure'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeeStructure'
+          description: ''
+    delete:
+      operationId: accounts_fees_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this fee structure.
+        required: true
+      tags:
+      - accounts
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/accounts/invoices/:
+    get:
+      operationId: accounts_invoices_list
+      parameters:
+      - in: query
+        name: due_date
+        schema:
+          type: string
+          format: date
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - in: query
+        name: payment_method
+        schema:
+          type: string
+          enum:
+          - BANK_TRANSFER
+          - CASH
+          - CREDIT_CARD
+          - PENDING
+        description: |-
+          * `BANK_TRANSFER` - Bank Transfer
+          * `CREDIT_CARD` - Credit / Debit Card
+          * `CASH` - Cash
+          * `PENDING` - Pending Payment
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - OVERDUE
+          - PAID
+          - UNPAID
+        description: |-
+          * `PAID` - Paid
+          * `UNPAID` - Unpaid
+          * `OVERDUE` - Overdue
+      - in: query
+        name: student
+        schema:
+          type: integer
+      tags:
+      - accounts
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Invoice'
+          description: ''
+    post:
+      operationId: accounts_invoices_create
+      tags:
+      - accounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Invoice'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Invoice'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Invoice'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+          description: ''
+  /api/accounts/invoices/{id}/:
+    get:
+      operationId: accounts_invoices_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this invoice.
+        required: true
+      tags:
+      - accounts
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+          description: ''
+    put:
+      operationId: accounts_invoices_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this invoice.
+        required: true
+      tags:
+      - accounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Invoice'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Invoice'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Invoice'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+          description: ''
+    patch:
+      operationId: accounts_invoices_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this invoice.
+        required: true
+      tags:
+      - accounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedInvoice'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedInvoice'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedInvoice'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+          description: ''
+    delete:
+      operationId: accounts_invoices_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this invoice.
+        required: true
+      tags:
+      - accounts
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/accounts/salaries/:
+    get:
+      operationId: accounts_salaries_list
+      parameters:
+      - in: query
+        name: is_paid
+        schema:
+          type: boolean
+      - in: query
+        name: month
+        schema:
+          type: string
+          format: date
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: teacher
+        schema:
+          type: integer
+      tags:
+      - accounts
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SalarySlip'
+          description: ''
+    post:
+      operationId: accounts_salaries_create
+      tags:
+      - accounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SalarySlip'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SalarySlip'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SalarySlip'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SalarySlip'
+          description: ''
+  /api/accounts/salaries/{id}/:
+    get:
+      operationId: accounts_salaries_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this salary slip.
+        required: true
+      tags:
+      - accounts
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SalarySlip'
+          description: ''
+    put:
+      operationId: accounts_salaries_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this salary slip.
+        required: true
+      tags:
+      - accounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SalarySlip'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SalarySlip'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SalarySlip'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SalarySlip'
+          description: ''
+    patch:
+      operationId: accounts_salaries_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this salary slip.
+        required: true
+      tags:
+      - accounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSalarySlip'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSalarySlip'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSalarySlip'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SalarySlip'
+          description: ''
+    delete:
+      operationId: accounts_salaries_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this salary slip.
+        required: true
+      tags:
+      - accounts
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/analytics/engagement-logs/:
+    get:
+      operationId: analytics_engagement_logs_list
+      parameters:
+      - in: query
+        name: lesson
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: student
+        schema:
+          type: integer
+      tags:
+      - analytics
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SessionEngagementLog'
+          description: ''
+    post:
+      operationId: analytics_engagement_logs_create
+      tags:
+      - analytics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SessionEngagementLog'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SessionEngagementLog'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SessionEngagementLog'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionEngagementLog'
+          description: ''
+  /api/analytics/engagement-logs/{id}/:
+    get:
+      operationId: analytics_engagement_logs_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this session engagement log.
+        required: true
+      tags:
+      - analytics
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionEngagementLog'
+          description: ''
+    put:
+      operationId: analytics_engagement_logs_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this session engagement log.
+        required: true
+      tags:
+      - analytics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SessionEngagementLog'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SessionEngagementLog'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SessionEngagementLog'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionEngagementLog'
+          description: ''
+    patch:
+      operationId: analytics_engagement_logs_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this session engagement log.
+        required: true
+      tags:
+      - analytics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSessionEngagementLog'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSessionEngagementLog'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSessionEngagementLog'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionEngagementLog'
+          description: ''
+    delete:
+      operationId: analytics_engagement_logs_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this session engagement log.
+        required: true
+      tags:
+      - analytics
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/analytics/summaries/:
+    get:
+      operationId: analytics_summaries_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: student
+        schema:
+          type: integer
+      tags:
+      - analytics
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StudentAnalyticsSummary'
+          description: ''
+    post:
+      operationId: analytics_summaries_create
+      tags:
+      - analytics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentAnalyticsSummary'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/StudentAnalyticsSummary'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/StudentAnalyticsSummary'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentAnalyticsSummary'
+          description: ''
+  /api/analytics/summaries/{id}/:
+    get:
+      operationId: analytics_summaries_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this student analytics summary.
+        required: true
+      tags:
+      - analytics
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentAnalyticsSummary'
+          description: ''
+    put:
+      operationId: analytics_summaries_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this student analytics summary.
+        required: true
+      tags:
+      - analytics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentAnalyticsSummary'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/StudentAnalyticsSummary'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/StudentAnalyticsSummary'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentAnalyticsSummary'
+          description: ''
+    patch:
+      operationId: analytics_summaries_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this student analytics summary.
+        required: true
+      tags:
+      - analytics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedStudentAnalyticsSummary'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedStudentAnalyticsSummary'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedStudentAnalyticsSummary'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentAnalyticsSummary'
+          description: ''
+    delete:
+      operationId: analytics_summaries_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this student analytics summary.
+        required: true
+      tags:
+      - analytics
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/assessments/personalized-plans/:
+    get:
+      operationId: assessments_personalized_plans_list
+      parameters:
+      - in: query
+        name: assigned_level
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: student
+        schema:
+          type: integer
+      tags:
+      - assessments
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PersonalizedCurriculum'
+          description: ''
+    post:
+      operationId: assessments_personalized_plans_create
+      tags:
+      - assessments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonalizedCurriculum'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PersonalizedCurriculum'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PersonalizedCurriculum'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonalizedCurriculum'
+          description: ''
+  /api/assessments/personalized-plans/{id}/:
+    get:
+      operationId: assessments_personalized_plans_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this personalized curriculum.
+        required: true
+      tags:
+      - assessments
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonalizedCurriculum'
+          description: ''
+    put:
+      operationId: assessments_personalized_plans_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this personalized curriculum.
+        required: true
+      tags:
+      - assessments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonalizedCurriculum'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PersonalizedCurriculum'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PersonalizedCurriculum'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonalizedCurriculum'
+          description: ''
+    patch:
+      operationId: assessments_personalized_plans_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this personalized curriculum.
+        required: true
+      tags:
+      - assessments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPersonalizedCurriculum'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedPersonalizedCurriculum'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedPersonalizedCurriculum'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonalizedCurriculum'
+          description: ''
+    delete:
+      operationId: assessments_personalized_plans_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this personalized curriculum.
+        required: true
+      tags:
+      - assessments
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/assessments/results/:
+    get:
+      operationId: assessments_results_list
+      parameters:
+      - in: query
+        name: assessment
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: shared_with_parents
+        schema:
+          type: boolean
+      - in: query
+        name: student
+        schema:
+          type: integer
+      tags:
+      - assessments
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AssessmentResult'
+          description: ''
+    post:
+      operationId: assessments_results_create
+      tags:
+      - assessments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssessmentResult'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AssessmentResult'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AssessmentResult'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssessmentResult'
+          description: ''
+  /api/assessments/results/{id}/:
+    get:
+      operationId: assessments_results_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this assessment result.
+        required: true
+      tags:
+      - assessments
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssessmentResult'
+          description: ''
+    put:
+      operationId: assessments_results_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this assessment result.
+        required: true
+      tags:
+      - assessments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssessmentResult'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AssessmentResult'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AssessmentResult'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssessmentResult'
+          description: ''
+    patch:
+      operationId: assessments_results_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this assessment result.
+        required: true
+      tags:
+      - assessments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAssessmentResult'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAssessmentResult'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAssessmentResult'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssessmentResult'
+          description: ''
+    delete:
+      operationId: assessments_results_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this assessment result.
+        required: true
+      tags:
+      - assessments
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/assessments/tests/:
+    get:
+      operationId: assessments_tests_list
+      parameters:
+      - in: query
+        name: created_by
+        schema:
+          type: integer
+      - in: query
+        name: is_admission_test
+        schema:
+          type: boolean
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - assessments
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Assessment'
+          description: ''
+    post:
+      operationId: assessments_tests_create
+      tags:
+      - assessments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Assessment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Assessment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Assessment'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Assessment'
+          description: ''
+  /api/assessments/tests/{id}/:
+    get:
+      operationId: assessments_tests_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this assessment.
+        required: true
+      tags:
+      - assessments
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Assessment'
+          description: ''
+    put:
+      operationId: assessments_tests_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this assessment.
+        required: true
+      tags:
+      - assessments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Assessment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Assessment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Assessment'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Assessment'
+          description: ''
+    patch:
+      operationId: assessments_tests_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this assessment.
+        required: true
+      tags:
+      - assessments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAssessment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAssessment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAssessment'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Assessment'
+          description: ''
+    delete:
+      operationId: assessments_tests_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this assessment.
+        required: true
+      tags:
+      - assessments
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/attendance/diaries/:
+    get:
+      operationId: attendance_diaries_list
+      parameters:
+      - in: query
+        name: classroom
+        schema:
+          type: integer
+      - in: query
+        name: date
+        schema:
+          type: string
+          format: date
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - attendance
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DigitalDiary'
+          description: ''
+    post:
+      operationId: attendance_diaries_create
+      tags:
+      - attendance
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DigitalDiary'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DigitalDiary'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DigitalDiary'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DigitalDiary'
+          description: ''
+  /api/attendance/diaries/{id}/:
+    get:
+      operationId: attendance_diaries_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this digital diary.
+        required: true
+      tags:
+      - attendance
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DigitalDiary'
+          description: ''
+    put:
+      operationId: attendance_diaries_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this digital diary.
+        required: true
+      tags:
+      - attendance
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DigitalDiary'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DigitalDiary'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DigitalDiary'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DigitalDiary'
+          description: ''
+    patch:
+      operationId: attendance_diaries_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this digital diary.
+        required: true
+      tags:
+      - attendance
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDigitalDiary'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedDigitalDiary'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedDigitalDiary'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DigitalDiary'
+          description: ''
+    delete:
+      operationId: attendance_diaries_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this digital diary.
+        required: true
+      tags:
+      - attendance
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/attendance/logs/:
+    get:
+      operationId: attendance_logs_list
+      parameters:
+      - in: query
+        name: date
+        schema:
+          type: string
+          format: date
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - ABSENT
+          - LATE
+          - LEAVE
+          - PRESENT
+        description: |-
+          * `PRESENT` - Present
+          * `ABSENT` - Absent
+          * `LATE` - Late
+          * `LEAVE` - On Leave
+      - in: query
+        name: student
+        schema:
+          type: integer
+      - in: query
+        name: teacher
+        schema:
+          type: integer
+      tags:
+      - attendance
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Attendance'
+          description: ''
+    post:
+      operationId: attendance_logs_create
+      tags:
+      - attendance
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Attendance'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Attendance'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Attendance'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attendance'
+          description: ''
+  /api/attendance/logs/{id}/:
+    get:
+      operationId: attendance_logs_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this attendance.
+        required: true
+      tags:
+      - attendance
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attendance'
+          description: ''
+    put:
+      operationId: attendance_logs_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this attendance.
+        required: true
+      tags:
+      - attendance
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Attendance'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Attendance'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Attendance'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attendance'
+          description: ''
+    patch:
+      operationId: attendance_logs_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this attendance.
+        required: true
+      tags:
+      - attendance
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAttendance'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAttendance'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAttendance'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attendance'
+          description: ''
+    delete:
+      operationId: attendance_logs_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this attendance.
+        required: true
+      tags:
+      - attendance
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/auth/login/:
+    post:
+      operationId: auth_login_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObtainPair'
+          description: ''
+  /api/auth/token/refresh/:
+    post:
+      operationId: auth_token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /api/curriculum/classrooms/:
+    get:
+      operationId: curriculum_classrooms_list
+      parameters:
+      - in: query
+        name: course
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: teacher
+        schema:
+          type: integer
+      tags:
+      - curriculum
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Classroom'
+          description: ''
+    post:
+      operationId: curriculum_classrooms_create
+      tags:
+      - curriculum
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Classroom'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Classroom'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Classroom'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Classroom'
+          description: ''
+  /api/curriculum/classrooms/{id}/:
+    get:
+      operationId: curriculum_classrooms_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this classroom.
+        required: true
+      tags:
+      - curriculum
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Classroom'
+          description: ''
+    put:
+      operationId: curriculum_classrooms_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this classroom.
+        required: true
+      tags:
+      - curriculum
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Classroom'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Classroom'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Classroom'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Classroom'
+          description: ''
+    patch:
+      operationId: curriculum_classrooms_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this classroom.
+        required: true
+      tags:
+      - curriculum
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedClassroom'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedClassroom'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedClassroom'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Classroom'
+          description: ''
+    delete:
+      operationId: curriculum_classrooms_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this classroom.
+        required: true
+      tags:
+      - curriculum
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/curriculum/courses/:
+    get:
+      operationId: curriculum_courses_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - in: query
+        name: program
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - curriculum
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Course'
+          description: ''
+    post:
+      operationId: curriculum_courses_create
+      tags:
+      - curriculum
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Course'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Course'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Course'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+          description: ''
+  /api/curriculum/courses/{id}/:
+    get:
+      operationId: curriculum_courses_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this course.
+        required: true
+      tags:
+      - curriculum
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+          description: ''
+    put:
+      operationId: curriculum_courses_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this course.
+        required: true
+      tags:
+      - curriculum
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Course'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Course'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Course'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+          description: ''
+    patch:
+      operationId: curriculum_courses_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this course.
+        required: true
+      tags:
+      - curriculum
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCourse'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCourse'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCourse'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+          description: ''
+    delete:
+      operationId: curriculum_courses_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this course.
+        required: true
+      tags:
+      - curriculum
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/curriculum/programs/:
+    get:
+      operationId: curriculum_programs_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - curriculum
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Program'
+          description: ''
+    post:
+      operationId: curriculum_programs_create
+      tags:
+      - curriculum
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Program'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Program'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Program'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Program'
+          description: ''
+  /api/curriculum/programs/{id}/:
+    get:
+      operationId: curriculum_programs_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this program.
+        required: true
+      tags:
+      - curriculum
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Program'
+          description: ''
+    put:
+      operationId: curriculum_programs_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this program.
+        required: true
+      tags:
+      - curriculum
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Program'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Program'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Program'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Program'
+          description: ''
+    patch:
+      operationId: curriculum_programs_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this program.
+        required: true
+      tags:
+      - curriculum
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProgram'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProgram'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProgram'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Program'
+          description: ''
+    delete:
+      operationId: curriculum_programs_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this program.
+        required: true
+      tags:
+      - curriculum
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/curriculum/slots/:
+    get:
+      operationId: curriculum_slots_list
+      parameters:
+      - in: query
+        name: classroom
+        schema:
+          type: integer
+      - in: query
+        name: day_of_week
+        schema:
+          type: string
+          enum:
+          - FRI
+          - MON
+          - SAT
+          - SUN
+          - THU
+          - TUE
+          - WED
+        description: |-
+          * `MON` - Monday
+          * `TUE` - Tuesday
+          * `WED` - Wednesday
+          * `THU` - Thursday
+          * `FRI` - Friday
+          * `SAT` - Saturday
+          * `SUN` - Sunday
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - curriculum
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TimetableSlot'
+          description: ''
+    post:
+      operationId: curriculum_slots_create
+      tags:
+      - curriculum
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimetableSlot'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TimetableSlot'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TimetableSlot'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimetableSlot'
+          description: ''
+  /api/curriculum/slots/{id}/:
+    get:
+      operationId: curriculum_slots_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this timetable slot.
+        required: true
+      tags:
+      - curriculum
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimetableSlot'
+          description: ''
+    put:
+      operationId: curriculum_slots_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this timetable slot.
+        required: true
+      tags:
+      - curriculum
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimetableSlot'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TimetableSlot'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TimetableSlot'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimetableSlot'
+          description: ''
+    patch:
+      operationId: curriculum_slots_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this timetable slot.
+        required: true
+      tags:
+      - curriculum
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTimetableSlot'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTimetableSlot'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTimetableSlot'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimetableSlot'
+          description: ''
+    delete:
+      operationId: curriculum_slots_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this timetable slot.
+        required: true
+      tags:
+      - curriculum
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/exams/attempts/:
+    get:
+      operationId: exams_attempts_list
+      parameters:
+      - in: query
+        name: exam
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: student
+        schema:
+          type: integer
+      tags:
+      - exams
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExamAttempt'
+          description: ''
+    post:
+      operationId: exams_attempts_create
+      tags:
+      - exams
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExamAttempt'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ExamAttempt'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ExamAttempt'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExamAttempt'
+          description: ''
+  /api/exams/attempts/{id}/:
+    get:
+      operationId: exams_attempts_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this exam attempt.
+        required: true
+      tags:
+      - exams
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExamAttempt'
+          description: ''
+    put:
+      operationId: exams_attempts_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this exam attempt.
+        required: true
+      tags:
+      - exams
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExamAttempt'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ExamAttempt'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ExamAttempt'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExamAttempt'
+          description: ''
+    patch:
+      operationId: exams_attempts_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this exam attempt.
+        required: true
+      tags:
+      - exams
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedExamAttempt'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedExamAttempt'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedExamAttempt'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExamAttempt'
+          description: ''
+    delete:
+      operationId: exams_attempts_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this exam attempt.
+        required: true
+      tags:
+      - exams
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/exams/questions/:
+    get:
+      operationId: exams_questions_list
+      parameters:
+      - in: query
+        name: exam
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: type
+        schema:
+          type: string
+          enum:
+          - MCQ
+          - SUBJECTIVE
+        description: |-
+          * `MCQ` - Multiple Choice Question
+          * `SUBJECTIVE` - Subjective / Theory
+      tags:
+      - exams
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Question'
+          description: ''
+    post:
+      operationId: exams_questions_create
+      tags:
+      - exams
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Question'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Question'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Question'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+          description: ''
+  /api/exams/questions/{id}/:
+    get:
+      operationId: exams_questions_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this question.
+        required: true
+      tags:
+      - exams
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+          description: ''
+    put:
+      operationId: exams_questions_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this question.
+        required: true
+      tags:
+      - exams
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Question'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Question'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Question'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+          description: ''
+    patch:
+      operationId: exams_questions_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this question.
+        required: true
+      tags:
+      - exams
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedQuestion'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedQuestion'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedQuestion'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Question'
+          description: ''
+    delete:
+      operationId: exams_questions_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this question.
+        required: true
+      tags:
+      - exams
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/exams/tests/:
+    get:
+      operationId: exams_tests_list
+      parameters:
+      - in: query
+        name: ai_proctoring_enabled
+        schema:
+          type: boolean
+      - in: query
+        name: course
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - exams
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Exam'
+          description: ''
+    post:
+      operationId: exams_tests_create
+      tags:
+      - exams
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Exam'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Exam'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Exam'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Exam'
+          description: ''
+  /api/exams/tests/{id}/:
+    get:
+      operationId: exams_tests_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this exam.
+        required: true
+      tags:
+      - exams
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Exam'
+          description: ''
+    put:
+      operationId: exams_tests_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this exam.
+        required: true
+      tags:
+      - exams
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Exam'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Exam'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Exam'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Exam'
+          description: ''
+    patch:
+      operationId: exams_tests_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this exam.
+        required: true
+      tags:
+      - exams
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedExam'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedExam'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedExam'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Exam'
+          description: ''
+    delete:
+      operationId: exams_tests_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this exam.
+        required: true
+      tags:
+      - exams
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/exams/violations/:
+    get:
+      operationId: exams_violations_list
+      parameters:
+      - in: query
+        name: attempt
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: violation_type
+        schema:
+          type: string
+          enum:
+          - FACE_NOT_FOUND
+          - MULTIPLE_FACES
+          - SPEECH_DETECTED
+          - TAB_SWITCH
+          - UNKNOWN_OBJECT
+        description: |-
+          * `FACE_NOT_FOUND` - No Face Detected
+          * `MULTIPLE_FACES` - Multiple Faces Detected
+          * `TAB_SWITCH` - Browser Tab Switched
+          * `SPEECH_DETECTED` - Speech/Voice Detected
+          * `UNKNOWN_OBJECT` - Restricted Object/Phone Detected
+      tags:
+      - exams
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProctoringViolationLog'
+          description: ''
+    post:
+      operationId: exams_violations_create
+      tags:
+      - exams
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProctoringViolationLog'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProctoringViolationLog'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProctoringViolationLog'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProctoringViolationLog'
+          description: ''
+  /api/exams/violations/{id}/:
+    get:
+      operationId: exams_violations_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this proctoring violation
+          log.
+        required: true
+      tags:
+      - exams
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProctoringViolationLog'
+          description: ''
+    put:
+      operationId: exams_violations_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this proctoring violation
+          log.
+        required: true
+      tags:
+      - exams
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProctoringViolationLog'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProctoringViolationLog'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProctoringViolationLog'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProctoringViolationLog'
+          description: ''
+    patch:
+      operationId: exams_violations_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this proctoring violation
+          log.
+        required: true
+      tags:
+      - exams
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProctoringViolationLog'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProctoringViolationLog'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProctoringViolationLog'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProctoringViolationLog'
+          description: ''
+    delete:
+      operationId: exams_violations_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this proctoring violation
+          log.
+        required: true
+      tags:
+      - exams
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/islamic-studies/profiles/:
+    get:
+      operationId: islamic_studies_profiles_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: student
+        schema:
+          type: integer
+      - in: query
+        name: tajweed_level
+        schema:
+          type: string
+          enum:
+          - ADVANCED
+          - BEGINNER
+          - INTERMEDIATE
+        description: |-
+          * `BEGINNER` - Beginner
+          * `INTERMEDIATE` - Intermediate
+          * `ADVANCED` - Advanced
+      tags:
+      - islamic-studies
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IslamicProfile'
+          description: ''
+    post:
+      operationId: islamic_studies_profiles_create
+      tags:
+      - islamic-studies
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IslamicProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/IslamicProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/IslamicProfile'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IslamicProfile'
+          description: ''
+  /api/islamic-studies/profiles/{id}/:
+    get:
+      operationId: islamic_studies_profiles_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this islamic profile.
+        required: true
+      tags:
+      - islamic-studies
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IslamicProfile'
+          description: ''
+    put:
+      operationId: islamic_studies_profiles_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this islamic profile.
+        required: true
+      tags:
+      - islamic-studies
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IslamicProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/IslamicProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/IslamicProfile'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IslamicProfile'
+          description: ''
+    patch:
+      operationId: islamic_studies_profiles_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this islamic profile.
+        required: true
+      tags:
+      - islamic-studies
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedIslamicProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedIslamicProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedIslamicProfile'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IslamicProfile'
+          description: ''
+    delete:
+      operationId: islamic_studies_profiles_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this islamic profile.
+        required: true
+      tags:
+      - islamic-studies
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/islamic-studies/progress-logs/:
+    get:
+      operationId: islamic_studies_progress_logs_list
+      parameters:
+      - in: query
+        name: date
+        schema:
+          type: string
+          format: date
+      - in: query
+        name: evaluation_grade
+        schema:
+          type: string
+          enum:
+          - EXCELLENT
+          - GOOD
+          - IMPROVING
+        description: |-
+          * `EXCELLENT` - Excellent
+          * `GOOD` - Good
+          * `IMPROVING` - Needs Improvement
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - in: query
+        name: profile
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: type
+        schema:
+          type: string
+          enum:
+          - HIFAZ
+          - ISLAMIC_STUDIES
+          - NAZRA
+          - TAJWEED
+          - TARBIYAH
+        description: |-
+          * `HIFAZ` - Hifz (Memorization)
+          * `NAZRA` - Nazra (Reading)
+          * `TAJWEED` - Tajweed (Rules)
+          * `TARBIYAH` - Tarbiyah (Character)
+          * `ISLAMIC_STUDIES` - Islamic Studies (Theory)
+      tags:
+      - islamic-studies
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DailyProgressLog'
+          description: ''
+    post:
+      operationId: islamic_studies_progress_logs_create
+      tags:
+      - islamic-studies
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DailyProgressLog'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DailyProgressLog'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DailyProgressLog'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DailyProgressLog'
+          description: ''
+  /api/islamic-studies/progress-logs/{id}/:
+    get:
+      operationId: islamic_studies_progress_logs_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this daily progress log.
+        required: true
+      tags:
+      - islamic-studies
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DailyProgressLog'
+          description: ''
+    put:
+      operationId: islamic_studies_progress_logs_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this daily progress log.
+        required: true
+      tags:
+      - islamic-studies
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DailyProgressLog'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DailyProgressLog'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DailyProgressLog'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DailyProgressLog'
+          description: ''
+    patch:
+      operationId: islamic_studies_progress_logs_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this daily progress log.
+        required: true
+      tags:
+      - islamic-studies
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDailyProgressLog'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedDailyProgressLog'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedDailyProgressLog'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DailyProgressLog'
+          description: ''
+    delete:
+      operationId: islamic_studies_progress_logs_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this daily progress log.
+        required: true
+      tags:
+      - islamic-studies
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/lms/assignments/:
+    get:
+      operationId: lms_assignments_list
+      parameters:
+      - in: query
+        name: due_date
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: lesson
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - lms
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Assignment'
+          description: ''
+    post:
+      operationId: lms_assignments_create
+      tags:
+      - lms
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Assignment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Assignment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Assignment'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Assignment'
+          description: ''
+  /api/lms/assignments/{id}/:
+    get:
+      operationId: lms_assignments_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this assignment.
+        required: true
+      tags:
+      - lms
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Assignment'
+          description: ''
+    put:
+      operationId: lms_assignments_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this assignment.
+        required: true
+      tags:
+      - lms
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Assignment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Assignment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Assignment'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Assignment'
+          description: ''
+    patch:
+      operationId: lms_assignments_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this assignment.
+        required: true
+      tags:
+      - lms
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAssignment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAssignment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAssignment'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Assignment'
+          description: ''
+    delete:
+      operationId: lms_assignments_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this assignment.
+        required: true
+      tags:
+      - lms
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/lms/lessons/:
+    get:
+      operationId: lms_lessons_list
+      parameters:
+      - in: query
+        name: course
+        schema:
+          type: integer
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - in: query
+        name: scheduled_time
+        schema:
+          type: string
+          format: date-time
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - lms
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Lesson'
+          description: ''
+    post:
+      operationId: lms_lessons_create
+      tags:
+      - lms
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Lesson'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Lesson'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Lesson'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lesson'
+          description: ''
+  /api/lms/lessons/{id}/:
+    get:
+      operationId: lms_lessons_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this lesson.
+        required: true
+      tags:
+      - lms
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lesson'
+          description: ''
+    put:
+      operationId: lms_lessons_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this lesson.
+        required: true
+      tags:
+      - lms
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Lesson'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Lesson'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Lesson'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lesson'
+          description: ''
+    patch:
+      operationId: lms_lessons_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this lesson.
+        required: true
+      tags:
+      - lms
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedLesson'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedLesson'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedLesson'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lesson'
+          description: ''
+    delete:
+      operationId: lms_lessons_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this lesson.
+        required: true
+      tags:
+      - lms
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/lms/submissions/:
+    get:
+      operationId: lms_submissions_list
+      parameters:
+      - in: query
+        name: assignment
+        schema:
+          type: integer
+      - in: query
+        name: grade
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: student
+        schema:
+          type: integer
+      tags:
+      - lms
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AssignmentSubmission'
+          description: ''
+    post:
+      operationId: lms_submissions_create
+      tags:
+      - lms
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssignmentSubmission'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AssignmentSubmission'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AssignmentSubmission'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssignmentSubmission'
+          description: ''
+  /api/lms/submissions/{id}/:
+    get:
+      operationId: lms_submissions_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this assignment submission.
+        required: true
+      tags:
+      - lms
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssignmentSubmission'
+          description: ''
+    put:
+      operationId: lms_submissions_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this assignment submission.
+        required: true
+      tags:
+      - lms
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssignmentSubmission'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AssignmentSubmission'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AssignmentSubmission'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssignmentSubmission'
+          description: ''
+    patch:
+      operationId: lms_submissions_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this assignment submission.
+        required: true
+      tags:
+      - lms
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAssignmentSubmission'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAssignmentSubmission'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAssignmentSubmission'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssignmentSubmission'
+          description: ''
+    delete:
+      operationId: lms_submissions_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this assignment submission.
+        required: true
+      tags:
+      - lms
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/skills-future/progress/:
+    get:
+      operationId: skills_future_progress_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: student
+        schema:
+          type: integer
+      - in: query
+        name: track
+        schema:
+          type: integer
+      tags:
+      - skills-future
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StudentSkillProgress'
+          description: ''
+    post:
+      operationId: skills_future_progress_create
+      tags:
+      - skills-future
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentSkillProgress'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/StudentSkillProgress'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/StudentSkillProgress'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentSkillProgress'
+          description: ''
+  /api/skills-future/progress/{id}/:
+    get:
+      operationId: skills_future_progress_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this student skill progress.
+        required: true
+      tags:
+      - skills-future
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentSkillProgress'
+          description: ''
+    put:
+      operationId: skills_future_progress_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this student skill progress.
+        required: true
+      tags:
+      - skills-future
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentSkillProgress'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/StudentSkillProgress'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/StudentSkillProgress'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentSkillProgress'
+          description: ''
+    patch:
+      operationId: skills_future_progress_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this student skill progress.
+        required: true
+      tags:
+      - skills-future
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedStudentSkillProgress'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedStudentSkillProgress'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedStudentSkillProgress'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentSkillProgress'
+          description: ''
+    delete:
+      operationId: skills_future_progress_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this student skill progress.
+        required: true
+      tags:
+      - skills-future
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/skills-future/projects/:
+    get:
+      operationId: skills_future_projects_list
+      parameters:
+      - in: query
+        name: grade
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: student
+        schema:
+          type: integer
+      - in: query
+        name: track
+        schema:
+          type: integer
+      tags:
+      - skills-future
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProjectSubmission'
+          description: ''
+    post:
+      operationId: skills_future_projects_create
+      tags:
+      - skills-future
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectSubmission'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProjectSubmission'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProjectSubmission'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectSubmission'
+          description: ''
+  /api/skills-future/projects/{id}/:
+    get:
+      operationId: skills_future_projects_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this project submission.
+        required: true
+      tags:
+      - skills-future
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectSubmission'
+          description: ''
+    put:
+      operationId: skills_future_projects_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this project submission.
+        required: true
+      tags:
+      - skills-future
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProjectSubmission'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProjectSubmission'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProjectSubmission'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectSubmission'
+          description: ''
+    patch:
+      operationId: skills_future_projects_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this project submission.
+        required: true
+      tags:
+      - skills-future
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProjectSubmission'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProjectSubmission'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProjectSubmission'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectSubmission'
+          description: ''
+    delete:
+      operationId: skills_future_projects_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this project submission.
+        required: true
+      tags:
+      - skills-future
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/skills-future/tracks/:
+    get:
+      operationId: skills_future_tracks_list
+      parameters:
+      - in: query
+        name: level
+        schema:
+          type: string
+          enum:
+          - ADVANCED
+          - BEGINNER
+          - INTERMEDIATE
+        description: |-
+          * `BEGINNER` - Beginner
+          * `INTERMEDIATE` - Intermediate
+          * `ADVANCED` - Advanced
+      - in: query
+        name: name
+        schema:
+          type: string
+          enum:
+          - AI
+          - DIGITAL_SKILLS
+          - GRAPHIC_DESIGN
+          - PYTHON
+          - ROBOTICS
+          - SCRATCH
+        description: |-
+          * `AI` - Artificial Intelligence
+          * `ROBOTICS` - Robotics
+          * `PYTHON` - Python Coding
+          * `SCRATCH` - Scratch coding
+          * `GRAPHIC_DESIGN` - Graphic Design
+          * `DIGITAL_SKILLS` - Digital Skills
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - skills-future
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SkillTrack'
+          description: ''
+    post:
+      operationId: skills_future_tracks_create
+      tags:
+      - skills-future
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SkillTrack'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SkillTrack'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SkillTrack'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SkillTrack'
+          description: ''
+  /api/skills-future/tracks/{id}/:
+    get:
+      operationId: skills_future_tracks_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this skill track.
+        required: true
+      tags:
+      - skills-future
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SkillTrack'
+          description: ''
+    put:
+      operationId: skills_future_tracks_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this skill track.
+        required: true
+      tags:
+      - skills-future
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SkillTrack'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SkillTrack'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SkillTrack'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SkillTrack'
+          description: ''
+    patch:
+      operationId: skills_future_tracks_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this skill track.
+        required: true
+      tags:
+      - skills-future
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSkillTrack'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSkillTrack'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSkillTrack'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SkillTrack'
+          description: ''
+    delete:
+      operationId: skills_future_tracks_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this skill track.
+        required: true
+      tags:
+      - skills-future
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/users/me/:
+    get:
+      operationId: users_me_retrieve
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    put:
+      operationId: users_me_update
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/users/parents/:
+    get:
+      operationId: users_parents_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ParentProfile'
+          description: ''
+    post:
+      operationId: users_parents_create
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParentProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ParentProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ParentProfile'
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParentProfile'
+          description: ''
+  /api/users/parents/{id}/:
+    get:
+      operationId: users_parents_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this parent profile.
+        required: true
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParentProfile'
+          description: ''
+    put:
+      operationId: users_parents_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this parent profile.
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParentProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ParentProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ParentProfile'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParentProfile'
+          description: ''
+    patch:
+      operationId: users_parents_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this parent profile.
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedParentProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedParentProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedParentProfile'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParentProfile'
+          description: ''
+    delete:
+      operationId: users_parents_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this parent profile.
+        required: true
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/users/register/:
+    post:
+      operationId: users_register_create
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistration'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRegistration'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserRegistration'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserRegistration'
+          description: ''
+  /api/users/students/:
+    get:
+      operationId: users_students_list
+      parameters:
+      - in: query
+        name: current_level
+        schema:
+          type: string
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - in: query
+        name: parent
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StudentProfile'
+          description: ''
+    post:
+      operationId: users_students_create
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/StudentProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/StudentProfile'
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentProfile'
+          description: ''
+  /api/users/students/{id}/:
+    get:
+      operationId: users_students_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this student profile.
+        required: true
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentProfile'
+          description: ''
+    put:
+      operationId: users_students_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this student profile.
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/StudentProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/StudentProfile'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentProfile'
+          description: ''
+    patch:
+      operationId: users_students_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this student profile.
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedStudentProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedStudentProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedStudentProfile'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentProfile'
+          description: ''
+    delete:
+      operationId: users_students_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this student profile.
+        required: true
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/users/teachers/:
+    get:
+      operationId: users_teachers_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TeacherProfile'
+          description: ''
+    post:
+      operationId: users_teachers_create
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeacherProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TeacherProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TeacherProfile'
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeacherProfile'
+          description: ''
+  /api/users/teachers/{id}/:
+    get:
+      operationId: users_teachers_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this teacher profile.
+        required: true
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeacherProfile'
+          description: ''
+    put:
+      operationId: users_teachers_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this teacher profile.
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeacherProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TeacherProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TeacherProfile'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeacherProfile'
+          description: ''
+    patch:
+      operationId: users_teachers_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this teacher profile.
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTeacherProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTeacherProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTeacherProfile'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeacherProfile'
+          description: ''
+    delete:
+      operationId: users_teachers_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this teacher profile.
+        required: true
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    Assessment:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 200
+        description:
+          type: string
+          nullable: true
+        is_admission_test:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        created_by:
+          type: integer
+          nullable: true
+      required:
+      - created_at
+      - id
+      - title
+    AssessmentResult:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        student_details:
+          allOf:
+          - $ref: '#/components/schemas/StudentProfile'
+          readOnly: true
+        score:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        strengths:
+          type: string
+          description: JSON or text detailing strengths
+        weaknesses:
+          type: string
+          description: JSON or text detailing weaknesses
+        learning_gaps:
+          type: string
+          description: JSON or text detailing learning gaps
+        recommendations:
+          type: string
+        shared_with_parents:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        student:
+          type: integer
+        assessment:
+          type: integer
+      required:
+      - assessment
+      - created_at
+      - id
+      - learning_gaps
+      - recommendations
+      - score
+      - strengths
+      - student
+      - student_details
+      - weaknesses
+    Assignment:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 200
+        instructions:
+          type: string
+        due_date:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        lesson:
+          type: integer
+      required:
+      - created_at
+      - due_date
+      - id
+      - instructions
+      - lesson
+      - title
+    AssignmentSubmission:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        student_details:
+          allOf:
+          - $ref: '#/components/schemas/StudentProfile'
+          readOnly: true
+        submitted_at:
+          type: string
+          format: date-time
+          readOnly: true
+        file_attachment:
+          type: string
+          format: uri
+          nullable: true
+        grade:
+          type: string
+          nullable: true
+          maxLength: 10
+        teacher_feedback:
+          type: string
+          nullable: true
+        assignment:
+          type: integer
+        student:
+          type: integer
+      required:
+      - assignment
+      - id
+      - student
+      - student_details
+      - submitted_at
+    Attendance:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        student_details:
+          allOf:
+          - $ref: '#/components/schemas/StudentProfile'
+          readOnly: true
+        teacher_details:
+          allOf:
+          - $ref: '#/components/schemas/TeacherProfile'
+          readOnly: true
+        status_display:
+          type: string
+          readOnly: true
+        date:
+          type: string
+          format: date
+        status:
+          $ref: '#/components/schemas/AttendanceStatusEnum'
+        student:
+          type: integer
+          nullable: true
+        teacher:
+          type: integer
+          nullable: true
+      required:
+      - date
+      - id
+      - status_display
+      - student_details
+      - teacher_details
+    AttendanceStatusEnum:
+      enum:
+      - PRESENT
+      - ABSENT
+      - LATE
+      - LEAVE
+      type: string
+      description: |-
+        * `PRESENT` - Present
+        * `ABSENT` - Absent
+        * `LATE` - Late
+        * `LEAVE` - On Leave
+    Classroom:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        course_details:
+          allOf:
+          - $ref: '#/components/schemas/Course'
+          readOnly: true
+        teacher_details:
+          allOf:
+          - $ref: '#/components/schemas/TeacherProfile'
+          readOnly: true
+        student_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/StudentProfile'
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        course:
+          type: integer
+        teacher:
+          type: integer
+          nullable: true
+        students:
+          type: array
+          items:
+            type: integer
+      required:
+      - course
+      - course_details
+      - id
+      - name
+      - student_details
+      - teacher_details
+    Course:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        program_name:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        code:
+          type: string
+          maxLength: 20
+        syllabus:
+          type: string
+          nullable: true
+        program:
+          type: integer
+      required:
+      - code
+      - id
+      - name
+      - program
+      - program_name
+    DailyProgressLog:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        type_display:
+          type: string
+          readOnly: true
+        evaluation_display:
+          type: string
+          readOnly: true
+        date:
+          type: string
+          format: date
+        type:
+          $ref: '#/components/schemas/DailyProgressLogTypeEnum'
+        surah_name:
+          type: string
+          nullable: true
+          maxLength: 100
+        from_ayat:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+          nullable: true
+        to_ayat:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+          nullable: true
+        evaluation_grade:
+          $ref: '#/components/schemas/EvaluationGradeEnum'
+        tarbiyah_notes:
+          type: string
+          nullable: true
+          description: Character and behavior notes
+        profile:
+          type: integer
+      required:
+      - date
+      - evaluation_display
+      - evaluation_grade
+      - id
+      - profile
+      - type
+      - type_display
+    DailyProgressLogTypeEnum:
+      enum:
+      - HIFAZ
+      - NAZRA
+      - TAJWEED
+      - TARBIYAH
+      - ISLAMIC_STUDIES
+      type: string
+      description: |-
+        * `HIFAZ` - Hifz (Memorization)
+        * `NAZRA` - Nazra (Reading)
+        * `TAJWEED` - Tajweed (Rules)
+        * `TARBIYAH` - Tarbiyah (Character)
+        * `ISLAMIC_STUDIES` - Islamic Studies (Theory)
+    DayOfWeekEnum:
+      enum:
+      - MON
+      - TUE
+      - WED
+      - THU
+      - FRI
+      - SAT
+      - SUN
+      type: string
+      description: |-
+        * `MON` - Monday
+        * `TUE` - Tuesday
+        * `WED` - Wednesday
+        * `THU` - Thursday
+        * `FRI` - Friday
+        * `SAT` - Saturday
+        * `SUN` - Sunday
+    DigitalDiary:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        classroom_name:
+          type: string
+          readOnly: true
+        date:
+          type: string
+          format: date
+        homework_notes:
+          type: string
+          nullable: true
+        announcements:
+          type: string
+          nullable: true
+        classroom:
+          type: integer
+      required:
+      - classroom
+      - classroom_name
+      - date
+      - id
+    EvaluationGradeEnum:
+      enum:
+      - EXCELLENT
+      - GOOD
+      - IMPROVING
+      type: string
+      description: |-
+        * `EXCELLENT` - Excellent
+        * `GOOD` - Good
+        * `IMPROVING` - Needs Improvement
+    Exam:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Question'
+          readOnly: true
+        title:
+          type: string
+          maxLength: 200
+        duration_minutes:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        ai_proctoring_enabled:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        course:
+          type: integer
+      required:
+      - course
+      - created_at
+      - id
+      - questions
+      - title
+    ExamAttempt:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        student_details:
+          allOf:
+          - $ref: '#/components/schemas/StudentProfile'
+          readOnly: true
+        score:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          nullable: true
+        started_at:
+          type: string
+          format: date-time
+          readOnly: true
+        submitted_at:
+          type: string
+          format: date-time
+          nullable: true
+        student:
+          type: integer
+        exam:
+          type: integer
+      required:
+      - exam
+      - id
+      - started_at
+      - student
+      - student_details
+    FeeStructure:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        program_details:
+          allOf:
+          - $ref: '#/components/schemas/Program'
+          readOnly: true
+        monthly_tuition:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        admission_fee:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        program:
+          type: integer
+      required:
+      - admission_fee
+      - id
+      - monthly_tuition
+      - program
+      - program_details
+    Invoice:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        student_details:
+          allOf:
+          - $ref: '#/components/schemas/StudentProfile'
+          readOnly: true
+        status_display:
+          type: string
+          readOnly: true
+        amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        due_date:
+          type: string
+          format: date
+        status:
+          $ref: '#/components/schemas/InvoiceStatusEnum'
+        payment_method:
+          $ref: '#/components/schemas/PaymentMethodEnum'
+        paid_at:
+          type: string
+          format: date-time
+          nullable: true
+        student:
+          type: integer
+      required:
+      - amount
+      - due_date
+      - id
+      - status_display
+      - student
+      - student_details
+    InvoiceStatusEnum:
+      enum:
+      - PAID
+      - UNPAID
+      - OVERDUE
+      type: string
+      description: |-
+        * `PAID` - Paid
+        * `UNPAID` - Unpaid
+        * `OVERDUE` - Overdue
+    IslamicProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        student_details:
+          allOf:
+          - $ref: '#/components/schemas/StudentProfile'
+          readOnly: true
+        current_surah:
+          type: string
+          nullable: true
+          maxLength: 100
+        current_ayat:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        hifz_completed_pages:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        tajweed_level:
+          $ref: '#/components/schemas/TajweedLevelEnum'
+        student:
+          type: integer
+      required:
+      - id
+      - student
+      - student_details
+    Lesson:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 200
+        content_body:
+          type: string
+          nullable: true
+        video_url:
+          nullable: true
+          description: URL for recorded lecture video
+          oneOf:
+          - type: string
+            format: uri
+            maxLength: 200
+          - type: string
+            maxLength: 0
+        zoom_link:
+          nullable: true
+          description: URL for live interactive session
+          oneOf:
+          - type: string
+            format: uri
+            maxLength: 200
+          - type: string
+            maxLength: 0
+        scheduled_time:
+          type: string
+          format: date-time
+          nullable: true
+          description: Start time for live session
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        course:
+          type: integer
+      required:
+      - course
+      - created_at
+      - id
+      - title
+    LevelEnum:
+      enum:
+      - BEGINNER
+      - INTERMEDIATE
+      - ADVANCED
+      type: string
+      description: |-
+        * `BEGINNER` - Beginner
+        * `INTERMEDIATE` - Intermediate
+        * `ADVANCED` - Advanced
+    ParentProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/StudentProfile'
+          readOnly: true
+      required:
+      - children
+      - id
+      - user
+    PatchedAssessment:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 200
+        description:
+          type: string
+          nullable: true
+        is_admission_test:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        created_by:
+          type: integer
+          nullable: true
+    PatchedAssessmentResult:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        student_details:
+          allOf:
+          - $ref: '#/components/schemas/StudentProfile'
+          readOnly: true
+        score:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        strengths:
+          type: string
+          description: JSON or text detailing strengths
+        weaknesses:
+          type: string
+          description: JSON or text detailing weaknesses
+        learning_gaps:
+          type: string
+          description: JSON or text detailing learning gaps
+        recommendations:
+          type: string
+        shared_with_parents:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        student:
+          type: integer
+        assessment:
+          type: integer
+    PatchedAssignment:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 200
+        instructions:
+          type: string
+        due_date:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        lesson:
+          type: integer
+    PatchedAssignmentSubmission:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        student_details:
+          allOf:
+          - $ref: '#/components/schemas/StudentProfile'
+          readOnly: true
+        submitted_at:
+          type: string
+          format: date-time
+          readOnly: true
+        file_attachment:
+          type: string
+          format: uri
+          nullable: true
+        grade:
+          type: string
+          nullable: true
+          maxLength: 10
+        teacher_feedback:
+          type: string
+          nullable: true
+        assignment:
+          type: integer
+        student:
+          type: integer
+    PatchedAttendance:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        student_details:
+          allOf:
+          - $ref: '#/components/schemas/StudentProfile'
+          readOnly: true
+        teacher_details:
+          allOf:
+          - $ref: '#/components/schemas/TeacherProfile'
+          readOnly: true
+        status_display:
+          type: string
+          readOnly: true
+        date:
+          type: string
+          format: date
+        status:
+          $ref: '#/components/schemas/AttendanceStatusEnum'
+        student:
+          type: integer
+          nullable: true
+        teacher:
+          type: integer
+          nullable: true
+    PatchedClassroom:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        course_details:
+          allOf:
+          - $ref: '#/components/schemas/Course'
+          readOnly: true
+        teacher_details:
+          allOf:
+          - $ref: '#/components/schemas/TeacherProfile'
+          readOnly: true
+        student_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/StudentProfile'
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        course:
+          type: integer
+        teacher:
+          type: integer
+          nullable: true
+        students:
+          type: array
+          items:
+            type: integer
+    PatchedCourse:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        program_name:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        code:
+          type: string
+          maxLength: 20
+        syllabus:
+          type: string
+          nullable: true
+        program:
+          type: integer
+    PatchedDailyProgressLog:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        type_display:
+          type: string
+          readOnly: true
+        evaluation_display:
+          type: string
+          readOnly: true
+        date:
+          type: string
+          format: date
+        type:
+          $ref: '#/components/schemas/DailyProgressLogTypeEnum'
+        surah_name:
+          type: string
+          nullable: true
+          maxLength: 100
+        from_ayat:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+          nullable: true
+        to_ayat:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+          nullable: true
+        evaluation_grade:
+          $ref: '#/components/schemas/EvaluationGradeEnum'
+        tarbiyah_notes:
+          type: string
+          nullable: true
+          description: Character and behavior notes
+        profile:
+          type: integer
+    PatchedDigitalDiary:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        classroom_name:
+          type: string
+          readOnly: true
+        date:
+          type: string
+          format: date
+        homework_notes:
+          type: string
+          nullable: true
+        announcements:
+          type: string
+          nullable: true
+        classroom:
+          type: integer
+    PatchedExam:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Question'
+          readOnly: true
+        title:
+          type: string
+          maxLength: 200
+        duration_minutes:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        ai_proctoring_enabled:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        course:
+          type: integer
+    PatchedExamAttempt:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        student_details:
+          allOf:
+          - $ref: '#/components/schemas/StudentProfile'
+          readOnly: true
+        score:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          nullable: true
+        started_at:
+          type: string
+          format: date-time
+          readOnly: true
+        submitted_at:
+          type: string
+          format: date-time
+          nullable: true
+        student:
+          type: integer
+        exam:
+          type: integer
+    PatchedFeeStructure:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        program_details:
+          allOf:
+          - $ref: '#/components/schemas/Program'
+          readOnly: true
+        monthly_tuition:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        admission_fee:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        program:
+          type: integer
+    PatchedInvoice:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        student_details:
+          allOf:
+          - $ref: '#/components/schemas/StudentProfile'
+          readOnly: true
+        status_display:
+          type: string
+          readOnly: true
+        amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        due_date:
+          type: string
+          format: date
+        status:
+          $ref: '#/components/schemas/InvoiceStatusEnum'
+        payment_method:
+          $ref: '#/components/schemas/PaymentMethodEnum'
+        paid_at:
+          type: string
+          format: date-time
+          nullable: true
+        student:
+          type: integer
+    PatchedIslamicProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        student_details:
+          allOf:
+          - $ref: '#/components/schemas/StudentProfile'
+          readOnly: true
+        current_surah:
+          type: string
+          nullable: true
+          maxLength: 100
+        current_ayat:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        hifz_completed_pages:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        tajweed_level:
+          $ref: '#/components/schemas/TajweedLevelEnum'
+        student:
+          type: integer
+    PatchedLesson:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 200
+        content_body:
+          type: string
+          nullable: true
+        video_url:
+          nullable: true
+          description: URL for recorded lecture video
+          oneOf:
+          - type: string
+            format: uri
+            maxLength: 200
+          - type: string
+            maxLength: 0
+        zoom_link:
+          nullable: true
+          description: URL for live interactive session
+          oneOf:
+          - type: string
+            format: uri
+            maxLength: 200
+          - type: string
+            maxLength: 0
+        scheduled_time:
+          type: string
+          format: date-time
+          nullable: true
+          description: Start time for live session
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        course:
+          type: integer
+    PatchedParentProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/StudentProfile'
+          readOnly: true
+    PatchedPersonalizedCurriculum:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        student_details:
+          allOf:
+          - $ref: '#/components/schemas/StudentProfile'
+          readOnly: true
+        assigned_level:
+          type: string
+          maxLength: 50
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+        student:
+          type: integer
+        recommended_courses:
+          type: array
+          items:
+            type: integer
+    PatchedProctoringViolationLog:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        violation_display:
+          type: string
+          readOnly: true
+        timestamp:
+          type: string
+          format: date-time
+          readOnly: true
+        violation_type:
+          $ref: '#/components/schemas/ViolationTypeEnum'
+        confidence_score:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          description: AI Model Confidence percentage (e.g. 98.50)
+        attempt:
+          type: integer
+    PatchedProgram:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          $ref: '#/components/schemas/ProgramNameEnum'
+        description:
+          type: string
+          nullable: true
+    PatchedProjectSubmission:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        student_details:
+          allOf:
+          - $ref: '#/components/schemas/StudentProfile'
+          readOnly: true
+        track_details:
+          allOf:
+          - $ref: '#/components/schemas/SkillTrack'
+          readOnly: true
+        title:
+          type: string
+          maxLength: 200
+        project_url:
+          type: string
+          format: uri
+          description: Link to GitHub, Scratch, or cloud drive folder
+          maxLength: 200
+        teacher_review:
+          type: string
+          nullable: true
+        grade:
+          type: string
+          nullable: true
+          maxLength: 10
+        submitted_at:
+          type: string
+          format: date-time
+          readOnly: true
+        student:
+          type: integer
+        track:
+          type: integer
+    PatchedQuestion:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        text:
+          type: string
+        type:
+          $ref: '#/components/schemas/QuestionTypeEnum'
+        options:
+          nullable: true
+          description: List of choices for MCQ, e.g. ['A', 'B', 'C', 'D']
+        correct_answer:
+          type: string
+          description: Correct answer text or option letter
+        exam:
+          type: integer
+    PatchedSalarySlip:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        teacher_details:
+          allOf:
+          - $ref: '#/components/schemas/TeacherProfile'
+          readOnly: true
+        month:
+          type: string
+          format: date
+          description: The first day of the pay month, e.g. 2026-07-01
+        basic_salary:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        bonus:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        deductions:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        is_paid:
+          type: boolean
+        paid_at:
+          type: string
+          format: date-time
+          nullable: true
+        teacher:
+          type: integer
+    PatchedSessionEngagementLog:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        student_details:
+          allOf:
+          - $ref: '#/components/schemas/StudentProfile'
+          readOnly: true
+        duration_seconds:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        attention_percentage:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        logged_at:
+          type: string
+          format: date-time
+          readOnly: true
+        student:
+          type: integer
+        lesson:
+          type: integer
+    PatchedSkillTrack:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name_display:
+          type: string
+          readOnly: true
+        level_display:
+          type: string
+          readOnly: true
+        name:
+          $ref: '#/components/schemas/SkillTrackNameEnum'
+        level:
+          $ref: '#/components/schemas/LevelEnum'
+        description:
+          type: string
+          nullable: true
+    PatchedStudentAnalyticsSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        student_details:
+          allOf:
+          - $ref: '#/components/schemas/StudentProfile'
+          readOnly: true
+        understanding_index:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          description: AI estimated understanding rating (0.0 - 100.0)
+        concentration_score:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          description: AI calculated concentration rating (0.0 - 100.0)
+        engagement_score:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          description: AI calculated class engagement rating (0.0 - 100.0)
+        academic_strength:
+          type: string
+          nullable: true
+          maxLength: 255
+        academic_weakness:
+          type: string
+          nullable: true
+          maxLength: 255
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+        student:
+          type: integer
+    PatchedStudentProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        parent:
+          type: integer
+          nullable: true
+        date_of_birth:
+          type: string
+          format: date
+          nullable: true
+        current_level:
+          type: string
+          nullable: true
+          maxLength: 50
+    PatchedStudentSkillProgress:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        student_details:
+          allOf:
+          - $ref: '#/components/schemas/StudentProfile'
+          readOnly: true
+        track_details:
+          allOf:
+          - $ref: '#/components/schemas/SkillTrack'
+          readOnly: true
+        progress_percent:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+          description: Percentage 0-100
+        completed_projects_count:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        last_active:
+          type: string
+          format: date-time
+          readOnly: true
+        student:
+          type: integer
+        track:
+          type: integer
+    PatchedTeacherProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        qualification:
+          type: string
+          nullable: true
+          maxLength: 100
+        specialization:
+          type: string
+          nullable: true
+          maxLength: 100
+    PatchedTimetableSlot:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        classroom_name:
+          type: string
+          readOnly: true
+        day_display:
+          type: string
+          readOnly: true
+        day_of_week:
+          $ref: '#/components/schemas/DayOfWeekEnum'
+        start_time:
+          type: string
+          format: time
+        end_time:
+          type: string
+          format: time
+        resource_details:
+          type: string
+          nullable: true
+          description: Virtual meeting URL, specific software tools, or textbook references
+          maxLength: 255
+        classroom:
+          type: integer
+    PaymentMethodEnum:
+      enum:
+      - BANK_TRANSFER
+      - CREDIT_CARD
+      - CASH
+      - PENDING
+      type: string
+      description: |-
+        * `BANK_TRANSFER` - Bank Transfer
+        * `CREDIT_CARD` - Credit / Debit Card
+        * `CASH` - Cash
+        * `PENDING` - Pending Payment
+    PersonalizedCurriculum:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        student_details:
+          allOf:
+          - $ref: '#/components/schemas/StudentProfile'
+          readOnly: true
+        assigned_level:
+          type: string
+          maxLength: 50
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+        student:
+          type: integer
+        recommended_courses:
+          type: array
+          items:
+            type: integer
+      required:
+      - assigned_level
+      - id
+      - last_updated
+      - student
+      - student_details
+    ProctoringViolationLog:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        violation_display:
+          type: string
+          readOnly: true
+        timestamp:
+          type: string
+          format: date-time
+          readOnly: true
+        violation_type:
+          $ref: '#/components/schemas/ViolationTypeEnum'
+        confidence_score:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          description: AI Model Confidence percentage (e.g. 98.50)
+        attempt:
+          type: integer
+      required:
+      - attempt
+      - confidence_score
+      - id
+      - timestamp
+      - violation_display
+      - violation_type
+    Program:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          $ref: '#/components/schemas/ProgramNameEnum'
+        description:
+          type: string
+          nullable: true
+      required:
+      - id
+      - name
+    ProgramNameEnum:
+      enum:
+      - MONTESSORI
+      - PRIMARY
+      - MIDDLE
+      - O_LEVEL
+      - IGCSE
+      - GED
+      type: string
+      description: |-
+        * `MONTESSORI` - Montessori
+        * `PRIMARY` - Primary (Grade 1-5)
+        * `MIDDLE` - Middle School (Grade 6-8)
+        * `O_LEVEL` - O Levels
+        * `IGCSE` - IGCSE
+        * `GED` - GED
+    ProjectSubmission:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        student_details:
+          allOf:
+          - $ref: '#/components/schemas/StudentProfile'
+          readOnly: true
+        track_details:
+          allOf:
+          - $ref: '#/components/schemas/SkillTrack'
+          readOnly: true
+        title:
+          type: string
+          maxLength: 200
+        project_url:
+          type: string
+          format: uri
+          description: Link to GitHub, Scratch, or cloud drive folder
+          maxLength: 200
+        teacher_review:
+          type: string
+          nullable: true
+        grade:
+          type: string
+          nullable: true
+          maxLength: 10
+        submitted_at:
+          type: string
+          format: date-time
+          readOnly: true
+        student:
+          type: integer
+        track:
+          type: integer
+      required:
+      - id
+      - project_url
+      - student
+      - student_details
+      - submitted_at
+      - title
+      - track
+      - track_details
+    Question:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        text:
+          type: string
+        type:
+          $ref: '#/components/schemas/QuestionTypeEnum'
+        options:
+          nullable: true
+          description: List of choices for MCQ, e.g. ['A', 'B', 'C', 'D']
+        correct_answer:
+          type: string
+          description: Correct answer text or option letter
+        exam:
+          type: integer
+      required:
+      - correct_answer
+      - exam
+      - id
+      - text
+    QuestionTypeEnum:
+      enum:
+      - MCQ
+      - SUBJECTIVE
+      type: string
+      description: |-
+        * `MCQ` - Multiple Choice Question
+        * `SUBJECTIVE` - Subjective / Theory
+    RoleEnum:
+      enum:
+      - ADMIN
+      - TEACHER
+      - STUDENT
+      - PARENT
+      type: string
+      description: |-
+        * `ADMIN` - Admin
+        * `TEACHER` - Teacher
+        * `STUDENT` - Student
+        * `PARENT` - Parent
+    SalarySlip:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        teacher_details:
+          allOf:
+          - $ref: '#/components/schemas/TeacherProfile'
+          readOnly: true
+        month:
+          type: string
+          format: date
+          description: The first day of the pay month, e.g. 2026-07-01
+        basic_salary:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        bonus:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        deductions:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        is_paid:
+          type: boolean
+        paid_at:
+          type: string
+          format: date-time
+          nullable: true
+        teacher:
+          type: integer
+      required:
+      - basic_salary
+      - id
+      - month
+      - teacher
+      - teacher_details
+    SessionEngagementLog:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        student_details:
+          allOf:
+          - $ref: '#/components/schemas/StudentProfile'
+          readOnly: true
+        duration_seconds:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        attention_percentage:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+        logged_at:
+          type: string
+          format: date-time
+          readOnly: true
+        student:
+          type: integer
+        lesson:
+          type: integer
+      required:
+      - id
+      - lesson
+      - logged_at
+      - student
+      - student_details
+    SkillTrack:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name_display:
+          type: string
+          readOnly: true
+        level_display:
+          type: string
+          readOnly: true
+        name:
+          $ref: '#/components/schemas/SkillTrackNameEnum'
+        level:
+          $ref: '#/components/schemas/LevelEnum'
+        description:
+          type: string
+          nullable: true
+      required:
+      - id
+      - level
+      - level_display
+      - name
+      - name_display
+    SkillTrackNameEnum:
+      enum:
+      - AI
+      - ROBOTICS
+      - PYTHON
+      - SCRATCH
+      - GRAPHIC_DESIGN
+      - DIGITAL_SKILLS
+      type: string
+      description: |-
+        * `AI` - Artificial Intelligence
+        * `ROBOTICS` - Robotics
+        * `PYTHON` - Python Coding
+        * `SCRATCH` - Scratch coding
+        * `GRAPHIC_DESIGN` - Graphic Design
+        * `DIGITAL_SKILLS` - Digital Skills
+    StudentAnalyticsSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        student_details:
+          allOf:
+          - $ref: '#/components/schemas/StudentProfile'
+          readOnly: true
+        understanding_index:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          description: AI estimated understanding rating (0.0 - 100.0)
+        concentration_score:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          description: AI calculated concentration rating (0.0 - 100.0)
+        engagement_score:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,2})?$
+          description: AI calculated class engagement rating (0.0 - 100.0)
+        academic_strength:
+          type: string
+          nullable: true
+          maxLength: 255
+        academic_weakness:
+          type: string
+          nullable: true
+          maxLength: 255
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+        student:
+          type: integer
+      required:
+      - id
+      - last_updated
+      - student
+      - student_details
+    StudentProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        parent:
+          type: integer
+          nullable: true
+        date_of_birth:
+          type: string
+          format: date
+          nullable: true
+        current_level:
+          type: string
+          nullable: true
+          maxLength: 50
+      required:
+      - id
+      - user
+    StudentSkillProgress:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        student_details:
+          allOf:
+          - $ref: '#/components/schemas/StudentProfile'
+          readOnly: true
+        track_details:
+          allOf:
+          - $ref: '#/components/schemas/SkillTrack'
+          readOnly: true
+        progress_percent:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+          description: Percentage 0-100
+        completed_projects_count:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        last_active:
+          type: string
+          format: date-time
+          readOnly: true
+        student:
+          type: integer
+        track:
+          type: integer
+      required:
+      - id
+      - last_active
+      - student
+      - student_details
+      - track
+      - track_details
+    TajweedLevelEnum:
+      enum:
+      - BEGINNER
+      - INTERMEDIATE
+      - ADVANCED
+      type: string
+      description: |-
+        * `BEGINNER` - Beginner
+        * `INTERMEDIATE` - Intermediate
+        * `ADVANCED` - Advanced
+    TeacherProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+        qualification:
+          type: string
+          nullable: true
+          maxLength: 100
+        specialization:
+          type: string
+          nullable: true
+          maxLength: 100
+      required:
+      - id
+      - user
+    TimetableSlot:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        classroom_name:
+          type: string
+          readOnly: true
+        day_display:
+          type: string
+          readOnly: true
+        day_of_week:
+          $ref: '#/components/schemas/DayOfWeekEnum'
+        start_time:
+          type: string
+          format: time
+        end_time:
+          type: string
+          format: time
+        resource_details:
+          type: string
+          nullable: true
+          description: Virtual meeting URL, specific software tools, or textbook references
+          maxLength: 255
+        classroom:
+          type: integer
+      required:
+      - classroom
+      - classroom_name
+      - day_display
+      - day_of_week
+      - end_time
+      - id
+      - start_time
+    TokenObtainPair:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          readOnly: true
+      required:
+      - access
+      - password
+      - refresh
+      - username
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+      required:
+      - access
+      - refresh
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        email:
+          title: Email address
+          oneOf:
+          - type: string
+            format: email
+            maxLength: 254
+          - type: string
+            maxLength: 0
+        role:
+          allOf:
+          - $ref: '#/components/schemas/RoleEnum'
+          readOnly: true
+        phone_number:
+          type: string
+          nullable: true
+          maxLength: 20
+        profile_picture:
+          type: string
+          format: uri
+          nullable: true
+        date_joined:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - date_joined
+      - id
+      - role
+      - username
+    UserRegistration:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        password:
+          type: string
+          writeOnly: true
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        email:
+          title: Email address
+          oneOf:
+          - type: string
+            format: email
+            maxLength: 254
+          - type: string
+            maxLength: 0
+        role:
+          $ref: '#/components/schemas/RoleEnum'
+        phone_number:
+          type: string
+          nullable: true
+          maxLength: 20
+      required:
+      - password
+      - username
+    ViolationTypeEnum:
+      enum:
+      - FACE_NOT_FOUND
+      - MULTIPLE_FACES
+      - TAB_SWITCH
+      - SPEECH_DETECTED
+      - UNKNOWN_OBJECT
+      type: string
+      description: |-
+        * `FACE_NOT_FOUND` - No Face Detected
+        * `MULTIPLE_FACES` - Multiple Faces Detected
+        * `TAB_SWITCH` - Browser Tab Switched
+        * `SPEECH_DETECTED` - Speech/Voice Detected
+        * `UNKNOWN_OBJECT` - Restricted Object/Phone Detected
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
