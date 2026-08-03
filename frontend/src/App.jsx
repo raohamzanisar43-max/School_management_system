@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from './pages/Login';
 import AdminDashboard from './pages/AdminDashboard';
@@ -48,8 +49,10 @@ export default function App() {
   }, []);
 
   return (
-    <AuthProvider>
-      <DashboardRouter />
-    </AuthProvider>
+    <BrowserRouter>
+      <AuthProvider>
+        <DashboardRouter />
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
