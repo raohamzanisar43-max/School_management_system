@@ -113,8 +113,8 @@ export default function ParentDashboard() {
       {/* Navigation Header */}
       <header className="glass sticky top-0 z-50 px-6 py-4 flex items-center justify-between border-b border-slate-800/80 backdrop-blur-md">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-pink-600/20 border border-pink-500/30 rounded-xl text-pink-400">
-            <GraduationCap className="h-6 w-6" />
+          <div className="p-2 bg-pink-600/20 border border-pink-500/30 rounded-xl">
+            <img src="/3.png" alt="Bright Future logo" className="h-10 w-10 object-contain rounded-xl" />
           </div>
           <div>
             <h1 className="text-xl font-bold font-outfit tracking-tight">Bright Future</h1>

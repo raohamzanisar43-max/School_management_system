@@ -322,23 +322,34 @@ export default function Login() {
       <header className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 py-4 sm:py-5 flex items-center justify-between z-20">
         
         {/* Brand Logo */}
-        <a href="/" className="flex items-center gap-3 group" onClick={(e) => { e.preventDefault(); setSelectedRole(null); setMode('LOGIN'); }}>
-          <div className="w-10 h-10 rounded-xl bg-theme-card-inner border border-theme flex items-center justify-center p-2 shadow-sm group-hover:border-lime-500/50 transition">
-            <svg className="w-6 h-6 text-theme-main sync-icon" viewBox="0 0 24 24" strokeWidth="1.8">
-              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-              <path d="M6 12v5c0 2 3 3 6 3s6-1 6-3v-5"/>
-            </svg>
-          </div>
-          <div>
-            <div className="font-extrabold text-sm sm:text-base tracking-tight text-theme-main uppercase flex items-center gap-1.5 leading-none">
-              <span>BRIGHT FUTURE</span>
-              <span style={{ color: 'var(--brand-lime)' }}>SCHOOL</span>
-            </div>
-            <div className="text-[9px] sm:text-[10px] font-bold tracking-widest text-theme-muted uppercase mt-1">
-              THE GLOBAL LEARNING HUB
-            </div>
-          </div>
-        </a>
+      <a
+  href="/"
+  className="flex items-center gap-3 group"
+  onClick={(e) => {
+    e.preventDefault();
+    setSelectedRole(null);
+    setMode("LOGIN");
+  }}
+>
+  <div className="rounded-xl bg-theme-card-inner  border-theme flex items-center justify-center p-2 shadow-sm group-hover:border-lime-500/50 transition">
+    <img
+      src="/3.png"
+      alt="School Logo"
+      className="w-14 h-14 rounded-full object-contain animate-logo-spin"
+    />
+  </div>
+
+  <div>
+    <div className="font-extrabold text-sm sm:text-base tracking-tight text-theme-main uppercase flex items-center gap-1.5 leading-none">
+      <span>BRIGHT FUTURE</span>
+      <span style={{ color: "var(--brand-lime)" }}>SCHOOL</span>
+    </div>
+
+    <div className="text-[9px] sm:text-[10px] font-bold tracking-widest text-theme-muted uppercase mt-1">
+      THE GLOBAL LEARNING HUB
+    </div>
+  </div>
+</a>
 
         {/* Header Actions */}
         <div className="flex items-center gap-3 sm:gap-4">
