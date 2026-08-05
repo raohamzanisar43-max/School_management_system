@@ -182,6 +182,13 @@ const MOCK_DATA = {
       created_at: '2026-07-14T09:00:00Z'
     }
   ],
+  announcements: [
+    { id: 1, title: 'Sports Day 2026', message: 'Annual Sports Day will be held on June 15, 2026. All students must wear house-color shirts.', audience: 'ALL', created_at: '2026-05-20T09:00:00Z' },
+    { id: 2, title: 'Summer Vacation Notice', message: 'Summer vacations start May 18 and school reopens June 30, 2026.', audience: 'ALL', created_at: '2026-05-18T09:00:00Z' },
+    { id: 3, title: 'Parent-Teacher Meeting', message: 'Parent-Teacher meeting scheduled for May 25, 2026 at 10:00 AM in the main hall.', audience: 'PARENTS', created_at: '2026-05-16T09:00:00Z' },
+    { id: 4, title: 'New Curriculum Update', message: 'Updated Grade 6-8 Science curriculum documents are now available in Learning Resources.', audience: 'ALL', created_at: '2026-05-10T09:00:00Z' },
+  ],
+
   chat_messages: [
     { id: 1, sender: 2, sender_username: 'teacher_ahmed', recipient: 3, recipient_username: 'student_zayd', message: "Assalam-o-Alaikum Zayd, I hope you are practicing your addition exercises! Don't forget to submit the worksheet today.", timestamp: '2026-07-18T08:00:00Z', is_read: true },
     { id: 2, sender: 3, sender_username: 'student_zayd', recipient: 2, recipient_username: 'teacher_ahmed', message: "Walaikum Assalam Ustadh, yes I am almost done with the sheet, I will upload it in a few minutes!", timestamp: '2026-07-18T08:05:00Z', is_read: true },
@@ -723,6 +730,42 @@ export const api = {
       localMockState.chat_messages.push(newMsg);
       return newMsg;
     }
+  },
+
+  // School-wide Announcements
+  getAnnouncements: async () => {
+    try {
+      const res = await apiInstance.get('/announcements/');
+      return res.data;
+    } catch (e) {
+      return [...localMockState.announcements].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    }
+  },
+
+  createAnnouncement: async (data) => {
+    try {
+      const res = await apiInstance.post('/announcements/', data);
+      return res.data;
+    } catch (e) {
+      const newAnn = {
+        id: localMockState.announcements.length + 1,
+        title: data.title,
+        message: data.message,
+        audience: data.audience || 'ALL',
+        created_at: new Date().toISOString(),
+      };
+      localMockState.announcements.unshift(newAnn);
+      return newAnn;
+    }
+  },
+
+  deleteAnnouncement: async (id) => {
+    try {
+      await apiInstance.delete(`/announcements/${id}/`);
+    } catch (e) {
+      // fall through to local removal regardless of backend outcome
+    }
+    localMockState.announcements = localMockState.announcements.filter(a => a.id !== id);
   },
 
   // Gemini API integration
