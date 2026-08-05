@@ -1,6 +1,7 @@
 import React from 'react';
 import { TrendingUp } from 'lucide-react';
-import { SectionCard, ProgressBar } from '../DashboardChrome';
+import { SectionCard } from '../ui/SectionCard';
+import { ProgressBar } from '../ui/ProgressBar';
 import { SUBJECT_LEVELS } from './constants';
 
 export default function ProgressView({ accent }) {

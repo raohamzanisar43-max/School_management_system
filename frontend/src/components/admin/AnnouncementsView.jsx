@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Plus, Megaphone, Trash2 } from 'lucide-react';
-import { SectionCard } from '../DashboardChrome';
+import { SectionCard } from '../ui/SectionCard';
 
 export default function AnnouncementsView({ announcements, onPost, onDelete, accent }) {
   const [title, setTitle] = useState('');

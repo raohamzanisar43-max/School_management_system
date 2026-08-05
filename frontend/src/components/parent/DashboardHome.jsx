@@ -1,6 +1,7 @@
 import React from 'react';
 import { Users, Calendar, Award, Wallet, CheckCircle, CalendarClock, MessageSquare, Megaphone, LayoutGrid, Download } from 'lucide-react';
-import { SectionCard, PersonCard } from '../DashboardChrome';
+import { SectionCard } from '../ui/SectionCard';
+import { PersonCard } from '../ui/PersonCard';
 import { TODAY_SCHEDULE, EXAM_RESULTS } from './constants';
 
 export default function DashboardHome({ parentName, child, chatMessages, announcements, isPaidThisMonth, nextDue, onNavigate, onPayInvoice, accent }) {

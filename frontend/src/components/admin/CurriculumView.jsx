@@ -1,6 +1,6 @@
 import React from 'react';
 import { GraduationCap, BookOpen } from 'lucide-react';
-import { SectionCard } from '../DashboardChrome';
+import { SectionCard } from '../ui/SectionCard';
 
 export default function CurriculumView({ programs, courses, accent }) {
   return (

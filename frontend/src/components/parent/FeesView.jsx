@@ -1,6 +1,6 @@
 import React from 'react';
 import { Wallet, Printer } from 'lucide-react';
-import { SectionCard } from '../DashboardChrome';
+import { SectionCard } from '../ui/SectionCard';
 
 export default function FeesView({ invoices, onPayInvoice, accent }) {
   return (

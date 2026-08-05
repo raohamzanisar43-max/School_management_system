@@ -1,6 +1,6 @@
 import React from 'react';
 import { ClipboardCheck } from 'lucide-react';
-import { SectionCard } from '../DashboardChrome';
+import { SectionCard } from '../ui/SectionCard';
 import { SUBJECT_LEVELS } from './constants';
 
 export default function AssessmentView({ accent }) {

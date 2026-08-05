@@ -1,6 +1,6 @@
 import React from 'react';
 import { Users } from 'lucide-react';
-import { SectionCard } from '../DashboardChrome';
+import { SectionCard } from '../ui/SectionCard';
 
 export default function ClassesView({ classrooms, accent }) {
   return (

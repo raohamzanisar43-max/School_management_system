@@ -1,6 +1,7 @@
 import React from 'react';
 import { BookOpen, Circle } from 'lucide-react';
-import { SectionCard, ProgressBar } from '../DashboardChrome';
+import { SectionCard } from '../ui/SectionCard';
+import { ProgressBar } from '../ui/ProgressBar';
 import { SUBJECT_LEVELS, LEARNING_GAPS } from './constants';
 
 export default function LearningView({ accent }) {

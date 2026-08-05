@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react';
-import { api } from '../../services/api';
+import { getStudents } from '../../services/studentService';
+import { getTeachers } from '../../services/teacherService';
+import { getPrograms, getCourses } from '../../services/curriculumService';
+import { getInvoices, getSalaries } from '../../services/billingService';
+import { getAnnouncements, createAnnouncement, deleteAnnouncement } from '../../services/announcementService';
 
 export default function useAdminData() {
   const [students, setStudents] = useState([]);
@@ -13,8 +17,8 @@ export default function useAdminData() {
   useEffect(() => {
     const fetchData = async () => {
       const [studs, techs, progs, crs, invs, sals, anns] = await Promise.all([
-        api.getStudents(), api.getTeachers(), api.getPrograms(),
-        api.getCourses(), api.getInvoices(), api.getSalaries(), api.getAnnouncements(),
+        getStudents(), getTeachers(), getPrograms(),
+        getCourses(), getInvoices(), getSalaries(), getAnnouncements(),
       ]);
       setStudents(studs);
       setTeachers(techs);
@@ -28,14 +32,14 @@ export default function useAdminData() {
   }, []);
 
   const postAnnouncement = async (title, message) => {
-    const newAnn = await api.createAnnouncement({ title, message, audience: 'ALL' });
+    const newAnn = await createAnnouncement({ title, message, audience: 'ALL' });
     setAnnouncements(prev => [newAnn, ...prev]);
   };
 
-  const deleteAnnouncement = async (id) => {
-    await api.deleteAnnouncement(id);
+  const removeAnnouncement = async (id) => {
+    await deleteAnnouncement(id);
     setAnnouncements(prev => prev.filter(a => a.id !== id));
   };
 
-  return { students, teachers, programs, courses, invoices, salaries, announcements, postAnnouncement, deleteAnnouncement };
+  return { students, teachers, programs, courses, invoices, salaries, announcements, postAnnouncement, deleteAnnouncement: removeAnnouncement };
 }

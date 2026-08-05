@@ -1,6 +1,8 @@
 import React from 'react';
 import { BookOpen, Users, ClipboardList, BarChart3, CalendarCheck, Calendar, Megaphone } from 'lucide-react';
-import { StatCard, SectionCard, ProgressBar } from '../DashboardChrome';
+import { StatCard } from '../ui/StatCard';
+import { SectionCard } from '../ui/SectionCard';
+import { ProgressBar } from '../ui/ProgressBar';
 import { TODAY_SCHEDULE, MY_CLASSES, PENDING_ASSIGNMENTS, RECENT_NOTICES, UPCOMING_EVENTS, STATUS_STYLE } from './constants';
 
 export default function DashboardHome({ teacherName, announcements, accent, onNavigate }) {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Award } from 'lucide-react';
-import { SectionCard } from '../DashboardChrome';
+import { SectionCard } from '../ui/SectionCard';
 import { EXAM_RESULTS } from './constants';
 
 export default function ResultsView({ accent }) {

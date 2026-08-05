@@ -3,7 +3,7 @@ import {
   ChevronRight, Sparkles, ClipboardCheck, Target, Star, AlertTriangle, Circle,
   BookOpen, FileText, Download, Share2, CheckCircle, Calendar,
 } from 'lucide-react';
-import { SectionCard } from '../DashboardChrome';
+import { SectionCard } from '../ui/SectionCard';
 import { STRENGTHS, WEAKNESSES, LEARNING_GAPS, SUBJECT_LEVELS, REASSESSMENT_STEPS } from './constants';
 
 export default function DashboardHome({ studentName, overallScore, assessmentDate, accent, onNavigate }) {

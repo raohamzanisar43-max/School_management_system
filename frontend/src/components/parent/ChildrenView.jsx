@@ -1,6 +1,7 @@
 import React from 'react';
 import { Users } from 'lucide-react';
-import { SectionCard, PersonCard } from '../DashboardChrome';
+import { SectionCard } from '../ui/SectionCard';
+import { PersonCard } from '../ui/PersonCard';
 
 export default function ChildrenView({ child, accent }) {
   return (

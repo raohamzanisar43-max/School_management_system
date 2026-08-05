@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
-import StudentChrome from '../components/student/StudentChrome';
-import StudentContent from '../components/student/StudentContent';
-import useStudentData from '../components/student/useStudentData';
+import { useAuth } from '../../contexts/AuthContext';
+import StudentChrome from '../../components/student/StudentChrome';
+import StudentContent from '../../components/student/StudentContent';
+import useStudentData from '../../components/student/useStudentData';
 
 export default function StudentDashboard() {
   const { user, logout, switchRole } = useAuth();

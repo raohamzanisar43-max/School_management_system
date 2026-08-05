@@ -1,6 +1,6 @@
 import React from 'react';
 import { Megaphone } from 'lucide-react';
-import { SectionCard } from '../DashboardChrome';
+import { SectionCard } from '../ui/SectionCard';
 
 export default function AnnouncementsView({ announcements, accent }) {
   return (

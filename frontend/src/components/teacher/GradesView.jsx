@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FileText, Award } from 'lucide-react';
-import { SectionCard } from '../DashboardChrome';
+import { SectionCard } from '../ui/SectionCard';
 
 export default function GradesView({ submissions, students, onGrade, accent }) {
   const [target, setTarget] = useState(null);

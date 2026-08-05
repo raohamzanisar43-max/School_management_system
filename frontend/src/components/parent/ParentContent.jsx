@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { ACCENTS, ChatPanel, SettingsPanel } from '../DashboardChrome';
+import { ACCENTS } from '../../constants/theme';
+import { ChatPanel } from '../ui/ChatPanel';
+import { SettingsPanel } from '../ui/SettingsPanel';
 import { DEFAULT_PARENT_NAME } from './useParentData';
 import DashboardHome from './DashboardHome';
 import ChildrenView from './ChildrenView';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { CalendarCheck } from 'lucide-react';
-import { SectionCard } from '../DashboardChrome';
+import { SectionCard } from '../ui/SectionCard';
 
 export default function AttendanceView({ attendanceLogs, students, accent }) {
   return (

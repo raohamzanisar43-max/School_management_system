@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
-import AdminChrome from '../components/admin/AdminChrome';
-import AdminContent from '../components/admin/AdminContent';
-import useAdminData from '../components/admin/useAdminData';
+import { useAuth } from '../../contexts/AuthContext';
+import AdminChrome from '../../components/admin/AdminChrome';
+import AdminContent from '../../components/admin/AdminContent';
+import useAdminData from '../../components/admin/useAdminData';
 
 export default function AdminDashboard() {
   const { user, logout, switchRole } = useAuth();

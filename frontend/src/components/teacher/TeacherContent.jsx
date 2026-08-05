@@ -1,5 +1,7 @@
 import React from 'react';
-import { ACCENTS, ChatPanel, SettingsPanel } from '../DashboardChrome';
+import { ACCENTS } from '../../constants/theme';
+import { ChatPanel } from '../ui/ChatPanel';
+import { SettingsPanel } from '../ui/SettingsPanel';
 import { RESOURCE_FILES } from './constants';
 import { DEFAULT_TEACHER_NAME } from './useTeacherData';
 import DashboardHome from './DashboardHome';

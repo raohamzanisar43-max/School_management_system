@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import { api } from '../services/api';
+import { login as authLogin, logout as authLogout, getCurrentUser } from '../services/authService';
 
 const AuthContext = createContext(null);
 
@@ -13,11 +13,11 @@ export const AuthProvider = ({ children }) => {
       const token = localStorage.getItem('access_token');
       if (token) {
         try {
-          const userData = await api.getCurrentUser();
+          const userData = await getCurrentUser();
           setUser(userData);
         } catch (e) {
           console.error('Failed to restore session:', e);
-          api.logout();
+          authLogout();
           setUser(null);
         }
       }
@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (username, password) => {
     setLoading(true);
     try {
-      const userData = await api.login(username, password);
+      const userData = await authLogin(username, password);
       setUser(userData);
       return userData;
     } catch (error) {
@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    api.logout();
+    authLogout();
     setUser(null);
   };
 

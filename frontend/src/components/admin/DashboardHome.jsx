@@ -1,6 +1,6 @@
 import React from 'react';
 import { ChevronRight, GraduationCap, Users, Wallet } from 'lucide-react';
-import { StatCard } from '../DashboardChrome';
+import { StatCard } from '../ui/StatCard';
 import { MODULES, COLOR_CLASSES } from './constants';
 
 export default function DashboardHome({ user, students, teachers, invoices, accent, onNavigate }) {

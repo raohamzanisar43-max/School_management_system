@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import { Sidebar, Topbar, DashboardShell, ACCENTS } from '../DashboardChrome';
+import { Sidebar } from '../layout/Sidebar';
+import { Topbar } from '../layout/Topbar';
+import { DashboardShell } from '../layout/DashboardShell';
+import { ACCENTS } from '../../constants/theme';
 import { NAV_ITEMS } from './constants';
 import { DEFAULT_PARENT_NAME } from './useParentData';
 

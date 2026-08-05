@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
-import { getThemeSpecs } from '../components/auth/themeSpecs';
-import useAuthTheme from '../components/auth/useAuthTheme';
-import useLoginForm from '../components/auth/useLoginForm';
-import useRegisterWizard from '../components/auth/useRegisterWizard';
-import ThemeStyles from '../components/auth/ThemeStyles';
-import AuthHeader from '../components/auth/AuthHeader';
-import AuthFooter from '../components/auth/AuthFooter';
-import Toast from '../components/auth/Toast';
-import LoginHero from '../components/auth/LoginHero';
-import RegisterHero from '../components/auth/RegisterHero';
-import PortalGrid from '../components/auth/PortalGrid';
-import LoginCredentialsForm from '../components/auth/LoginCredentialsForm';
-import RegisterWizard from '../components/auth/RegisterWizard';
+import { useAuth } from '../../contexts/AuthContext';
+import { getThemeSpecs } from '../../components/auth/themeSpecs';
+import useAuthTheme from '../../components/auth/useAuthTheme';
+import useLoginForm from '../../components/auth/useLoginForm';
+import useRegisterWizard from '../../components/auth/useRegisterWizard';
+import ThemeStyles from '../../components/auth/ThemeStyles';
+import AuthHeader from '../../components/auth/AuthHeader';
+import AuthFooter from '../../components/auth/AuthFooter';
+import Toast from '../../components/auth/Toast';
+import LoginHero from '../../components/auth/LoginHero';
+import RegisterHero from '../../components/auth/RegisterHero';
+import PortalGrid from '../../components/auth/PortalGrid';
+import LoginCredentialsForm from '../../components/auth/LoginCredentialsForm';
+import RegisterWizard from '../../components/auth/RegisterWizard';
 
 export default function Login() {
   const { login } = useAuth();

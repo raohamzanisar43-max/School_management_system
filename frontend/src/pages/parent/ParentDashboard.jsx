@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
-import ParentChrome from '../components/parent/ParentChrome';
-import ParentContent from '../components/parent/ParentContent';
-import useParentData from '../components/parent/useParentData';
+import { useAuth } from '../../contexts/AuthContext';
+import ParentChrome from '../../components/parent/ParentChrome';
+import ParentContent from '../../components/parent/ParentContent';
+import useParentData from '../../components/parent/useParentData';
 
 export default function ParentDashboard() {
   const { user, logout, switchRole } = useAuth();

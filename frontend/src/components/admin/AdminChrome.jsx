@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { LayoutGrid } from 'lucide-react';
-import { Sidebar, Topbar, DashboardShell, ACCENTS } from '../DashboardChrome';
+import { Sidebar } from '../layout/Sidebar';
+import { Topbar } from '../layout/Topbar';
+import { DashboardShell } from '../layout/DashboardShell';
+import { ACCENTS } from '../../constants/theme';
 
 const accent = ACCENTS.ADMIN;
 const NAV_ITEMS = [{ key: 'dashboard', label: 'Dashboard', icon: LayoutGrid }];

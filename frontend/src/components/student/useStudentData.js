@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
-import { api } from '../../services/api';
+import { getAssessmentResults } from '../../services/assessmentService';
+import { getCourses, getTimetableSlots } from '../../services/curriculumService';
+import { getTeachers } from '../../services/teacherService';
+import { getChatMessages, sendChatMessage } from '../../services/chatService';
 
 export const DEFAULT_STUDENT_NAME = 'Muhammad';
 
@@ -13,21 +16,21 @@ export default function useStudentData() {
   useEffect(() => {
     const fetchData = async () => {
       const [results, crs, techs, slots] = await Promise.all([
-        api.getAssessmentResults(3), api.getCourses(), api.getTeachers(), api.getTimetableSlots(),
+        getAssessmentResults(3), getCourses(), getTeachers(), getTimetableSlots(),
       ]);
       setAssessmentResults(results);
       setCourses(crs);
       setTeachers(techs);
       setTimetable(slots);
       try {
-        setChatMessages(await api.getChatMessages(2));
+        setChatMessages(await getChatMessages(2));
       } catch { /* ignore */ }
     };
     fetchData();
   }, []);
 
   const sendMessage = async (text) => {
-    const msg = await api.sendChatMessage(2, text);
+    const msg = await sendChatMessage(2, text);
     setChatMessages(prev => [...prev, msg]);
   };
 

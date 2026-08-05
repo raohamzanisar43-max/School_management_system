@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
-import { ACCENTS } from '../DashboardChrome';
+import { ACCENTS } from '../../constants/theme';
 import DashboardHome from './DashboardHome';
 import StudentsView from './StudentsView';
 import TeachersView from './TeachersView';

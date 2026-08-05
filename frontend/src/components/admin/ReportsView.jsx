@@ -1,6 +1,7 @@
 import React from 'react';
 import { DollarSign, Wallet, FileText, BarChart3 } from 'lucide-react';
-import { StatCard, SectionCard } from '../DashboardChrome';
+import { StatCard } from '../ui/StatCard';
+import { SectionCard } from '../ui/SectionCard';
 import { PROGRAM_META } from './constants';
 
 export default function ReportsView({ students, invoices, salaries, accent }) {

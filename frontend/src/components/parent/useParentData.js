@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
-import { api } from '../../services/api';
+import { getStudents } from '../../services/studentService';
+import { getInvoices, payInvoice as payInvoiceRequest } from '../../services/billingService';
+import { getAnnouncements } from '../../services/announcementService';
+import { getChatMessages, sendChatMessage } from '../../services/chatService';
 
 export const DEFAULT_PARENT_NAME = 'Mrs. Sarah Khan';
 export const DEFAULT_CHILD = { name: 'Muhammad Ali', current_level: 'MIDDLE' };
@@ -13,25 +16,25 @@ export default function useParentData() {
   useEffect(() => {
     const fetchData = async () => {
       const [studs, invs, anns] = await Promise.all([
-        api.getStudents(), api.getInvoices(3), api.getAnnouncements(),
+        getStudents(), getInvoices(3), getAnnouncements(),
       ]);
       setStudents(studs);
       setInvoices(invs);
       setAnnouncements(anns);
       try {
-        setChatMessages(await api.getChatMessages(2));
+        setChatMessages(await getChatMessages(2));
       } catch { /* ignore */ }
     };
     fetchData();
   }, []);
 
   const sendMessage = async (text) => {
-    const msg = await api.sendChatMessage(2, text);
+    const msg = await sendChatMessage(2, text);
     setChatMessages(prev => [...prev, msg]);
   };
 
   const payInvoice = async (invoiceId, method) => {
-    await api.payInvoice(invoiceId, method);
+    await payInvoiceRequest(invoiceId, method);
     setInvoices(prev => prev.map(inv => (inv.id === invoiceId ? { ...inv, status: 'PAID', payment_method: method } : inv)));
   };
 
