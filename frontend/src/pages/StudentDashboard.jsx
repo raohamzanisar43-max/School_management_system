@@ -12,8 +12,8 @@ const NAV_ITEMS = [
   { key: 'quran', label: 'Quran Progression Log', icon: 'fa-book-quran', color: 'text-green-400' },
   { key: 'skills', label: 'Future Skills Lab', icon: 'fa-rocket', color: 'text-pink-500' },
   { key: 'billing', label: 'Tuition Billing', icon: 'fa-credit-card', color: 'text-amber-400' },
-  { key: 'messages', label: 'Message Tutor', icon: 'fa-comment-dots', color: 'text-sky-400' },
-  { key: 'ai', label: 'AI Tutor', icon: 'fa-robot', color: 'text-teal-400' },
+  { key: 'messages', label: 'Message Tutors', icon: 'fa-comment-dots', color: 'text-sky-400' },
+  { key: 'ai', label: 'AI Tutors', icon: 'fa-robot', color: 'text-teal-400' },
 ];
 
 const QUICK_ACCESS = [
@@ -23,8 +23,8 @@ const QUICK_ACCESS = [
   { key: 'quran', title: 'Quran Progression Log', desc: 'Track your daily Quran learning progress.', icon: 'fa-book-quran', bg: 'bg-green-600', chip: 'bg-green-50 dark:bg-green-950/40 text-green-500', border: 'hover:border-green-500/50' },
   { key: 'skills', title: 'Future Skills Lab', desc: 'Learn coding, AI and future skills.', icon: 'fa-rocket', bg: 'bg-pink-500', chip: 'bg-pink-50 dark:bg-pink-950/40 text-pink-500', border: 'hover:border-pink-500/50' },
   { key: 'billing', title: 'Tuition Billing', desc: 'View your fee details and payment history.', icon: 'fa-credit-card', bg: 'bg-amber-500', chip: 'bg-amber-50 dark:bg-amber-950/40 text-amber-500', border: 'hover:border-amber-500/50' },
-  { key: 'messages', title: 'Message Tutor', desc: 'Chat with your teachers anytime.', icon: 'fa-comment-dots', bg: 'bg-sky-500', chip: 'bg-sky-50 dark:bg-sky-950/40 text-sky-500', border: 'hover:border-sky-500/50' },
-  { key: 'ai', title: 'AI Tutor', desc: 'Ask anything and get instant help.', icon: 'fa-robot', bg: 'bg-teal-500', chip: 'bg-teal-50 dark:bg-teal-950/40 text-teal-500', border: 'hover:border-teal-500/50' },
+  { key: 'messages', title: 'Message Tutors', desc: 'Chat with your teachers anytime.', icon: 'fa-comment-dots', bg: 'bg-sky-500', chip: 'bg-sky-50 dark:bg-sky-950/40 text-sky-500', border: 'hover:border-sky-500/50' },
+  { key: 'ai', title: 'AI Tutors', desc: 'Ask anything and get instant help.', icon: 'fa-robot', bg: 'bg-teal-500', chip: 'bg-teal-50 dark:bg-teal-950/40 text-teal-500', border: 'hover:border-teal-500/50' },
 ];
 
 export default function StudentDashboard() {
@@ -537,12 +537,12 @@ export default function StudentDashboard() {
                 </div>
 
                 {/* AI TUTOR AGENT CARD */}
-                <div className="lg:col-span-4 bg-gradient-to-br from-sky-50 to-blue-100/60 dark:from-darkbg-card dark:to-[#0c1e38] border border-sky-200/70 dark:border-gray-800 rounded-3xl p-6 flex flex-col justify-between relative overflow-hidden shadow-sm">
+                <div className="lg:col-span-4 bg-gradient-to-br from-sky-50 to-blue-100/60 dark:from-darkbg-card dark:to-[#0c1e38] border border-sky-200/70 dark:border-gray-800 rounded-3xl p-6 flex flex-col justify-between relative overflow-hidden shadow-lg animate-fade-in hover:scale-[1.01] transition-transform duration-300">
                   <div className="flex items-start justify-between">
                     <div>
                       <span className="text-xs font-semibold text-sky-600 dark:text-sky-400 tracking-wider uppercase">Hi! I'm</span>
                       <h3 className="text-xl font-extrabold text-gray-900 dark:text-white flex items-center gap-1.5">
-                        Tutor <i className="fa-solid fa-sparkles text-amber-400 text-sm animate-pulse"></i>
+                        Tutors <i className="fa-solid fa-sparkles text-amber-400 text-sm animate-pulse"></i>
                       </h3>
                       <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Your AI study buddy</p>
                     </div>
@@ -593,14 +593,14 @@ export default function StudentDashboard() {
                     </div>
                   </div>
 
-                  <div className="mt-3 bg-white/80 dark:bg-darkbg-card/90 border border-sky-100 dark:border-gray-800 rounded-2xl p-3 text-xs text-gray-700 dark:text-gray-300">
-                    <p className="font-semibold text-gray-900 dark:text-white mb-0.5">Ask me anything!</p>
-                    <p className="text-[11px] text-gray-500 dark:text-gray-400">I can help you with lessons, homework, explanations and more.</p>
+                  <div className="mt-3 bg-white/90 dark:bg-darkbg-card/90 border border-sky-100 dark:border-gray-800 rounded-2xl p-3 text-xs text-gray-700 dark:text-gray-300 backdrop-blur-sm">
+                    <p className="font-semibold text-gray-900 dark:text-white mb-0.5">Ask us anything!</p>
+                    <p className="text-[11px] text-gray-500 dark:text-gray-400 leading-relaxed">Friendly tutors and AI together help with lessons, homework, and quick explanations.</p>
                   </div>
 
-                  <button onClick={() => goToPage('ai')} className="mt-4 w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-semibold text-xs transition-all shadow-md shadow-sky-500/20 cursor-pointer">
-                    <span>Chat with Tutor</span>
-                    <i className="fa-solid fa-arrow-right text-xs"></i>
+                  <button onClick={() => goToPage('ai')} className="mt-4 w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-semibold text-xs transition-all shadow-lg shadow-sky-500/25 cursor-pointer ring-1 ring-sky-300/20 hover:ring-sky-400/30">
+                    <span>Chat with Tutors</span>
+                    <i className="fa-solid fa-arrow-right text-xs animate-[pulse_1.8s_infinite]"></i>
                   </button>
                 </div>
               </div>
@@ -1272,30 +1272,30 @@ export default function StudentDashboard() {
             </div>
           )}
 
-          {/* ================= PAGE: MESSAGE TUTOR ================= */}
+          {/* ================= PAGE: MESSAGE TUTORS ================= */}
           {activePage === 'messages' && (
             <div className="space-y-6 animate-fade-in">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Message Your Tutor</h2>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Message Your Tutors</h2>
                 <p className="text-xs text-gray-500 dark:text-gray-400">Direct instant messaging with subject teachers.</p>
               </div>
 
-              <div className="bg-white dark:bg-darkbg-card border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden h-[480px] flex flex-col max-w-3xl mx-auto">
-                <div className="p-4 border-b border-gray-100 dark:border-gray-800 flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-green-500/20 text-green-600 dark:text-green-400 flex items-center justify-center font-bold text-xs">T</div>
+              <div className="bg-white dark:bg-darkbg-card border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden h-[480px] flex flex-col max-w-3xl mx-auto shadow-md">
+                <div className="p-4 border-b border-gray-100 dark:border-gray-800 flex items-center gap-3 bg-gradient-to-r from-white/60 to-sky-50 dark:from-darkbg-card/60 dark:to-transparent">
+                  <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-green-400 to-green-600 text-white flex items-center justify-center font-bold text-xs shadow">T</div>
                   <div>
-                    <h4 className="font-bold text-sm text-gray-900 dark:text-white">Your Tutor</h4>
-                    <p className="text-[11px] text-green-500">● Online</p>
+                    <h4 className="font-bold text-sm text-gray-900 dark:text-white">Your Tutors</h4>
+                    <p className="text-[11px] text-green-500 flex items-center gap-2"><span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> Online</p>
                   </div>
                 </div>
 
-                <div className="flex-1 p-4 overflow-y-auto space-y-3 text-xs">
+                <div className="flex-1 p-4 overflow-y-auto space-y-3 text-xs animate-fade-in">
                   {chatMessages.map(msg => {
                     const isMe = msg.sender === 3;
                     return (
                       <div key={msg.id} className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}>
-                        <div className={`max-w-xs rounded-2xl px-4 py-2.5 ${isMe ? 'bg-green-500 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200'}`}>
-                          <p>{msg.message}</p>
+                        <div className={`max-w-xs rounded-2xl px-4 py-2.5 transition-transform transform motion-reduce:transform-none hover:scale-[1.03] ${isMe ? 'bg-green-500 text-white shadow-md' : 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 shadow-sm'}`}>
+                          <p className="leading-relaxed">{msg.message}</p>
                           <span className={`block text-[8px] mt-1.5 text-right ${isMe ? 'text-green-100' : 'text-gray-400'}`}>
                             {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                           </span>
@@ -1304,11 +1304,11 @@ export default function StudentDashboard() {
                     );
                   })}
                   {chatMessages.length === 0 && (
-                    <p className="text-center text-gray-400 italic py-6">No messages yet. Say hello!</p>
+                    <p className="text-center text-gray-400 italic py-6 animate-pulse">No messages yet. Say hello!</p>
                   )}
                 </div>
 
-                <form onSubmit={handleSendChatMessage} className="p-3 border-t border-gray-100 dark:border-gray-800 flex items-center gap-2">
+                <form onSubmit={handleSendChatMessage} className="p-3 border-t border-gray-100 dark:border-gray-800 flex items-center gap-2 bg-white/60">
                   <input
                     id="chat-input"
                     type="text"
@@ -1316,22 +1316,22 @@ export default function StudentDashboard() {
                     value={chatInputText}
                     onChange={(e) => setChatInputText(e.target.value)}
                     placeholder="Type your message..."
-                    className="flex-1 bg-gray-100 dark:bg-darkbg-main border border-transparent rounded-xl px-4 py-2 text-xs text-gray-800 dark:text-gray-200 focus:outline-none"
+                    className="flex-1 bg-gray-100 dark:bg-darkbg-main border border-transparent rounded-xl px-4 py-2 text-xs text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-1 focus:ring-green-500/30"
                   />
-                  <button type="submit" className="px-4 py-2 bg-green-500 text-white rounded-xl text-xs font-bold hover:bg-green-600 cursor-pointer">Send</button>
+                  <button type="submit" className="px-4 py-2 bg-green-500 text-white rounded-xl text-xs font-bold hover:bg-green-600 transition-transform transform active:scale-95">Send</button>
                 </form>
               </div>
             </div>
           )}
 
-          {/* ================= PAGE: AI TUTOR ================= */}
+          {/* ================= PAGE: AI TUTORS ================= */}
           {activePage === 'ai' && (
             <div className="space-y-6 animate-fade-in">
               <div className="flex justify-between items-center flex-wrap gap-3">
                 <div>
                   <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
                     <i className="fa-solid fa-sparkles text-sky-500"></i>
-                    AI Tutor: AI Study Assistant
+                    AI Tutors: AI Study Assistant
                   </h2>
                   <p className="text-xs text-gray-500 dark:text-gray-400">Ask any question regarding your subjects, homework, or Quran Tajweed.</p>
                 </div>
@@ -1399,7 +1399,7 @@ export default function StudentDashboard() {
                     required
                     value={aiInputText}
                     onChange={(e) => setAiInputText(e.target.value)}
-                    placeholder="Ask AI tutor something (e.g. explain variables in coding, help with math 3+2)..."
+                    placeholder="Ask AI tutors something (e.g. explain variables in coding, help with math 3+2)..."
                     className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-xs text-gray-800 dark:text-white rounded-xl focus:outline-none focus:ring-1 focus:ring-violet-500"
                   />
                   <button type="submit" disabled={aiLoading} className="p-3 bg-violet-600 hover:bg-violet-500 text-white rounded-xl transition cursor-pointer disabled:opacity-50">
