@@ -170,7 +170,7 @@ export default function ParentDashboard() {
       <aside className="hidden md:flex w-64 shrink-0 flex-col bg-gradient-to-b from-violet-700 to-purple-900 text-white">
         <div className="flex items-center gap-3 px-6 py-6">
           <div className="w-9 h-9 rounded-xl bg-white/15 flex items-center justify-center">
-            <GraduationCap className="h-5 w-5" />
+            <img src="/3.png" alt="Bright Future logo" className="h-6 w-6 object-contain rounded-lg" />
           </div>
           <div>
             <h1 className="text-sm font-bold font-outfit tracking-tight leading-tight">Bright Future</h1>

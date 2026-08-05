@@ -142,3 +142,16 @@
   transform-origin: center;
   animation: subtleBlink 4s infinite;
 }
+
+.animate-logo-spin {
+  animation: logoSpin 8s linear infinite;
+}
+
+@keyframes logoSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
