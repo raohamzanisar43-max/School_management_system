@@ -32,6 +32,7 @@ urlpatterns = [
     path('api/analytics/', include('analytics.urls')),
     path('api/accounts/', include('accounts.urls')),
     path('api/chat/', include('chat.urls')),
+    path('api/announcements/', include('announcements.urls')),
 
     # OpenAPI Schema / Swagger UI / Redoc
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),

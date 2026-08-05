@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'analytics',
     'accounts',
     'chat',
+    'announcements',
 ]
 
 MIDDLEWARE = [
@@ -177,7 +178,8 @@ JAZZMIN_SETTINGS = {
     "hide_models": [],
     "order_with_respect_to": [
         "users", "assessments", "curriculum", "lms", "islamic_studies",
-        "skills_future", "smart_exams", "attendance_diary", "analytics", "accounts"
+        "skills_future", "smart_exams", "attendance_diary", "analytics", "accounts",
+        "announcements"
     ],
     "icons": {
         "users.user": "fas fa-user-shield",
@@ -209,6 +211,7 @@ JAZZMIN_SETTINGS = {
         "accounts.feestructure": "fas fa-money-bill-wave",
         "accounts.invoice": "fas fa-file-invoice-dollar",
         "accounts.salaryslip": "fas fa-wallet",
+        "announcements.announcement": "fas fa-bullhorn",
     },
     "default_icon_parents": "fas fa-chevron-circle-right",
     "default_icon_children": "fas fa-circle",
