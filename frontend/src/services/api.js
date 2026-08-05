@@ -285,11 +285,15 @@ export const api = {
     }
   },
 
-  // Directory (Students / Teachers / Parents)
   getStudents: async () => {
     try {
       const res = await apiInstance.get('/users/students/');
-      return res.data;
+      return res.data.map(s => ({
+        ...s,
+        name: s.user && typeof s.user === 'object' ? `${s.user.first_name} ${s.user.last_name}`.trim() || s.user.username : s.name,
+        email: s.user && typeof s.user === 'object' ? s.user.email : s.email,
+        user: s.user && typeof s.user === 'object' ? s.user.id : s.user
+      }));
     } catch (e) {
       return localMockState.students;
     }
@@ -298,7 +302,12 @@ export const api = {
   getTeachers: async () => {
     try {
       const res = await apiInstance.get('/users/teachers/');
-      return res.data;
+      return res.data.map(t => ({
+        ...t,
+        name: t.user && typeof t.user === 'object' ? `${t.user.first_name} ${t.user.last_name}`.trim() || t.user.username : t.name,
+        email: t.user && typeof t.user === 'object' ? t.user.email : t.email,
+        user: t.user && typeof t.user === 'object' ? t.user.id : t.user
+      }));
     } catch (e) {
       return localMockState.teachers;
     }
@@ -307,7 +316,12 @@ export const api = {
   getParents: async () => {
     try {
       const res = await apiInstance.get('/users/parents/');
-      return res.data;
+      return res.data.map(p => ({
+        ...p,
+        name: p.user && typeof p.user === 'object' ? `${p.user.first_name} ${p.user.last_name}`.trim() || p.user.username : p.name,
+        email: p.user && typeof p.user === 'object' ? p.user.email : p.email,
+        user: p.user && typeof p.user === 'object' ? p.user.id : p.user
+      }));
     } catch (e) {
       return localMockState.parents;
     }
