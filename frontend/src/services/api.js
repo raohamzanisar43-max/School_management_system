@@ -320,7 +320,19 @@ export const api = {
         ...p,
         name: p.user && typeof p.user === 'object' ? `${p.user.first_name} ${p.user.last_name}`.trim() || p.user.username : p.name,
         email: p.user && typeof p.user === 'object' ? p.user.email : p.email,
-        user: p.user && typeof p.user === 'object' ? p.user.id : p.user
+        phone: p.user && typeof p.user === 'object' ? p.user.phone_number : p.phone,
+        user: p.user && typeof p.user === 'object' ? p.user.id : p.user,
+        children: Array.isArray(p.children)
+          ? p.children.map(child => {
+              if (child && typeof child === 'object') {
+                if (child.user && typeof child.user === 'object') {
+                  return `${child.user.first_name} ${child.user.last_name}`.trim() || child.user.username;
+                }
+                return child.name || '';
+              }
+              return child || '';
+            }).filter(Boolean)
+          : []
       }));
     } catch (e) {
       return localMockState.parents;
