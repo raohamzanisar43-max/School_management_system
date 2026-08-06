@@ -1,6 +1,11 @@
 import { apiClient } from './apiClient';
 import { localMockState } from './mockData';
 
+export const register = async (registerData) => {
+  const response = await apiClient.post('/users/register/', registerData);
+  return response.data;
+};
+
 export const login = async (username, password) => {
   try {
     const response = await apiClient.post('/auth/login/', { username, password });

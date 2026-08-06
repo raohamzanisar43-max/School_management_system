@@ -14,6 +14,12 @@ export const apiClient = axios.create({
 apiClient.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('access_token');
+    // Quick View uses fake local tokens for role previewing — the real backend
+    // will always 401 these, so skip the network call and go straight to each
+    // service's mock-data fallback instead of flooding the console with errors.
+    if (token && token.startsWith('mock_jwt_token_')) {
+      return Promise.reject(new Error('Quick View mock session — skipping real API call'));
+    }
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

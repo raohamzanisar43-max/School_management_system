@@ -1,8 +1,4 @@
 import { useState } from 'react';
-// Namespace import: authService doesn't export `register` (pre-existing gap,
-// not added by this refactor). A named import would fail to resolve at
-// build/module-load time; this mirrors the original `api.register` behavior,
-// which only throws once the registration flow actually calls it.
 import * as authService from '../../services/authService';
 
 export default function useRegisterWizard(login, showNotification, onNeedsManualLogin) {
